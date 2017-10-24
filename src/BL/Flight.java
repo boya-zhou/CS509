@@ -17,7 +17,6 @@ public class Flight{
 
 
     public Flight() {
-    	throw new UnsupportedOperationException();
     }
     
     public Flight(int flightNumber, Date depatureTime, Date arrivalTime, String depatureCode, String arrivalCode, String airplaneModel, int flightTime,
