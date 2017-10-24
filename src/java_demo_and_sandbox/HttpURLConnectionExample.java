@@ -13,8 +13,6 @@ import javax.management.RuntimeErrorException;
 public class HttpURLConnectionExample {
 
 
-	static String USER_AGENT = "Mozilla/5.0";
-
 
 	public static void main(String[] args) throws IOException {
 		String querylist_airport = "&list_type=airports";
@@ -36,11 +34,10 @@ public class HttpURLConnectionExample {
 		System.out.println("POST DONE");
 	}
 
-	private static void sendGET(String GET_URL) throws IOException {
+	private static String sendGET(String GET_URL) throws IOException {
 		URL obj = new URL(GET_URL);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 		con.setRequestMethod("GET");
-		con.setRequestProperty("User-Agent", USER_AGENT);
 		int responseCode = con.getResponseCode();
 		System.out.println("GET Response Code :: " + responseCode);
 		if (responseCode == HttpURLConnection.HTTP_OK) { // success
@@ -56,8 +53,9 @@ public class HttpURLConnectionExample {
 
 			// print result
 			System.out.println(response.toString());
+			return(response.toString());
 		} else {
-			System.out.println("GET request not worked");
+			throw new IOException("Cannot open a connection to the target URL: "+GET_URL+".");
 		}
 
 	}
@@ -69,7 +67,6 @@ public class HttpURLConnectionExample {
 
 		// For POST only - START
 		con.setDoOutput(true);
-		con.setRequestProperty("User-Agent", USER_AGENT);
 		OutputStream os = con.getOutputStream();
 		//os.write(POST_PARAMS.getBytes());
 		os.flush();

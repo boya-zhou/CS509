@@ -6,57 +6,79 @@ import javax.swing.text.Document;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.beans.XMLDecoder;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.Date;
 import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
 
 public class GetData {
-    String date;//yyyy_mm_dd
-    String airportCode;//e.g. BOS
 
-    String querylist_airport ="?team=404&action=list&list_type=airports";
-    String querylist_airplane="?team=404&action=list&list_type=airplanes";
-    String querylist_flightdepaturing="?team=404&action=list&list_type=departing&airport="+airportCode+"&day="+date;
-    String querylist_flightarriving="?team=404&action=list&list_type=arriving&airport="+airportCode+"&day="+date;
-    String url="http://cs509.cs.wpi.edu:8181/CS509.server/ReservationSystem";
+	private String getXML(String getURL) throws IOException {
+		HttpURLConnection con = (HttpURLConnection) (new URL(getURL)).openConnection();
+		con.setRequestMethod("GET");
+		int responseCode = con.getResponseCode();
+		//System.out.println("GET Response Code :: " + responseCode);
+		if (responseCode == HttpURLConnection.HTTP_OK) { // success
+			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+			String inputLine;
+			StringBuffer response = new StringBuffer();
 
+			while ((inputLine = in.readLine()) != null) {
+				response.append(inputLine);
+			}
+			in.close();
+			return(response.toString());
+		} else {
+			throw new IOException(responseCode + ": Error trying to open URL: "+getURL+".");
+		}
+	}
 
+	private static String sendPOST(String postURL) throws IOException {
+		HttpURLConnection con = (HttpURLConnection) (new URL(postURL)).openConnection();
+		con.setRequestMethod("POST");
+		int responseCode = con.getResponseCode();
+		//System.out.println("POST Response Code :: " + responseCode);
+		if (responseCode == HttpURLConnection.HTTP_OK) { // success
+			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+			String inputLine;
+			StringBuffer response = new StringBuffer();
 
-    private void getXML(String query) throws IOException {
-        URL url2=new URL(url+query);
-        InputStream in = url2.openStream();
-        Document doc = parse(in);
+			while ((inputLine = in.readLine()) != null) {
+				response.append(inputLine);
+			}
+			in.close();
+			return(response.toString());
+		} else {
+			throw new IOException(responseCode + ": Error trying to open URL: "+postURL+".");
+		}
+	}
+    
+    private class queryURLBuilder {
+    	private String url = "http://cs509.cs.wpi.edu:8181/CS509.server/ReservationSystem?team=404";
+    	
+    	public String getListAirportsURL() {
+    		return(url+"&action=list&list_type=airports");
+    	}
 
+    	public String getListAirplanesURL() {
+    		return(url+"&action=list&list_type=airplanes");
+    	}
+    	
+    	public String getListDeparturesURL(String airportCode, Date date) {
+    		return(url+"&action=list&list_type=departing&airport=" + airportCode + "&day=" + date.toString());
+    	}
+    	
+    	public String getListArrivingsURL(String airportCode, Date date) {
+    		return(url+"&action=list&list_type=arriving&airport=" + airportCode + "&day=" + date.toString());
+    	}
     }
-
-
-    public GetData() throws IOException {
-    }
-
-    /**
-     * Constructs a Document object by reading from an input stream.
-     */
-    public static Document parse (InputStream is) {
-        Document ret = null;
-        DocumentBuilderFactory domFactory;
-        DocumentBuilder builder;
-
-        try {
-            domFactory = DocumentBuilderFactory.newInstance();
-            domFactory.setValidating(false);
-            domFactory.setNamespaceAware(false);
-            builder = domFactory.newDocumentBuilder();
-
-            ret = (Document) builder.parse(is);
-        }
-        catch (Exception ex) {
-          //  System.error.println("unable to load XML: " + ex);
-        }
-        return ret;
-    }
-
 }
+
