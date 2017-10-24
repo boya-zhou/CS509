@@ -7,6 +7,11 @@ public class Airport {
     double latitude;
     double longitude;
 
+
+    public Airport() {
+    	throw new UnsupportedOperationException();
+    }
+    
     public Airport(String airportCode, String airportName, double latitude, double longitude) {
         this.airportCode = airportCode;
         this.airportName = airportName;
@@ -21,5 +26,21 @@ public class Airport {
 
     public String toString(){
         return "[" + airportCode + "||" + airportName + "||" + latitude + "||" + longitude + "]\n";
+    }
+
+    public String getAirportCode() {
+        return airportCode;
+    }
+
+    public String getAirportName() {
+        return airportName;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
     }
 }
