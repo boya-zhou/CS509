@@ -23,4 +23,20 @@ public class Airplane {
 
         return "[" + model + "||" + maunfacturer + "||" + amount_firstclassSeat + "||" + amount_coachSeat + "]\n";
     }
+
+    public String getModel() {
+        return model;
+    }
+
+    public String getMaunfacturer() {
+        return maunfacturer;
+    }
+
+    public int getAmount_firstclassSeat() {
+        return amount_firstclassSeat;
+    }
+
+    public int getAmount_coachSeat() {
+        return amount_coachSeat;
+    }
 }

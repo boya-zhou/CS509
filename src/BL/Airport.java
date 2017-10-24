@@ -22,4 +22,20 @@ public class Airport {
     public String toString(){
         return "[" + airportCode + "||" + airportName + "||" + latitude + "||" + longitude + "]\n";
     }
+
+    public String getAirportCode() {
+        return airportCode;
+    }
+
+    public String getAirportName() {
+        return airportName;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
 }

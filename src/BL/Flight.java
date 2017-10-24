@@ -39,4 +39,48 @@ public class Flight{
                 arrivalCode + "||" + airplaneModel + "||" + flightTime + "||" + remain_FirstClass+
                 remain_Coach + "||" + price_FirstClass + "||" + price_Coach +"]\n";
     }
+
+    public int getFlightNumber() {
+        return flightNumber;
+    }
+
+    public Date getDepatureTime() {
+        return depatureTime;
+    }
+
+    public Date getArrivalTime() {
+        return arrivalTime;
+    }
+
+    public String getDepatureCode() {
+        return depatureCode;
+    }
+
+    public String getArrivalCode() {
+        return arrivalCode;
+    }
+
+    public String getAirplaneModel() {
+        return airplaneModel;
+    }
+
+    public int getFlightTime() {
+        return flightTime;
+    }
+
+    public int getRemain_FirstClass() {
+        return remain_FirstClass;
+    }
+
+    public int getRemain_Coach() {
+        return remain_Coach;
+    }
+
+    public double getPrice_FirstClass() {
+        return price_FirstClass;
+    }
+
+    public double getPrice_Coach() {
+        return price_Coach;
+    }
 }
