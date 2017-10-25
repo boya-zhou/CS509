@@ -7,7 +7,7 @@ import java.io.IOException;
 public class Reserve{
     public static void reserve(Flight flight) throws IOException {
         ReserveFlight.lock();
-        ReserveFlight.reserve();
+        ReserveFlight.reserve(null);
         ReserveFlight.unlock();
 
     }

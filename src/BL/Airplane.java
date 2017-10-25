@@ -7,6 +7,10 @@ public class Airplane {
     int amount_firstclassSeat;
     int amount_coachSeat;
 
+    public Airplane() {
+    	throw new UnsupportedOperationException();
+    }
+
     public Airplane(String model, String maunfacturer, int amount_firstclassSeat, int amount_coachSeat) {
         this.model = model;
         this.maunfacturer = maunfacturer;

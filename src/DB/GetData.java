@@ -1,51 +1,63 @@
 package DB;
 
-import BL.Airplane;
-import BL.Airport;
-
-import javax.swing.text.Document;
-import javax.xml.bind.JAXBException;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.beans.XMLDecoder;
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringReader;
-import java.net.MalformedURLException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.AbstractMap;
-import java.util.List;
-import java.util.Map;
-import javax.xml.bind.JAXB;
-
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class GetData {
-    String date;//yyyy_mm_dd
-    String airportCode;//e.g. BOS
 
-    String querylist_airport ="?team=404&action=list&list_type=airports";
-    String querylist_airplane="?team=404&action=list&list_type=airplanes";
+	private static String baseURL = "http://cs509.cs.wpi.edu:8181/CS509.server/ReservationSystem?team=404";
 
-    String querylist_flightdepaturing="?team=404&action=list&list_type=departing&airport="+airportCode+"&day="+date;
-    String querylist_flightarriving="?team=404&action=list&list_type=arriving&airport="+airportCode+"&day="+date;
-    String url="http://cs509.cs.wpi.edu:8181/CS509.server/ReservationSystem";
+	public static String getDepartureFlightInfo(String departureAirportCode, Date departureDate) {
+		SimpleDateFormat dateformat = new SimpleDateFormat("yyyy_mm_dd");
+		String dateString = dateformat.format(departureDate);
+		String url = baseURL+"&action=list&list_type=departing&airport=" + departureAirportCode + "&day=" + dateString;
+		try {
+			return(getXML(url));
+		} catch(IOException e) {
+			return("<xml><Flights></Flights></xml>");
+		}
+	}
+	
+	public static String getArrivalFlightInfo(String arrivalAirportCode, Date arrivalDate) {
+		SimpleDateFormat dateformat = new SimpleDateFormat("yyyy_MM_dd");
+		String dateString = dateformat.format(arrivalDate);
+		String url = baseURL+"&action=list&list_type=arriving&airport=" + arrivalAirportCode + "&day=" + dateString;
+		System.out.println(url);
+		try {
+			return(getXML(url));
+		} catch(IOException e) {
+			return("<xml><Flights></Flights></xml>");
+		}
+	}
+	
+	/**
+	 * helper function to interface with the server GET API
+	 * @param getURL
+	 * @return
+	 * @throws IOException
+	 */
+	private static String getXML(String getURL) throws IOException {
+		HttpURLConnection con = (HttpURLConnection) (new URL(getURL)).openConnection();
+		con.setRequestMethod("GET");
+		int responseCode = con.getResponseCode();
+		//System.out.println("GET Response Code :: " + responseCode);
+		if (responseCode == HttpURLConnection.HTTP_OK) { // success
+			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+			String inputLine;
+			StringBuffer response = new StringBuffer();
 
-
-
-    private void getXML(String query) throws IOException {
-        URL url2=new URL(url+query);
-        InputStream in = url2.openStream();
-
-    }
-
-    public static Airport listAirport(String xml) throws JAXBException{
-        Airport airport = JAXB.unmarshal(new StringReader(xml), Airport.class);
-        return airport;
-
-    }
-
-    public GetData() throws IOException {
-    }
-
-
+			while ((inputLine = in.readLine()) != null) {
+				response.append(inputLine);
+			}
+			in.close();
+			return(response.toString());
+		} else {
+			throw new IOException(responseCode + ": Error trying to open URL: "+getURL+".");
+		}
+	}
 }

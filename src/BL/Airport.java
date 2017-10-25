@@ -7,6 +7,11 @@ public class Airport {
     double latitude;
     double longitude;
 
+
+    public Airport() {
+    	throw new UnsupportedOperationException();
+    }
+    
     public Airport(String airportCode, String airportName, double latitude, double longitude) {
         this.airportCode = airportCode;
         this.airportName = airportName;

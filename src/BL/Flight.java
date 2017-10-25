@@ -15,6 +15,10 @@ public class Flight{
     public double price_FirstClass;
     public double price_Coach;
 
+
+    public Flight() {
+    }
+    
     public Flight(int flightNumber, Date depatureTime, Date arrivalTime, String depatureCode, String arrivalCode, String airplaneModel, int flightTime,
                   int remain_FirstClass, int remain_Coach, double price_FirstClass, double price_Coach) {
         this.flightNumber = flightNumber;
@@ -31,6 +35,7 @@ public class Flight{
     }
     public static Flight getFlight(int flightNumber){
         Flight flight=new Flight(/*need fill up*/);
+        return null;
     }
 
     @Override
