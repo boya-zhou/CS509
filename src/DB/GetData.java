@@ -13,9 +13,11 @@ public class GetData {
 	private static String baseURL = "http://cs509.cs.wpi.edu:8181/CS509.server/ReservationSystem?team=404";
 
 	public static String getDepartureFlightInfo(String departureAirportCode, Date departureDate) {
-		SimpleDateFormat dateformat = new SimpleDateFormat("yyyy_mm_dd");
+		SimpleDateFormat dateformat = new SimpleDateFormat("yyyy_MM_dd");
 		String dateString = dateformat.format(departureDate);
 		String url = baseURL+"&action=list&list_type=departing&airport=" + departureAirportCode + "&day=" + dateString;
+//		System.out.println(url);
+		
 		try {
 			return(getXML(url));
 		} catch(IOException e) {
@@ -27,7 +29,7 @@ public class GetData {
 		SimpleDateFormat dateformat = new SimpleDateFormat("yyyy_MM_dd");
 		String dateString = dateformat.format(arrivalDate);
 		String url = baseURL+"&action=list&list_type=arriving&airport=" + arrivalAirportCode + "&day=" + dateString;
-		System.out.println(url);
+//		System.out.println(url);
 		try {
 			return(getXML(url));
 		} catch(IOException e) {

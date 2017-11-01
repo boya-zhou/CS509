@@ -94,7 +94,7 @@ public class XMLparser {
 		Element coachNode = (Element) seating.getElementsByTagName("Coach").item(0);
 		int remainingFirstClass = Integer.parseInt(firstClassNode.getTextContent());
 		int remainingCoach = Integer.parseInt(coachNode.getTextContent());
-		double priceFirstClass = Double.parseDouble(firstClassNode.getAttribute("Price").replace("$", ""));
+		double priceFirstClass = Double.parseDouble(firstClassNode.getAttribute("Price").replace("$", "").replace(",", ""));
 		double priceCoach = Double.parseDouble(coachNode.getAttribute("Price").replace("$", ""));
 
 		return new Flight(flightNumber, departureTime, arrivalTime, 

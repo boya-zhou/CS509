@@ -1,5 +1,6 @@
 package BL;
 
+import java.util.Comparator;
 import java.util.Date;
 
 public class Flight{
@@ -40,11 +41,21 @@ public class Flight{
 
     @Override
     public String toString() {
-        return "[" + flightNumber + "||" + depatureTime + "||" + arrivalTime + "||" + depatureCode +
-                arrivalCode + "||" + airplaneModel + "||" + flightTime + "||" + remain_FirstClass+
+        return "[" + flightNumber + "||" + depatureTime + "||" + arrivalTime + "||" + depatureCode + "||" +
+                arrivalCode + "||" + airplaneModel + "||" + flightTime + "||" + remain_FirstClass + "||" + 
                 remain_Coach + "||" + price_FirstClass + "||" + price_Coach +"]\n";
     }
-
+    
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Flight && this.flightNumber == (((Flight) obj).flightNumber);
+    }
+    
+    @Override
+    public int hashCode() {
+        return this.flightNumber;
+    }
+    
     public int getFlightNumber() {
         return flightNumber;
     }
