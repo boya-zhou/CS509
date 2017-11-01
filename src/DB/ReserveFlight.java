@@ -15,7 +15,7 @@ public class ReserveFlight {
 
     public static void lock()throws IOException{
         String lockDB="http://cs509.cs.wpi.edu:8181/CS509.server/ReservationSystem?team=404&action=lockDB";
-        sendGET(lockDB);
+        sendPOST(lockDB);
 
     }
     public static void reserve()throws IOException{
@@ -23,38 +23,13 @@ public class ReserveFlight {
     }
     public static void unlock()throws IOException{
         String unlockDB="http://cs509.cs.wpi.edu:8181/CS509.server/ReservationSystem?team=404&action=unlockDB";
-        sendGET(unlockDB);
+        sendPOST(unlockDB);
     }
     public static void reset()throws IOException{
         String resetDB="http://cs509.cs.wpi.edu:8181/CS509.server/ReservationSystem?team=404&action=resetDB";
-        sendGET(resetDB);
+        sendPOST(resetDB);
     }
 
-    private static String sendGET(String GET_URL) throws IOException {
-        URL obj = new URL(GET_URL);
-        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-        con.setRequestMethod("GET");
-        int responseCode = con.getResponseCode();
-        System.out.println("GET Response Code :: " + responseCode);
-        if (responseCode == HttpURLConnection.HTTP_OK) { // success
-            BufferedReader in = new BufferedReader(new InputStreamReader(
-                    con.getInputStream()));
-            String inputLine;
-            StringBuffer response = new StringBuffer();
-
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-            }
-            in.close();
-
-            // print result
-            System.out.println(response.toString());
-            return(response.toString());
-        } else {
-            throw new IOException("Cannot open a connection to the target URL: "+GET_URL+".");
-        }
-
-    }
 
     private static void sendPOST(String POST_URL) throws IOException {
         URL obj = new URL(POST_URL);
@@ -89,4 +64,30 @@ public class ReserveFlight {
             System.out.println("POST request not worked");
         }
     }
+    private static String sendGET(String GET_URL) throws IOException {
+        URL obj = new URL(GET_URL);
+        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+        con.setRequestMethod("GET");
+        int responseCode = con.getResponseCode();
+        System.out.println("GET Response Code :: " + responseCode);
+        if (responseCode == HttpURLConnection.HTTP_OK) { // success
+            BufferedReader in = new BufferedReader(new InputStreamReader(
+                    con.getInputStream()));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+
+            // print result
+            System.out.println(response.toString());
+            return(response.toString());
+        } else {
+            throw new IOException("Cannot open a connection to the target URL: "+GET_URL+".");
+        }
+
+    }
+
 }
