@@ -16,7 +16,10 @@ import DB.GetData;
 // TODO: the layover time range from o.5 hour to 4 hour(30 min to 240 min), is this right? 
 
 
-public class oneStopOver {
+public class OneStopOver {
+	
+	static long lowerTime = 30;
+	static long upperTime = 240;
 	
 	public static void main(String[] args) throws IOException {
 		
@@ -76,7 +79,7 @@ public class oneStopOver {
 					if (secF.arrivalCode.equals(aCode)) {
 						
 						long timeDiff = TimeUnit.MILLISECONDS.toMinutes(secF.depatureTime.getTime() - f.arrivalTime.getTime()); 
-						if ((timeDiff >= 30) & (timeDiff <= 240)) {
+						if ((timeDiff >= lowerTime) & (timeDiff <= upperTime)) {
 							
 							ArrayList<Flight> validTrip = new ArrayList<>();
 							validTrip.add(f);
@@ -117,7 +120,7 @@ public class oneStopOver {
 				for (Flight firF: interAFlightSet) {
 					if(firF.depatureCode.equals(deCode)) {
 						long timeDiff = TimeUnit.MILLISECONDS.toMinutes(f.depatureTime.getTime() - firF.arrivalTime.getTime()); 
-						if ((timeDiff <= 240 ) & (timeDiff >= 30)) {
+						if ((timeDiff <= upperTime ) & (timeDiff >= lowerTime)) {
 							ArrayList<Flight> validTrip = new ArrayList<>();
 							validTrip.add(firF);
 							validTrip.add(f);
@@ -170,7 +173,7 @@ public class oneStopOver {
 			for (Flight secEle : secF) {
 				if (firEle.arrivalCode.equals(secEle.depatureCode)) {
 					long timeDiff = TimeUnit.MILLISECONDS.toMinutes(secEle.depatureTime.getTime() - firEle.arrivalTime.getTime());
-					if ( (timeDiff <= 240 ) & (timeDiff >= 30)) {
+					if ( (timeDiff <= upperTime ) & (timeDiff >= lowerTime)) {
 						ArrayList<Flight> validTrip = new ArrayList<>();
 						validTrip.add(firEle);
 						validTrip.add(secEle);

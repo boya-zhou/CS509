@@ -12,7 +12,7 @@ import java.util.Set;
 import BL.Flight;
 import BL.XMLparser;
 
-public class zeroStopOver {
+public class ZeroStopOver {
 	
 	public static void main(String[] args) throws IOException {
 				
