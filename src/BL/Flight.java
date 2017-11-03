@@ -34,10 +34,10 @@ public class Flight{
         this.price_FirstClass = price_FirstClass;
         this.price_Coach = price_Coach;
     }
-    public static Flight getFlight(int flightNumber){
-        Flight flight=new Flight(/*need fill up*/);
-        return null;
-    }
+//    public static Flight getFlight(int flightNumber){
+//        Flight flight=new Flight(/*need fill up*/);
+//        return null;
+//    }
 
     @Override
     public String toString() {

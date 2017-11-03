@@ -1,4 +1,4 @@
-package result_generator;
+package BL.result_generator;
 
 import BL.Leg_Trip;
 
