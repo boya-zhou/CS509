@@ -7,12 +7,25 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Set;
+
+import BL.Flight;
 
 public class GetData {
 
 	private static String baseURL = "http://cs509.cs.wpi.edu:8181/CS509.server/ReservationSystem?team=404";
 
-	public static String getDepartureFlightInfo(String departureAirportCode, Date departureDate) {
+	public static Set<Flight> getDepartureFlightInfo(String departureAirportCode, Date departureDate) throws IOException {
+		String returnString = getDepartureFlightInfoXML(departureAirportCode, departureDate);
+		return XMLparser.parseFlightSet(returnString);
+	}
+
+	public static Set<Flight> getArrivalFlightInfo(String departureAirportCode, Date departureDate) throws IOException {
+		String returnString = getArrivalFlightInfoXML(departureAirportCode, departureDate);
+		return XMLparser.parseFlightSet(returnString);
+	}
+	
+	public static String getDepartureFlightInfoXML(String departureAirportCode, Date departureDate) {
 		SimpleDateFormat dateformat = new SimpleDateFormat("yyyy_MM_dd");
 		String dateString = dateformat.format(departureDate);
 		String url = baseURL+"&action=list&list_type=departing&airport=" + departureAirportCode + "&day=" + dateString;
@@ -25,7 +38,7 @@ public class GetData {
 		}
 	}
 	
-	public static String getArrivalFlightInfo(String arrivalAirportCode, Date arrivalDate) {
+	public static String getArrivalFlightInfoXML(String arrivalAirportCode, Date arrivalDate) {
 		SimpleDateFormat dateformat = new SimpleDateFormat("yyyy_MM_dd");
 		String dateString = dateformat.format(arrivalDate);
 		String url = baseURL+"&action=list&list_type=arriving&airport=" + arrivalAirportCode + "&day=" + dateString;

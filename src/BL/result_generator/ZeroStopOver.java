@@ -1,7 +1,5 @@
 package BL.result_generator;
 
-import DB.GetData;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -10,7 +8,7 @@ import java.util.GregorianCalendar;
 import java.util.Set;
 
 import BL.Flight;
-import BL.XMLparser;
+import DB.GetData;
 
 public class ZeroStopOver {
 	
@@ -23,8 +21,7 @@ public class ZeroStopOver {
 		
 		Date deDate = new GregorianCalendar(deYear, deMonth, deDay).getTime();
 		
-		String deXMLString = GetData.getDepartureFlightInfo(deCode, deDate);		
-		Set<Flight> deFlightSet = XMLparser.parseFlightSet(deXMLString);
+		Set<Flight> deFlightSet = GetData.getDepartureFlightInfo(deCode, deDate);		
 		System.out.println(deFlightSet);
 		
 		
@@ -35,8 +32,7 @@ public class ZeroStopOver {
 		
 		Date aDate = new GregorianCalendar(aYear, aMonth, aDay).getTime();
 		
-		String aXMLString = GetData.getArrivalFlightInfo(aCode, aDate);		
-		Set<Flight> aFlightSet = XMLparser.parseFlightSet(aXMLString);
+		Set<Flight> aFlightSet = GetData.getArrivalFlightInfo(aCode, aDate);		
 		System.out.println(aFlightSet);		
 		
 		
@@ -52,8 +48,7 @@ public class ZeroStopOver {
 		// only give de airport, serach for arrival airport
 		ArrayList<Flight> zeroStop = new ArrayList<>(); 
 		
-		String deXMLString = GetData.getDepartureFlightInfo(deCode, deDate);
-		Set<Flight> deFlightSet = XMLparser.parseFlightSet(deXMLString);
+		Set<Flight> deFlightSet = GetData.getDepartureFlightInfo(deCode, deDate);
 		
 		for (Flight f: deFlightSet) {
 			if (aCode.equals(f.arrivalCode)) {
@@ -70,8 +65,7 @@ public class ZeroStopOver {
 		// only give a airport, search for de airport
 		ArrayList<Flight> zeroStop = new ArrayList<>(); 
 		
-		String aXMLString = GetData.getArrivalFlightInfo(aCode, aDate);
-		Set<Flight> aFlightSet = XMLparser.parseFlightSet(aXMLString);
+		Set<Flight> aFlightSet = GetData.getArrivalFlightInfo(aCode, aDate);
 		
 		for (Flight f: aFlightSet) {
 			if (deCode.equals(f.depatureCode)) {
@@ -86,11 +80,9 @@ public class ZeroStopOver {
 	public static ArrayList<Flight> generateZeroStopOver(String deCode, Date deDate, String aCode, Date aDate) throws IOException{
 		// give both, find if there are same flight number
 				
-		String deXMLString = GetData.getDepartureFlightInfo(deCode, deDate);
-		Set<Flight> deFlightSet = XMLparser.parseFlightSet(deXMLString);
+		Set<Flight> deFlightSet = GetData.getDepartureFlightInfo(deCode, deDate);
 		
-		String aXMLString = GetData.getArrivalFlightInfo(aCode, aDate);
-		Set<Flight> aFlightList = XMLparser.parseFlightSet(aXMLString);
+		Set<Flight> aFlightList = GetData.getArrivalFlightInfo(aCode, aDate);
 		
 		deFlightSet.retainAll(aFlightList);
 		return new ArrayList<Flight>(deFlightSet);
