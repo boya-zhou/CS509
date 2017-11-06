@@ -1,4 +1,4 @@
-package result_generator;
+package BL.result_generator;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -62,8 +62,7 @@ public class OneStopOver {
 		
 		ArrayList<ArrayList<Flight>> oneStop = new ArrayList<>(); 
 		
-		String deXMLString = GetData.getDepartureFlightInfo(deCode, deDate);
-		Set<Flight> deFlightSet = XMLparser.parseFlightSet(deXMLString);
+		Set<Flight> deFlightSet = GetData.getDepartureFlightInfo(deCode, deDate);
 		
 		for (Flight f: deFlightSet) {
 			if (! f.arrivalCode.equals(aCode)) {
@@ -72,8 +71,7 @@ public class OneStopOver {
 				
 				//TODO: ask the how server return result related with Date
 				//TODO: if I ask flight in "2017_12_12", flight in which time range will be return? (2017_12_11 12:00PM ~ 2017_12_13 12:00AM)
-				String interDeXMLString = GetData.getDepartureFlightInfo(interDeCode, interDeDate);
-				Set<Flight> interDeFlightSet = XMLparser.parseFlightSet(interDeXMLString);
+				Set<Flight> interDeFlightSet = GetData.getDepartureFlightInfo(interDeCode, interDeDate);
 				
 				for(Flight secF: interDeFlightSet) {
 					//two restrcition: final aCode equals aCode, time between interDeDate and final
@@ -106,8 +104,7 @@ public class OneStopOver {
 		
 		ArrayList<ArrayList<Flight>> oneStop = new ArrayList<>(); 
 		
-		String aXMLString = GetData.getArrivalFlightInfo(aCode, aDate);
-		Set<Flight> aFlightSet = XMLparser.parseFlightSet(aXMLString);
+		Set<Flight> aFlightSet = GetData.getArrivalFlightInfo(aCode, aDate);
 		
 		for (Flight f: aFlightSet) {
 			if (!f.depatureCode.equals(deCode)) {
@@ -115,8 +112,7 @@ public class OneStopOver {
 				String interACode = f.depatureCode;
 				Date interADate = f.depatureTime;
 				
-				String interAXMLString = GetData.getArrivalFlightInfo(interACode, interADate);
-				Set<Flight> interAFlightSet = XMLparser.parseFlightSet(interAXMLString);
+				Set<Flight> interAFlightSet = GetData.getArrivalFlightInfo(interACode, interADate);
 				
 				for (Flight firF: interAFlightSet) {
 					if(firF.depatureCode.equals(deCode)) {
@@ -147,8 +143,7 @@ public class OneStopOver {
 		ArrayList<Flight> firF = new ArrayList<>();
 		ArrayList<Flight> secF = new ArrayList<>();
 		
-		String deXMLString = GetData.getDepartureFlightInfo(deCode, deDate);
-		Set<Flight> deFlightSet = XMLparser.parseFlightSet(deXMLString);
+		Set<Flight> deFlightSet = GetData.getDepartureFlightInfo(deCode, deDate);
 		
 		for (Flight f: deFlightSet) {
 			if (!f.arrivalCode.equals(aCode)) {
@@ -158,8 +153,7 @@ public class OneStopOver {
 		
 		Collections.sort(firF, new BL.CodeComparatorArrival());
 		
-		String aXMLString = GetData.getArrivalFlightInfo(aCode, aDate);
-		Set<Flight> aFlightSet = XMLparser.parseFlightSet(aXMLString);
+		Set<Flight> aFlightSet = GetData.getArrivalFlightInfo(aCode, aDate);
 		
 		for (Flight f: aFlightSet) {
 			if (!f.depatureCode.equals(deCode)) {

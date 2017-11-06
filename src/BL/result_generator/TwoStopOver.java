@@ -1,4 +1,4 @@
-package result_generator;
+package BL.result_generator;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -9,8 +9,11 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import BL.Flight;
+<<<<<<< HEAD:src/result_generator/TwoStopOver.java
 import BL.Leg_Trip;
 import BL.XMLparser;
+=======
+>>>>>>> 2f637b8413b6e604e10d6ce14cb4e1e61936f21b:src/BL/result_generator/TwoStopOver.java
 import DB.GetData;
 
 public class TwoStopOver {
@@ -64,16 +67,14 @@ public class TwoStopOver {
 		
 		ArrayList<ArrayList<Flight>> twoStop = new ArrayList<>(); 
 		
-		String deXMLString = GetData.getDepartureFlightInfo(deCode, deDate);
-		Set<Flight> deFlightSet = XMLparser.parseFlightSet(deXMLString);
+		Set<Flight> deFlightSet = GetData.getDepartureFlightInfo(deCode, deDate);
 		
 		for (Flight f: deFlightSet) {
 			if (! f.arrivalCode.equals(aCode)) {
 				String firCode = f.arrivalCode;
 				Date firDate = f.arrivalTime;
 				
-				String firDeXMLString = GetData.getDepartureFlightInfo(firCode, firDate);
-				Set<Flight> firDeFlightSet = XMLparser.parseFlightSet(firDeXMLString);
+				Set<Flight> firDeFlightSet = GetData.getDepartureFlightInfo(firCode, firDate);
 				
 				for(Flight secF: firDeFlightSet) {
 					//two restrcition: final aCode equals aCode, time between interDeDate and final
@@ -85,8 +86,7 @@ public class TwoStopOver {
 							String secCode = secF.arrivalCode;
 							Date secDate = secF.arrivalTime;
 							
-							String secDeXMLString = GetData.getDepartureFlightInfo(secCode, secDate);
-							Set<Flight> secDeFlightSet = XMLparser.parseFlightSet(secDeXMLString);
+							Set<Flight> secDeFlightSet = GetData.getDepartureFlightInfo(secCode, secDate);
 							
 							for (Flight thF: secDeFlightSet) {
 								if (thF.arrivalCode.equals(aCode)) {
@@ -117,16 +117,14 @@ public class TwoStopOver {
 		// find third valid flight
 		
 		ArrayList<ArrayList<Flight>> twoStop = new ArrayList<>(); 
-		String zeroXMLString = GetData.getArrivalFlightInfo(aCode, aDate);
-		Set<Flight> zeroAFlightSet = XMLparser.parseFlightSet(zeroXMLString);
+		Set<Flight> zeroAFlightSet = GetData.getArrivalFlightInfo(aCode, aDate);
 		
 		for (Flight zeroF: zeroAFlightSet) {
 			if (!deCode.equals(zeroF.depatureCode)) {
 				String zeroCode = zeroF.depatureCode;
 				Date zeroDate = zeroF.depatureTime;
 				
-				String firDeXMLString = GetData.getArrivalFlightInfo(zeroCode, zeroDate);
-				Set<Flight> firAFlightSet = XMLparser.parseFlightSet(firDeXMLString);
+				Set<Flight> firAFlightSet = GetData.getArrivalFlightInfo(zeroCode, zeroDate);
 				
 				for(Flight firF: firAFlightSet) {
 					
@@ -136,8 +134,7 @@ public class TwoStopOver {
 							String firCode = firF.depatureCode;
 							Date firDate = firF.depatureTime;
 							
-							String secAXMLString = GetData.getArrivalFlightInfo(firCode, firDate);
-							Set<Flight> secAFlightSet = XMLparser.parseFlightSet(secAXMLString);
+							Set<Flight> secAFlightSet = GetData.getArrivalFlightInfo(firCode, firDate);
 							
 							for (Flight secF: secAFlightSet) {
 								
@@ -182,11 +179,9 @@ public class TwoStopOver {
 		
 		ArrayList<Leg_Trip> twoStop = new ArrayList<>(); 
 		
-		String zeroDeXMLString = GetData.getDepartureFlightInfo(deCode, dDate);
-		Set<Flight> zeroDeFlightSet = XMLparser.parseFlightSet(zeroDeXMLString);
+		Set<Flight> zeroDeFlightSet = GetData.getDepartureFlightInfo(deCode, dDate);
 		
-		String secAXMLString = GetData.getDepartureFlightInfo(aCode, aDate);
-		Set<Flight> secAFlightSet = XMLparser.parseFlightSet(secAXMLString);
+		Set<Flight> secAFlightSet = GetData.getDepartureFlightInfo(aCode, aDate);
 		
 		for (Flight zeroF: zeroDeFlightSet) {
 			
