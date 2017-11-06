@@ -1,3 +1,10 @@
+
+/build/
+
+<<<<<<< HEAD
+
+=======
+>>>>>>> 54d0f72f855b8917116de9489a1208e50fdeb6c4
 .metadata
 bin/
 tmp/
@@ -47,3 +54,7 @@ local.properties
 .cache-main
 .scala_dependencies
 .worksheet
+<<<<<<< HEAD
+
+=======
+>>>>>>> 54d0f72f855b8917116de9489a1208e50fdeb6c4

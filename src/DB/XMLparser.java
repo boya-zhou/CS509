@@ -1,4 +1,4 @@
-package BL;
+package DB;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -22,9 +22,9 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-@Deprecated
+import BL.Flight;
+
 /**
- * please use new DB.GetData calls that return the objects
  * @author tpatikorn
  *
  */
@@ -46,6 +46,10 @@ public class XMLparser {
 		for(Flight f: flightList) {
 			System.out.println(f);
 		}
+	}
+	
+	public static String FlightSetToXML(Set<Flight> flights) {
+		throw new RuntimeException("not implemented yet");
 	}
 	
 	/**

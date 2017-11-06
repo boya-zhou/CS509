@@ -5,7 +5,9 @@ public class Leg_Trip {
     
 	List<Flight> flightList;
     int num_flight;
-
+    Long TotalTime;
+    int TripType;
+    
     public Leg_Trip(List<Flight> flightList) {
         this.flightList = flightList;
     }
