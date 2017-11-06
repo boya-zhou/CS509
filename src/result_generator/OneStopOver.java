@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import BL.Flight;
+import BL.Leg_Trip;
 import BL.XMLparser;
 import DB.GetData;
 
@@ -136,12 +137,12 @@ public class OneStopOver {
 		
 	}
 
-	public static ArrayList<ArrayList<Flight>> generateOneStopOver(String deCode, Date deDate, String aCode, Date aDate) throws IOException{
+	public static ArrayList<Leg_Trip> generateOneStopOver(String deCode, Date deDate, String aCode, Date aDate) throws IOException{
 		// find all flight start with deCode, remove direct, sort by acode
 		// find all flight end with aCode, remove direct, sort by decode
 		// join by left-acode and right-decode, then filter by time restriction
 		
-		ArrayList<ArrayList<Flight>> oneStop = new ArrayList<>(); 
+		ArrayList<Leg_Trip> oneStop = new ArrayList<>(); 
 		
 		ArrayList<Flight> firF = new ArrayList<>();
 		ArrayList<Flight> secF = new ArrayList<>();
@@ -177,7 +178,9 @@ public class OneStopOver {
 						ArrayList<Flight> validTrip = new ArrayList<>();
 						validTrip.add(firEle);
 						validTrip.add(secEle);
-						oneStop.add(validTrip);
+						Leg_Trip legTrip = new Leg_Trip(validTrip);
+						oneStop.add(legTrip);
+						
 					}
 					flag = false;
 				}else if (flag = false){

@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import BL.Flight;
+import BL.Leg_Trip;
 import BL.XMLparser;
 import DB.GetData;
 
@@ -165,13 +166,21 @@ public class TwoStopOver {
 		
 	}
 	
+	public static Calendar dateToCalendar(Date date) {
+		
+		Calendar tCalendar = Calendar.getInstance();
+		tCalendar.setTime(date);
+		
+		return tCalendar;
+	}
 	
-	public static ArrayList<ArrayList<Flight>> generateTwoStopOver(String deCode, Date dDate, String aCode, Date aDate) throws IOException{
+	
+	public static ArrayList<Leg_Trip> generateTwoStopOver(String deCode, Date dDate, String aCode, Date aDate) throws IOException{
 		// generate valid flight  from decode and dDate
 		// generate calid flight from acode and adate
 		// iter first set, iter sec set, restrict by one hour
 		
-		ArrayList<ArrayList<Flight>> twoStop = new ArrayList<>(); 
+		ArrayList<Leg_Trip> twoStop = new ArrayList<>(); 
 		
 		String zeroDeXMLString = GetData.getDepartureFlightInfo(deCode, dDate);
 		Set<Flight> zeroDeFlightSet = XMLparser.parseFlightSet(zeroDeXMLString);
@@ -198,17 +207,17 @@ public class TwoStopOver {
 							String zeroACode = zeroF.arrivalCode;
 							String secDeCode = secF.depatureCode;
 							
-							ArrayList<Flight> firFlight = ZeroStopOver.generateZeroStopOver(zeroACode, zeroADate, secDeCode, secDeDate);
+							ArrayList<Leg_Trip> firFlight = ZeroStopOver.generateZeroStopOver(zeroACode, zeroADate, 0,  secDeCode, secDeDate, 0);
 							
-							for (Flight firF: firFlight) {
+							for (Leg_Trip firF: firFlight) {
 								
-								if (validTimeRes(firF.arrivalTime, zeroADate) & validTimeRes(secDeDate, firF.depatureTime)) {
+								if (validTimeRes(firF.getFlightList().get(0).arrivalTime, zeroADate) & validTimeRes(secDeDate, firF.getFlightList().get(0).depatureTime)) {
 									
 									ArrayList<Flight> validTrip = new ArrayList<>();
 									validTrip.add(zeroF);
-									validTrip.add(firF);
+									validTrip.add(firF.getFlightList().get(0));
 									validTrip.add(secF);
-									twoStop.add(validTrip);
+									twoStop.add(new Leg_Trip(validTrip));
 									
 								}
 								
@@ -224,11 +233,5 @@ public class TwoStopOver {
 		
 		return twoStop;
 	}
-	
-	
-	
-	
-	
-		
 	
 }

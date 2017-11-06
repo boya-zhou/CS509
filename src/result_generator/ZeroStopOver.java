@@ -2,14 +2,18 @@ package result_generator;
 
 import DB.GetData;
 
+import java.awt.List;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Set;
 
 import BL.Flight;
+import BL.Leg_Trip;
 import BL.XMLparser;
 
 public class ZeroStopOver {
@@ -19,7 +23,7 @@ public class ZeroStopOver {
 		String deCode = "AUS";
 		int deYear = 2017;
 		int deMonth = Calendar.DECEMBER;
-		int deDay = 12;
+		int deDay = 11;
 		
 		Date deDate = new GregorianCalendar(deYear, deMonth, deDay).getTime();
 		
@@ -42,8 +46,42 @@ public class ZeroStopOver {
 		
 		System.out.println(generateZeroStopOver(deCode, deDate, aCode));
 		System.out.println(generateZeroStopOver(deCode, aCode, aDate)); 
-		System.out.println(generateZeroStopOver(deCode, deDate, aCode, aDate)); 
+		System.out.println(generateZeroStopOver(deCode, deDate, 0, aCode, aDate, 0)); 
 		
+	}
+	
+	public static ArrayList<Integer> timeWindow(int timeWin) {
+		
+		ArrayList<Integer> timeWinList = new ArrayList<Integer>();
+		
+		switch (timeWin) {
+	
+		case 0:
+			timeWinList.add(0);
+			break;
+		case 1:
+			timeWinList.add(-1);
+			timeWinList.add(0);
+			timeWinList.add(1);
+			break;
+		case 2:
+			timeWinList.add(-2);
+			timeWinList.add(-1);
+			timeWinList.add(0);
+			timeWinList.add(1);
+			timeWinList.add(2);
+			break;
+		case 3:
+			timeWinList.add(-3);
+			timeWinList.add(-2);
+			timeWinList.add(-1);
+			timeWinList.add(0);
+			timeWinList.add(1);
+			timeWinList.add(2);
+			timeWinList.add(3);
+			break;
+		}
+		return timeWinList;
 	}
 	
 	// 
@@ -65,17 +103,20 @@ public class ZeroStopOver {
 		
 	}
 	
-	public static ArrayList<Flight> generateZeroStopOver(String deCode, String aCode, Date aDate) throws IOException{
+	public static ArrayList<Leg_Trip> generateZeroStopOver(String deCode, String aCode, Date aDate) throws IOException{
 		
 		// only give a airport, search for de airport
-		ArrayList<Flight> zeroStop = new ArrayList<>(); 
+		ArrayList<Leg_Trip> zeroStop = new ArrayList<>(); 
 		
 		String aXMLString = GetData.getArrivalFlightInfo(aCode, aDate);
 		Set<Flight> aFlightSet = XMLparser.parseFlightSet(aXMLString);
 		
 		for (Flight f: aFlightSet) {
 			if (deCode.equals(f.depatureCode)) {
-				zeroStop.add(f);
+				ArrayList<Flight> validLeg = new ArrayList<Flight>();
+				validLeg.add(f);
+				zeroStop.add(new Leg_Trip(validLeg));
+			
 			}
 		}
 		
@@ -83,17 +124,44 @@ public class ZeroStopOver {
 		
 	}
 	
-	public static ArrayList<Flight> generateZeroStopOver(String deCode, Date deDate, String aCode, Date aDate) throws IOException{
+	public static Calendar dateToCalendar(Date date) {
+		
+		Calendar tCalendar = Calendar.getInstance();
+		tCalendar.setTime(date);
+		
+		return tCalendar;
+	}
+	
+	public static ArrayList<Leg_Trip> generateZeroStopOver(String deCode, Date deDate,int deWin, String aCode, Date aDate, int aWin) throws IOException{
 		// give both, find if there are same flight number
 				
-		String deXMLString = GetData.getDepartureFlightInfo(deCode, deDate);
-		Set<Flight> deFlightSet = XMLparser.parseFlightSet(deXMLString);
+		ArrayList<Leg_Trip> zeroStop = new ArrayList<>();
 		
-		String aXMLString = GetData.getArrivalFlightInfo(aCode, aDate);
-		Set<Flight> aFlightList = XMLparser.parseFlightSet(aXMLString);
+		ArrayList<Integer> deWinList = timeWindow(deWin);
+		ArrayList<Integer> aWinList = timeWindow(aWin);
 		
-		deFlightSet.retainAll(aFlightList);
-		return new ArrayList<Flight>(deFlightSet);
+		deWinList.retainAll(aWinList);
+				
+		for (Integer deTime: deWinList) {
+			
+			Calendar newDeDate= (GregorianCalendar) dateToCalendar(deDate).clone();
+			newDeDate.add(Calendar.DAY_OF_MONTH, deTime.intValue());
+			
+			String deXMLString = GetData.getDepartureFlightInfo(deCode, newDeDate.getTime());
+			Set<Flight> deFlightSet = XMLparser.parseFlightSet(deXMLString);
+			
+			String aXMLString = GetData.getArrivalFlightInfo(aCode, newDeDate.getTime());
+			Set<Flight> aFlightList = XMLparser.parseFlightSet(aXMLString);
+			
+			deFlightSet.retainAll(aFlightList);
+			
+			for (Flight flight: deFlightSet) {
+				zeroStop.add(new Leg_Trip(new ArrayList<Flight>(Arrays.asList(new Flight[] {flight}))));
+			}
+
+		}
+		
+		return zeroStop;
 		
 	}
 	

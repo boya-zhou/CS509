@@ -148,7 +148,7 @@ public class SearchAndResult_Frame extends JFrame{
 		panel.add(rdbtnNewRadioButton);
 		
 		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon(SearchAndResult_Frame.class.getResource("/image/download (1).png")));
+		lblNewLabel.setIcon(new ImageIcon(SearchAndResult_Frame.class.getResource("/image/download1.png")));
 		lblNewLabel.setBounds(31, 15, 197, 93);
 		panel.add(lblNewLabel);
 		

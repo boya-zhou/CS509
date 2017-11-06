@@ -8,4 +8,17 @@ public class Trip {
     public Trip(List<Leg_Trip> leg_tripList) {
         this.leg_tripList = leg_tripList;
     }
+    
+    @Override
+    public String toString() {
+    	
+    		String result = "";
+		
+    		for (Leg_Trip legTrip: leg_tripList) {
+    			result += "\t" + legTrip;
+    		}
+    			
+    		return result;
+    	
+    }
 }
