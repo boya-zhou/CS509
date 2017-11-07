@@ -1,7 +1,7 @@
 package UI;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.plaf.metal.MetalBorders.TableHeaderBorder;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -98,7 +98,7 @@ public class SearchAndResult_Frame extends JFrame{
 				java.util.Date inputDate = new GregorianCalendar(departy, departm-1, departd).getTime();
 			System.out.println(inputDate);
 			try {
-				flightList=XMLparser.parseFlightSet(DB.GetData.getDepartureFlightInfo(departPlace, inputDate));
+				flightList=DB.GetData.getDepartureFlightInfo(departPlace, inputDate);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -124,6 +124,8 @@ public class SearchAndResult_Frame extends JFrame{
 		
 		table = new JTable();
 		table.setFillsViewportHeight(true);
+		table.setFont(new Font("Tempus Sans ITC", Font.BOLD, 15));
+		table.setFillsViewportHeight(isEnabled());
 		scrollPane.setViewportView(table);
 		
 		seat = new JComboBox<String>();
@@ -150,7 +152,7 @@ public class SearchAndResult_Frame extends JFrame{
 		panel.add(rdbtnNewRadioButton);
 		
 		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon(SearchAndResult_Frame.class.getResource("/image/download (1).png")));
+		lblNewLabel.setIcon(new ImageIcon(SearchAndResult_Frame.class.getResource("/image/download1.png")));
 		lblNewLabel.setBounds(31, 15, 197, 93);
 		panel.add(lblNewLabel);
 		

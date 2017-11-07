@@ -34,10 +34,22 @@ public class Flight{
         this.price_FirstClass = price_FirstClass;
         this.price_Coach = price_Coach;
     }
-    public static Flight getFlight(int flightNumber){
-        Flight flight=new Flight(/*need fill up*/);
-        return null;
+    
+    public Flight(Flight flight) {
+        this.flightNumber = flight.flightNumber;
+        this.depatureTime = flight.depatureTime;
+        this.arrivalTime = flight.arrivalTime;
+        this.depatureCode = flight.depatureCode;
+        this.arrivalCode = flight.arrivalCode;
+        this.airplaneModel = flight.airplaneModel;
+        this.flightTime = flight.flightTime;
+        this.remain_FirstClass = flight.remain_FirstClass;
+        this.remain_Coach = flight.remain_Coach;
+        this.price_FirstClass = flight.price_FirstClass;
+        this.price_Coach = flight.price_Coach;
+    	
     }
+
 
     @Override
     public String toString() {

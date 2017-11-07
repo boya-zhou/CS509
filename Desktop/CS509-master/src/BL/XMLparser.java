@@ -22,8 +22,15 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+@Deprecated
+/**
+ * please use new DB.GetData calls that return the objects
+ * @author tpatikorn
+ *
+ */
 public class XMLparser {
 	
+	@Deprecated
 	public static void main(String args[]) throws IOException {
 		String inputCode = "BOS";
 		int inputYear = 2017;
@@ -32,7 +39,7 @@ public class XMLparser {
 		
 		Date inputDate = new GregorianCalendar(inputYear, inputMonth, inputDay).getTime();
 		System.out.println(inputDate);
-		String xmlString = DB.GetData.getArrivalFlightInfo(inputCode, inputDate);
+		String xmlString = DB.GetData.getArrivalFlightInfoXML(inputCode, inputDate);
 		System.out.println(xmlString);
 		Set<Flight> flightList = parseFlightSet(xmlString);
 		System.out.println(flightList);

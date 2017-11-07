@@ -4,10 +4,11 @@ import DB.ReserveFlight;
 
 import java.io.IOException;
 
-public class Reserve{
+public class Reserve{	
+	
     public static void reserve(Flight flight) throws IOException {
         ReserveFlight.lock();
-        ReserveFlight.reserve(null);
+        ReserveFlight.reserve();
         ReserveFlight.unlock();
 
     }

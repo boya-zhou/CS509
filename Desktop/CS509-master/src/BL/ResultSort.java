@@ -65,31 +65,31 @@ public class ResultSort {
         }
     };
     /*need fill up*/
-    public static final Comparator<Flight> TotalTimeAsc = new Comparator<Flight>() {
+    public static final Comparator<Leg_Trip> TotalTimeAsc = new Comparator<Leg_Trip>() {
         @Override
-        public int compare(Flight f1, Flight f2) {
-            return  f2.getArrivalTime().compareTo(f1.getArrivalTime());
+        public int compare(Leg_Trip l1, Leg_Trip l2) {
+            return  l2.getArrivalTime().compareTo(l1.getArrivalTime());
         }
     };
     /*need fill up*/
-    public static final Comparator<Flight> TotalTimeDes = new Comparator<Flight>() {
+    public static final Comparator<Leg_Trip> TotalTimeDes = new Comparator<Leg_Trip>() {
         @Override
-        public int compare(Flight f1, Flight f2) {
-            return  f2.getArrivalTime().compareTo(f1.getArrivalTime());
+        public int compare(Leg_Trip l1, Leg_Trip l2) {
+            return  l2.getArrivalTime().compareTo(l1.getArrivalTime());
         }
     };
     /*need fill up*/
-    public static final Comparator<Flight> StopoverAsc = new Comparator<Flight>() {
+    public static final Comparator<Leg_Trip> StopoverAsc = new Comparator<Leg_Trip>() {
         @Override
-        public int compare(Flight f1, Flight f2) {
-            return  f2.getArrivalTime().compareTo(f1.getArrivalTime());
+        public int compare(Leg_Trip l1, Leg_Trip l2) {
+            return  l2.getArrivalTime().compareTo(l1.getArrivalTime());
         }
     };
     /*need fill up*/
-    public static final Comparator<Flight> StopoverDes = new Comparator<Flight>() {
+    public static final Comparator<Leg_Trip> StopoverDes = new Comparator<Leg_Trip>() {
         @Override
-        public int compare(Flight f1, Flight f2) {
-            return  f2.getArrivalTime().compareTo(f1.getArrivalTime());
+        public int compare(Leg_Trip l1, Leg_Trip l2) {
+            return  l2.getArrivalTime().compareTo(l1.getArrivalTime());
         }
     };
 }
