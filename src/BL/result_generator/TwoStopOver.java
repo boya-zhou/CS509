@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import BL.Flight;
 import BL.Leg_Trip;
-import BL.XMLparser;
 import DB.GetData;
 
 public class TwoStopOver {
@@ -18,33 +18,30 @@ public class TwoStopOver {
 	static long lowerTime = 30;
 	static long upperTime = 240;
 	
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		
 		String deCode = "AUS";
 		int deYear = 2017;
 		int deMonth = Calendar.DECEMBER;
-		int deDay = 12;
+		int deDay = 11;
 		
 		Date deDate = new GregorianCalendar(deYear, deMonth, deDay).getTime();
-		
-//		String deXMLString = GetData.getDepartureFlightInfo(deCode, deDate);		
-//		Set<Flight> deFlightSet = XMLparser.parseFlightSet(deXMLString);
-//		System.out.println(deFlightSet);
 		
 		String aCode = "DEN";
 		int aYear = 2017;
 		int aMonth = Calendar.DECEMBER;
 		int aDay = 12;
 		
-		Date aDate = new GregorianCalendar(aYear, aMonth, aDay).getTime();
+		Date aDate = new GregorianCalendar(aYear, aMonth, aDay).getTime();		
 		
-//		String aXMLString = GetData.getArrivalFlightInfo(aCode, aDate);		
-//		Set<Flight> aFlightSet = XMLparser.parseFlightSet(aXMLString);
-//		System.out.println(aFlightSet);	
+		long tStart = System.currentTimeMillis();
 		
-//		System.out.println(generateTwoStopOver(deCode, deDate, aCode));
-//		System.out.println(generateTwoStopOver(deCode, aCode, aDate));
-		System.out.println(generateTwoStopOver(deCode, deDate, aCode, aDate));
+		System.out.println(generateTwoStopOver(deCode, deDate, aCode));
+		
+		long tEnd = System.currentTimeMillis();
+		long tDelta = tEnd - tStart;
+		double elapsedSeconds = tDelta / 1000.0;
+		System.out.println(elapsedSeconds);
 	
 	}
 	
@@ -53,37 +50,36 @@ public class TwoStopOver {
 		if ((timeDiff >= lowerTime) & (timeDiff <= upperTime)) {
 			return true;
 		}
-		
 		return false;
 	}
 	
-	public static ArrayList<ArrayList<Flight>> generateTwoStopOver(String deCode, Date deDate, String aCode) throws IOException{
+	public static ArrayList<Leg_Trip> generateTwoStopOver(String deCode, Date deDate, String aCode) throws IOException, ClassNotFoundException{
 		// find fir set of valid flights, remove straight
 		// find sec set of valid flights, remove stright
 		// find third valid flight
 		
-		ArrayList<ArrayList<Flight>> twoStop = new ArrayList<>(); 
+		Map<String, Set<Flight>> cachedFlight = HashFlight.readFlightMap();
+		ArrayList<Leg_Trip> twoStop = new ArrayList<>(); 
 		
-		Set<Flight> deFlightSet = GetData.getDepartureFlightInfo(deCode, deDate);
+		Set<Flight> deFlightSet = HashFlight.getDeFlight(cachedFlight, deCode, deDate);
 		
 		for (Flight f: deFlightSet) {
 			if (! f.arrivalCode.equals(aCode)) {
 				String firCode = f.arrivalCode;
 				Date firDate = f.arrivalTime;
 				
-				Set<Flight> firDeFlightSet = GetData.getDepartureFlightInfo(firCode, firDate);
+				Set<Flight> firDeFlightSet = HashFlight.getDeFlight(cachedFlight, firCode, firDate);
 				
 				for(Flight secF: firDeFlightSet) {
 					//two restrcition: final aCode equals aCode, time between interDeDate and final
 					if ((!secF.arrivalCode.equals(aCode)) & (!secF.arrivalCode.equals(deCode))) {
 						
-//						long timeDiff = TimeUnit.MILLISECONDS.toMinutes(secF.depatureTime.getTime() - f.arrivalTime.getTime()); 
 						if (validTimeRes(secF.depatureTime, f.arrivalTime)){
 							
 							String secCode = secF.arrivalCode;
 							Date secDate = secF.arrivalTime;
 							
-							Set<Flight> secDeFlightSet = GetData.getDepartureFlightInfo(secCode, secDate);
+							Set<Flight> secDeFlightSet = HashFlight.getDeFlight(cachedFlight, secCode, secDate);
 							
 							for (Flight thF: secDeFlightSet) {
 								if (thF.arrivalCode.equals(aCode)) {
@@ -94,7 +90,7 @@ public class TwoStopOver {
 										validTrip.add(f);
 										validTrip.add(secF);
 										validTrip.add(thF);
-										twoStop.add(validTrip);
+										twoStop.add(new Leg_Trip(validTrip));
 									}
 								}
 							}
@@ -159,71 +155,59 @@ public class TwoStopOver {
 		return twoStop;
 		
 	}
-	
-	public static Calendar dateToCalendar(Date date) {
 		
-		Calendar tCalendar = Calendar.getInstance();
-		tCalendar.setTime(date);
-		
-		return tCalendar;
-	}
-	
-	
-	public static ArrayList<Leg_Trip> generateTwoStopOver(String deCode, Date dDate, String aCode, Date aDate) throws IOException{
-		// generate valid flight  from decode and dDate
-		// generate calid flight from acode and adate
-		// iter first set, iter sec set, restrict by one hour
-		
-		ArrayList<Leg_Trip> twoStop = new ArrayList<>(); 
-		
-		Set<Flight> zeroDeFlightSet = GetData.getDepartureFlightInfo(deCode, dDate);
-		
-		Set<Flight> secAFlightSet = GetData.getDepartureFlightInfo(aCode, aDate);
-		
-		for (Flight zeroF: zeroDeFlightSet) {
-			
-			if (! zeroF.arrivalCode.equals(aCode)) {
-				
-				for (Flight secF: secAFlightSet) {
-					
-					if (! secF.depatureCode.equals(deCode)) {
-						// find aDate for zeroF, find deDate for secF, diff should larger than two lowertime
-						
-						Date zeroADate = zeroF.arrivalTime;
-						Date secDeDate = secF.depatureTime;
-						
-						long timeDiff = TimeUnit.MILLISECONDS.toMinutes(secDeDate.getTime() - zeroADate.getTime()); 
-					
-						if (timeDiff >= 2* lowerTime) {
-							
-							String zeroACode = zeroF.arrivalCode;
-							String secDeCode = secF.depatureCode;
-							
-							ArrayList<Leg_Trip> firFlight = ZeroStopOver.generateZeroStopOver(zeroACode, zeroADate, 0,  secDeCode, secDeDate, 0);
-							
-							for (Leg_Trip firF: firFlight) {
-								
-								if (validTimeRes(firF.getFlightList().get(0).arrivalTime, zeroADate) & validTimeRes(secDeDate, firF.getFlightList().get(0).depatureTime)) {
-									
-									ArrayList<Flight> validTrip = new ArrayList<>();
-									validTrip.add(zeroF);
-									validTrip.add(firF.getFlightList().get(0));
-									validTrip.add(secF);
-									twoStop.add(new Leg_Trip(validTrip));
-									
-								}
-								
-							}
-						}
-
-					}
-				}
-				
-			}
-			
-		}
-		
-		return twoStop;
-	}
+	public static ArrayList<ArrayList<Flight>> generateTwoStopOver(String deCode, Date deDate, String aCode, Date aDate) throws IOException, ClassNotFoundException{
+		 		// generate valid flight  from decode and dDate
+		 		// generate calid flight from acode and adate
+		 		// iter first set, iter sec set, restrict by one hour
+		 		
+		 		ArrayList<ArrayList<Flight>> twoStop = new ArrayList<>(); 
+		 		
+		 		Map<String, Set<Flight>> cachedFlight = HashFlight.readFlightMap();
+		 		
+		 		Set<Flight> zeroDeFlightSet = HashFlight.getDeFlight(cachedFlight, deCode, deDate);
+		 		Set<Flight> secAFlightSet = HashFlight.getAFlight(cachedFlight, aCode, aDate);
+		 		
+		 		for (Flight zeroF: zeroDeFlightSet) {
+		 			
+		 			if (! zeroF.arrivalCode.equals(aCode)) {
+		 				
+		 				for (Flight secF: secAFlightSet) {
+		 					
+		 					if (! secF.depatureCode.equals(deCode)) {
+		 						// find aDate for zeroF, find deDate for secF, diff should larger than two lowertime
+		 						
+		 						Date zeroADate = zeroF.arrivalTime;
+		 						Date secDeDate = secF.depatureTime;
+		 						
+		 						long timeDiff = TimeUnit.MILLISECONDS.toMinutes(secDeDate.getTime() - zeroADate.getTime()); 
+		 					
+		 						if (timeDiff >= 2* lowerTime) {
+		 							
+		 							String zeroACode = zeroF.arrivalCode;
+		 							String secDeCode = secF.depatureCode;
+		 							
+		 							ArrayList<Flight> firFlight = ZeroStopOver.generateZeroStopOver(zeroACode, zeroADate, secDeCode, secDeDate);
+		 							
+		 							for (Flight firF: firFlight) {
+		 								
+		 								if (validTimeRes(firF.arrivalTime, zeroADate) & validTimeRes(secDeDate, firF.depatureTime)) {
+		 									ArrayList<Flight> validTrip = new ArrayList<>();
+		 									validTrip.add(zeroF);
+		 									validTrip.add(firF);
+		 									validTrip.add(secF);
+		 									twoStop.add(validTrip);
+		 								}
+		 								
+		 							}
+		 						}		 
+		 					}
+		 				}		 				
+		 			}
+		 			
+		 		}
+		 		
+		 		return twoStop;
+		 }
 	
 }

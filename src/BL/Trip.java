@@ -15,7 +15,7 @@ public class Trip {
     		String result = "";
 		
     		for (Leg_Trip legTrip: leg_tripList) {
-    			result += "\t" + legTrip;
+    			result += "\t\n" + legTrip;
     		}
     			
     		return result;

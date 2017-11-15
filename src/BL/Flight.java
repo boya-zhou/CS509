@@ -1,9 +1,10 @@
 package BL;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Date;
 
-public class Flight{
+public class Flight implements Serializable{
     public int flightNumber;
     public Date depatureTime;
     public Date arrivalTime;

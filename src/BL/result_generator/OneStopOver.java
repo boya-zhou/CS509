@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -22,7 +23,7 @@ public class OneStopOver {
 	static long lowerTime = 30;
 	static long upperTime = 240;
 	
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		
 		String deCode = "AUS";
 		int deYear = 2017;
@@ -42,27 +43,23 @@ public class OneStopOver {
 		
 		Date aDate = new GregorianCalendar(aYear, aMonth, aDay).getTime();
 		
-//		String aXMLString = GetData.getArrivalFlightInfo(aCode, aDate);		
-//		Set<Flight> aFlightSet = XMLparser.parseFlightSet(aXMLString);
-//		System.out.println(aFlightSet);	
-		
-//		System.out.println(generateOneStopOver(deCode, deDate, aCode));
+		System.out.println(generateOneStopOver(deCode, deDate, aCode));
 //		System.out.println(generateOneStopOver(deCode, aCode, aDate));
-		System.out.println(generateOneStopOver(deCode, deDate, aCode, aDate));
+//		System.out.println(generateOneStopOver(deCode, deDate, aCode, aDate));
 		
 		
 	}
 	
-	public static ArrayList<ArrayList<Flight>> generateOneStopOver(String deCode, Date deDate, String aCode) throws IOException{
+	public static ArrayList<Leg_Trip> generateOneStopOver(String deCode, Date deDate, String aCode) throws IOException, ClassNotFoundException{
 		
 		// find all flight start from deCode
 		// remove the one that can direct get to acode
 		// for each inter-aCode(also inter-deCode), find the final-deCode equals aCode
 		// for all flights above, fliter by layover time restriction
+		Map<String, Set<Flight>> cachedFlight = HashFlight.readFlightMap();
+		ArrayList<Leg_Trip> oneStop = new ArrayList<>(); 
 		
-		ArrayList<ArrayList<Flight>> oneStop = new ArrayList<>(); 
-		
-		Set<Flight> deFlightSet = GetData.getDepartureFlightInfo(deCode, deDate);
+		Set<Flight> deFlightSet = HashFlight.getDeFlight(cachedFlight, deCode, deDate);
 		
 		for (Flight f: deFlightSet) {
 			if (! f.arrivalCode.equals(aCode)) {
@@ -71,7 +68,7 @@ public class OneStopOver {
 				
 				//TODO: ask the how server return result related with Date
 				//TODO: if I ask flight in "2017_12_12", flight in which time range will be return? (2017_12_11 12:00PM ~ 2017_12_13 12:00AM)
-				Set<Flight> interDeFlightSet = GetData.getDepartureFlightInfo(interDeCode, interDeDate);
+				Set<Flight> interDeFlightSet = HashFlight.getDeFlight(cachedFlight, interDeCode, interDeDate);
 				
 				for(Flight secF: interDeFlightSet) {
 					//two restrcition: final aCode equals aCode, time between interDeDate and final
@@ -83,7 +80,7 @@ public class OneStopOver {
 							ArrayList<Flight> validTrip = new ArrayList<>();
 							validTrip.add(f);
 							validTrip.add(secF);
-							oneStop.add(validTrip);
+							oneStop.add(new Leg_Trip(validTrip));
 						}
 					}
 				}
