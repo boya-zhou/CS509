@@ -1,14 +1,20 @@
 package DB;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
+import BL.Airplane;
+import BL.Airport;
 import BL.Flight;
 
 public class GetData {
@@ -50,6 +56,42 @@ public class GetData {
 		}
 	}
 	
+	public static Set<Airport> getAllAirports() {
+		String url = baseURL+"&action=list&list_type=airports";
+//		System.out.println(url);
+		try {
+			String xmlString = getXML(url);
+			System.out.println(xmlString);
+			Set<Airport> airportSets = XMLparser.parseAirportSet(xmlString, getTimeZoneOffsetInfo());
+			return airportSets;
+		} catch(IOException e) {
+			throw new RuntimeException("Cannot connect to the WPI API");
+		}
+	}	
+	
+	private static Map<String, Integer> getTimeZoneOffsetInfo() throws IOException {
+		BufferedReader reader = new BufferedReader(new FileReader("sources/airport_timezoneoffset.csv"));
+		Map<String, Integer> timeMap = new HashMap<String, Integer>();
+		String line = null;
+		while ((line = reader.readLine()) != null) {
+			String[] s = line.split(",");
+			timeMap.put(s[0], Integer.parseInt(s[1]));
+		}
+		return timeMap;
+	}
+
+	public static Set<Airplane> getAllAirplanes() {
+		String url = baseURL+"&action=list&list_type=airplanes";
+//		System.out.println(url);
+		try {
+			String xmlString = getXML(url);
+			System.out.println(xmlString);
+			return XMLparser.parseAirplaneSet(xmlString);
+		} catch(IOException e) {
+			throw new RuntimeException("Cannot connect to the WPI API");
+		}
+	}	
+
 	/**
 	 * helper function to interface with the server GET API
 	 * @param getURL

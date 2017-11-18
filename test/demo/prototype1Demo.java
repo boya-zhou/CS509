@@ -1,4 +1,4 @@
-package demo;
+package java_demo_and_sandbox;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -6,11 +6,21 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Set;
 
+import BL.Airplane;
+import BL.Airport;
 import BL.Flight;
 import DB.GetData;
 
 public class prototype1Demo {
 	public static void main(String args[]) {
+		Set<Airport> airports = GetData.getAllAirports();
+		for(Airport a: airports) {
+			System.out.println(a.toString());
+		}
+		Set<Airplane> Airplanes = GetData.getAllAirplanes();
+		for(Airplane a: Airplanes) {
+			System.out.println(a.toString());
+		}
 		BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
 		try {
 			while(true) {

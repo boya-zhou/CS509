@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -22,6 +23,8 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import BL.Airplane;
+import BL.Airport;
 import BL.Flight;
 
 /**
@@ -29,60 +32,66 @@ import BL.Flight;
  *
  */
 public class XMLparser {
-	
+
 	@Deprecated
 	public static void main(String args[]) throws IOException {
 		String inputCode = "BOS";
 		int inputYear = 2017;
 		int inputMonth = Calendar.DECEMBER;
 		int inputDay = 12;
-		
+
 		Date inputDate = new GregorianCalendar(inputYear, inputMonth, inputDay).getTime();
 		System.out.println(inputDate);
 		String xmlString = DB.GetData.getArrivalFlightInfoXML(inputCode, inputDate);
 		System.out.println(xmlString);
 		Set<Flight> flightList = parseFlightSet(xmlString);
 		System.out.println(flightList);
-		for(Flight f: flightList) {
+		for (Flight f : flightList) {
 			System.out.println(f);
 		}
 	}
-	
+
 	public static String FlightSetToXML(Set<Flight> flights) {
 		throw new RuntimeException("not implemented yet");
 	}
-	
+
 	/**
-	 * parse an input xml string to a Set of Flight objects
-	 * if the server responds with nothing, an empty set is returned
-	 * @param xmlString input string
+	 * parse an input xml string to a Set of Flight objects if the server
+	 * responds with nothing, an empty set is returned
+	 * 
+	 * @param xmlString
+	 *            input string
 	 * @return a Set of Flight objects
-	 * @throws IOException if something wrong happens, e.g. xml not in the right format, some info missing
+	 * @throws IOException
+	 *             if something wrong happens, e.g. xml not in the right format,
+	 *             some info missing
 	 */
 	public static Set<Flight> parseFlightSet(String xmlString) throws IOException {
 		try {
 			Set<Flight> flightList = new HashSet<Flight>();
 			Document doc = loadXMLFromString(xmlString);
 			NodeList flights = doc.getChildNodes().item(0).getChildNodes();
-			for(int i = 0; i < flights.getLength(); i++) {
+			for (int i = 0; i < flights.getLength(); i++) {
 				Element flightElement = (Element) flights.item(i);
 				flightList.add(elementToFlight(flightElement));
 			}
 			return flightList;
-		} catch(IOException e) {
+		} catch (IOException e) {
 			throw e;
-		} catch (DOMException|ParseException e) {
+		} catch (DOMException | ParseException e) {
 			e.printStackTrace();
-			throw new IOException(e.getClass() + ": "+ e.getMessage());
+			throw new IOException(e.getClass() + ": " + e.getMessage());
 		}
 	}
-	
+
 	/**
-	 * attempt to convert an Element e into a Flight object
-	 * if all information related to the Flight is present in the right format (server default format)
-	 * a Flight object is return.
-	 * Otherwise, the behavior is unpredictable.
-	 * @param e input element
+	 * attempt to convert an Element e into a Flight object if all information
+	 * related to the Flight is present in the right format (server default
+	 * format) a Flight object is return. Otherwise, the behavior is
+	 * unpredictable.
+	 * 
+	 * @param e
+	 *            input element
 	 * @return a Flight object corresponding to e
 	 * @throws DOMException
 	 * @throws ParseException
@@ -91,7 +100,7 @@ public class XMLparser {
 		int flightNumber = Integer.parseInt(e.getAttribute("Number"));
 		String airplaneModel = e.getAttribute("Airplane");
 		int flightTime = Integer.parseInt(e.getAttribute("FlightTime"));
-		
+
 		Element depNode = (Element) e.getElementsByTagName("Departure").item(0);
 		String departureCode = depNode.getElementsByTagName("Code").item(0).getTextContent();
 		Date departureTime = serverDTStringToDate(depNode.getElementsByTagName("Time").item(0).getTextContent());
@@ -105,29 +114,31 @@ public class XMLparser {
 		Element coachNode = (Element) seating.getElementsByTagName("Coach").item(0);
 		int remainingFirstClass = Integer.parseInt(firstClassNode.getTextContent());
 		int remainingCoach = Integer.parseInt(coachNode.getTextContent());
-		double priceFirstClass = Double.parseDouble(firstClassNode.getAttribute("Price").replace("$", "").replace(",", ""));
+		double priceFirstClass = Double
+				.parseDouble(firstClassNode.getAttribute("Price").replace("$", "").replace(",", ""));
 		double priceCoach = Double.parseDouble(coachNode.getAttribute("Price").replace("$", ""));
 
-		return new Flight(flightNumber, departureTime, arrivalTime, 
-				departureCode, arrivalCode, airplaneModel, flightTime, 
-				remainingFirstClass, remainingCoach, priceFirstClass, priceCoach);
+		return new Flight(flightNumber, departureTime, arrivalTime, departureCode, arrivalCode, airplaneModel,
+				flightTime, remainingFirstClass, remainingCoach, priceFirstClass, priceCoach);
 	}
-	
+
 	/**
 	 * convert server's datetime string (from xml) to a Date object
+	 * 
 	 * @param dtString
 	 * @return
 	 * @throws ParseException
 	 */
-	private static Date serverDTStringToDate(String  dtString) throws ParseException {
+	private static Date serverDTStringToDate(String dtString) throws ParseException {
 		SimpleDateFormat df = new SimpleDateFormat("yyyy MMM dd hh:mm 'GMT'");
 		df.setTimeZone(TimeZone.getTimeZone("GMT"));
 		return df.parse(dtString);
-		
+
 	}
-	
+
 	/**
 	 * put the xml string into a Document object for reading
+	 * 
 	 * @param xml
 	 * @return
 	 * @throws IOException
@@ -140,10 +151,110 @@ public class XMLparser {
 			return builder.parse(is);
 		} catch (IOException e) {
 			throw e;
-		} catch (SAXException|ParserConfigurationException e) {
+		} catch (SAXException | ParserConfigurationException e) {
 			e.printStackTrace();
-			throw new IOException(e.getClass() + ": "+ e.getMessage());
-		} 
+			throw new IOException(e.getClass() + ": " + e.getMessage());
+		}
 	}
-	
+
+	/**
+	 * parse an input xml string to a Set of Airport objects if the server
+	 * responds with nothing, an empty set is returned
+	 * 
+	 * @param xmlString
+	 *            input string
+	 * @return a Set of Airport objects
+	 * @throws IOException
+	 *             if something wrong happens, e.g. xml not in the right format,
+	 *             some info missing
+	 */
+	public static Set<Airport> parseAirportSet(String xmlString, Map<String, Integer> timeMap) throws IOException {
+		try {
+			Set<Airport> airportSet = new HashSet<Airport>();
+			Document doc = loadXMLFromString(xmlString);
+			NodeList airports = doc.getChildNodes().item(0).getChildNodes();
+			for (int i = 0; i < airports.getLength(); i++) {
+				Element airportElement = (Element) airports.item(i);
+				airportSet.add(elementToAirport(airportElement, timeMap));
+			}
+			return airportSet;
+		} catch (IOException e) {
+			throw e;
+		} catch (DOMException | ParseException e) {
+			e.printStackTrace();
+			throw new IOException(e.getClass() + ": " + e.getMessage());
+		}
+	}
+
+	/**
+	 * parse an input xml string to a Set of Airplane objects if the server
+	 * responds with nothing, an empty set is returned
+	 * 
+	 * @param xmlString
+	 *            input string
+	 * @return a Set of Airplane objects
+	 * @throws IOException
+	 *             if something wrong happens, e.g. xml not in the right format,
+	 *             some info missing
+	 */
+	public static Set<Airplane> parseAirplaneSet(String xmlString) throws IOException {
+		try {
+			Set<Airplane> AirplaneSet = new HashSet<Airplane>();
+			Document doc = loadXMLFromString(xmlString);
+			NodeList Airplanes = doc.getChildNodes().item(0).getChildNodes();
+			for (int i = 0; i < Airplanes.getLength(); i++) {
+				Element AirplaneElement = (Element) Airplanes.item(i);
+				AirplaneSet.add(elementToAirplane(AirplaneElement));
+			}
+			return AirplaneSet;
+		} catch (IOException e) {
+			throw e;
+		} catch (DOMException | ParseException e) {
+			e.printStackTrace();
+			throw new IOException(e.getClass() + ": " + e.getMessage());
+		}
+	}
+
+	/**
+	 * attempt to convert an Element e into a Airport object if all information
+	 * related to the Airport is present in the right format (server default
+	 * format) a Airport object is return. Otherwise, the behavior is
+	 * unpredictable.
+	 * 
+	 * @param e
+	 *            input element
+	 * @return a Airport object corresponding to e
+	 * @throws DOMException
+	 * @throws ParseException
+	 */
+	private static Airport elementToAirport(Element e, Map<String,Integer> timeMap) throws DOMException, ParseException {
+		String airportCode = e.getAttribute("Code");
+		String airportName = e.getAttribute("Name");
+		double latitude = Double.parseDouble(e.getElementsByTagName("Latitude").item(0).getTextContent());
+		double longitude = Double.parseDouble(e.getElementsByTagName("Longitude").item(0).getTextContent());
+		return new Airport(airportCode, airportName, latitude, longitude, timeMap.get(airportCode));
+	}
+
+	/**
+	 * attempt to convert an Element e into an Airplane object if all
+	 * information related to the Airplane is present in the right format
+	 * (server default format) a Airport object is return. Otherwise, the
+	 * behavior is unpredictable.
+	 * 
+	 * @param e
+	 *            input element
+	 * @return a Airplane object corresponding to e
+	 * @throws DOMException
+	 * @throws ParseException
+	 */
+	private static Airplane elementToAirplane(Element e) throws DOMException, ParseException {
+		//<Airplane Manufacturer="Airbus" Model="A310">
+		//<FirstClassSeats>24</FirstClassSeats>
+		//<CoachSeats>200</CoachSeats></Airplane>
+		String maunfacturer = e.getAttribute("Manufacturer");
+		String model = e.getAttribute("Model");
+		int firstclassSeat = Integer.parseInt(e.getElementsByTagName("FirstClassSeats").item(0).getTextContent());
+		int coachSeat = Integer.parseInt(e.getElementsByTagName("CoachSeats").item(0).getTextContent());
+		return new Airplane(model, maunfacturer, firstclassSeat, coachSeat);
+	}
 }

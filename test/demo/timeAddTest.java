@@ -1,12 +1,8 @@
 package java_demo_and_sandbox;
 
-import java.awt.print.Printable;
-import java.lang.reflect.Array;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class timeAddTest {
