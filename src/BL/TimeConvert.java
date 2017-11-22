@@ -9,24 +9,22 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 public class TimeConvert {
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		
 		String deCode = "BOS";
 		int deYear = 2017;
-		int deMonth = Calendar.DECEMBER;
+		int deMonth = 12;
 		int deDay = 12;
 						
 		System.out.println(localToGMT(deYear, deMonth, deDay, 23, 59, deCode));
@@ -88,5 +86,26 @@ public class TimeConvert {
 		in.close();
         fileIn.close();
         return e;
+	}
+
+
+	/**
+	 * return the beginning of the day of date of the given date
+	 * specifically 0 hours 0 minutes 0 seconds
+	 * @param year 
+	 * @param month begin counting at 1 (January) and end at 12 (December)
+	 * @param day begin counting at 1
+	 * @return
+	 */
+	public static ZonedDateTime getBeginOfZonedDayInGMT(int year, int month, int day, TimeZone timezone) {
+		LocalDate ldt = LocalDate.of(year, month, day);
+		LocalTime beginTime = LocalTime.of(0, 0, 0, 0);
+		return ZonedDateTime.of(ldt, beginTime, timezone.toZoneId());
+	}
+	
+	public static ZonedDateTime getEndOfZonedDayInGMT(int year, int month, int day, TimeZone timezone) {
+		LocalDate ldt = LocalDate.of(year, month, day);
+		LocalTime endTime = LocalTime.of(23, 59, 59);
+		return ZonedDateTime.of(ldt, endTime, timezone.toZoneId());
 	}
 }

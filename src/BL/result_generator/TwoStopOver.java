@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -22,14 +20,14 @@ public class TwoStopOver {
 		
 		String deCode = "AUS";
 		int deYear = 2017;
-		int deMonth = Calendar.DECEMBER;
+		int deMonth = 12;
 		int deDay = 11;
 		
 		LocalDate deDate = LocalDate.of(deYear, deMonth, deDay);
 		
 		String aCode = "DEN";
 		int aYear = 2017;
-		int aMonth = Calendar.DECEMBER;
+		int aMonth = 12;
 		int aDay = 12;
 		
 		LocalDate aDate = LocalDate.of(aYear, aMonth, aDay);		

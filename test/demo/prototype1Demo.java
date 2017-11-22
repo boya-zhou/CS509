@@ -35,7 +35,7 @@ public class prototype1Demo {
 				String yMdString = buffer.readLine();
 				String[] yMd = yMdString.split("/");
 				LocalDate date = LocalDate.of(Integer.parseInt(yMd[0]), 
-						Integer.parseInt(yMd[1])-1, /* -1 because the GregorianCalendar start month = 0*/ 
+						Integer.parseInt(yMd[1]), 
 						Integer.parseInt(yMd[2]));
 				Set<Flight> flightSet = GetData.getDepartureFlightInfo(airport, date);
 				System.out.println("Found " + flightSet.size() + " result(s):");

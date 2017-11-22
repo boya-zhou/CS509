@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Set;
 
 import BL.Flight;
@@ -17,7 +16,7 @@ public class ZeroStopOver {
 				
 		String deCode = "AUS";
 		int deYear = 2017;
-		int deMonth = Calendar.DECEMBER;
+		int deMonth = 12;
 		int deDay = 11;
 		
 		LocalDate deDate = LocalDate.of(deYear, deMonth, deDay);
@@ -26,7 +25,7 @@ public class ZeroStopOver {
 		
 		String aCode = "DEN";
 		int aYear = 2017;
-		int aMonth = Calendar.DECEMBER;
+		int aMonth = 12;
 		int aDay = 12;
 		
 		LocalDate aDate = LocalDate.of(aYear, aMonth, aDay);

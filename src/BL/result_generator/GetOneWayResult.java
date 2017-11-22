@@ -3,7 +3,6 @@ package BL.result_generator;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Set;
 
 import BL.Flight;
@@ -15,7 +14,7 @@ public class GetOneWayResult {
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		String deCode = "AUS";
 		int deYear = 2017;
-		int deMonth = Calendar.DECEMBER;
+		int deMonth = 12;
 		int deDay = 12;
 		
 		LocalDate deDate = LocalDate.of(deYear, deMonth, deDay);
@@ -24,7 +23,7 @@ public class GetOneWayResult {
 		
 		String aCode = "DEN";
 		int aYear = 2017;
-		int aMonth = Calendar.DECEMBER;
+		int aMonth = 12;
 		int aDay = 12;
 		
 		LocalDate aDate = LocalDate.of(aYear, aMonth, aDay);
