@@ -20,32 +20,26 @@ public class ZeroStopOver {
 		String deCode = "AUS";
 		int deYear = 2017;
 		int deMonth = Calendar.DECEMBER;
-		int deDay = 11;
-		
-		Date deDate = new GregorianCalendar(deYear, deMonth, deDay).getTime();
-		
-		Set<Flight> deFlightSet = GetData.getDepartureFlightInfo(deCode, deDate);				
-		
+		int deDay = 12;
+				
 		String aCode = "DEN";
 		int aYear = 2017;
 		int aMonth = Calendar.DECEMBER;
 		int aDay = 12;
-		
-		Date aDate = new GregorianCalendar(aYear, aMonth, aDay).getTime();
-				
-		System.out.println(generateZeroStopOver(deCode, deDate, aCode));
+						
+		System.out.println(generateZeroStopOver(deCode, deYear,deMonth, deDay , aCode));
 //		System.out.println(generateZeroStopOver(deCode, aCode, aDate)); 
 //		System.out.println(generateZeroStopOver(deCode, deDate, 0, aCode, aDate, 0)); 
 		
 	}
 	
-	public static ArrayList<Leg_Trip> generateZeroStopOver(String deCode, Date deDate, String aCode) throws IOException, ClassNotFoundException{
+	public static ArrayList<Leg_Trip> generateZeroStopOver(String deCode, int year, int month, int day, String aCode) throws IOException, ClassNotFoundException{
 		
 		// only give de airport, serach for arrival airport
 		Map<String, Set<Flight>> cachedFlight = HashFlight.readFlightMap();
 		ArrayList<Leg_Trip> zeroStop = new ArrayList<>(); 
 		
-		Set<Flight> deFlightSet = HashFlight.getDeFlight(cachedFlight, deCode, deDate);
+		Set<Flight> deFlightSet = HashFlight.getDeFlight(cachedFlight, deCode, year, month, day);
 		
 		for (Flight f: deFlightSet) {
 			if (aCode.equals(f.arrivalCode)) {
@@ -55,36 +49,36 @@ public class ZeroStopOver {
 		return zeroStop;		
 	}
 	
-	public static ArrayList<Leg_Trip> generateZeroStopOver(String deCode, String aCode, Date aDate) throws IOException{
-		
-		// only give a airport, search for de airport
-		ArrayList<Leg_Trip> zeroStop = new ArrayList<>(); 
-		
-		Set<Flight> aFlightSet = GetData.getArrivalFlightInfo(aCode, aDate);
-		
-		for (Flight f: aFlightSet) {
-			if (deCode.equals(f.depatureCode)) {
-				ArrayList<Flight> validLeg = new ArrayList<Flight>();
-				validLeg.add(f);
-				zeroStop.add(new Leg_Trip(validLeg));
-			
-			}
-		}
-		
-		return zeroStop;
-		
-	}
-	
- 	public static ArrayList<Flight> generateZeroStopOver(String deCode, Date deDate, String aCode, Date aDate) throws IOException, ClassNotFoundException{
- 		// give both, find if there are same flight number
- 		
- 		Map<String, Set<Flight>> cachedFlight = HashFlight.readFlightMap();
- 		Set<Flight> deFlightSet = HashFlight.getDeFlight(cachedFlight, deCode, deDate);
- 		
- 		Set<Flight> aFlightList = HashFlight.getAFlight(cachedFlight, aCode, aDate);
- 		deFlightSet.retainAll(aFlightList);
- 		return new ArrayList<Flight>(deFlightSet);
- 		
- 	}
+//	public static ArrayList<Leg_Trip> generateZeroStopOver(String deCode, String aCode, Date aDate) throws IOException{
+//		
+//		// only give a airport, search for de airport
+//		ArrayList<Leg_Trip> zeroStop = new ArrayList<>(); 
+//		
+//		Set<Flight> aFlightSet = GetData.getArrivalFlightInfo(aCode, aDate);
+//		
+//		for (Flight f: aFlightSet) {
+//			if (deCode.equals(f.depatureCode)) {
+//				ArrayList<Flight> validLeg = new ArrayList<Flight>();
+//				validLeg.add(f);
+//				zeroStop.add(new Leg_Trip(validLeg));
+//			
+//			}
+//		}
+//		
+//		return zeroStop;
+//		
+//	}
+//	
+// 	public static ArrayList<Flight> generateZeroStopOver(String deCode, Date deDate, String aCode, Date aDate) throws IOException, ClassNotFoundException{
+// 		// give both, find if there are same flight number
+// 		
+// 		Map<String, Set<Flight>> cachedFlight = HashFlight.readFlightMap();
+// 		Set<Flight> deFlightSet = HashFlight.getDeFlight(cachedFlight, deCode, deDate);
+// 		
+// 		Set<Flight> aFlightList = HashFlight.getAFlight(cachedFlight, aCode, aDate);
+// 		deFlightSet.retainAll(aFlightList);
+// 		return new ArrayList<Flight>(deFlightSet);
+// 		
+// 	}
 		
 }

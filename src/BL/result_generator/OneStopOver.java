@@ -50,7 +50,7 @@ public class OneStopOver {
 		
 	}
 	
-	public static ArrayList<Leg_Trip> generateOneStopOver(String deCode, Date deDate, String aCode) throws IOException, ClassNotFoundException{
+	public static ArrayList<Leg_Trip> generateOneStopOver(String deCode, int year, int month, int day, String aCode) throws IOException, ClassNotFoundException{
 		
 		// find all flight start from deCode
 		// remove the one that can direct get to acode
@@ -91,99 +91,99 @@ public class OneStopOver {
 		
 	}
 	
-	public static ArrayList<ArrayList<Flight>> generateOneStopOver(String deCode, String aCode, Date aDate) throws IOException{
-		
-		// find all flight end with aCode
-		// remove the one that can direct from deCode
-		// for each inter-Code(also inter-deCode), find the start deCode equals deCode
-		// for all flights above, fliter by layover time restriction
-		// TODO: add current date restriction
-		
-		ArrayList<ArrayList<Flight>> oneStop = new ArrayList<>(); 
-		
-		Set<Flight> aFlightSet = GetData.getArrivalFlightInfo(aCode, aDate);
-		
-		for (Flight f: aFlightSet) {
-			if (!f.depatureCode.equals(deCode)) {
-				
-				String interACode = f.depatureCode;
-				Date interADate = f.depatureTime;
-				
-				Set<Flight> interAFlightSet = GetData.getArrivalFlightInfo(interACode, interADate);
-				
-				for (Flight firF: interAFlightSet) {
-					if(firF.depatureCode.equals(deCode)) {
-						long timeDiff = TimeUnit.MILLISECONDS.toMinutes(f.depatureTime.getTime() - firF.arrivalTime.getTime()); 
-						if ((timeDiff <= upperTime ) & (timeDiff >= lowerTime)) {
-							ArrayList<Flight> validTrip = new ArrayList<>();
-							validTrip.add(firF);
-							validTrip.add(f);
-							oneStop.add(validTrip);
-						}
-					}
-				}
-				
-			}
-		}
-	
-		return oneStop;
-		
-	}
-
-	public static ArrayList<Leg_Trip> generateOneStopOver(String deCode, Date deDate, String aCode, Date aDate) throws IOException{
-		// find all flight start with deCode, remove direct, sort by acode
-		// find all flight end with aCode, remove direct, sort by decode
-		// join by left-acode and right-decode, then filter by time restriction
-		
-		ArrayList<Leg_Trip> oneStop = new ArrayList<>(); 
-		
-		ArrayList<Flight> firF = new ArrayList<>();
-		ArrayList<Flight> secF = new ArrayList<>();
-		
-		Set<Flight> deFlightSet = GetData.getDepartureFlightInfo(deCode, deDate);
-		
-		for (Flight f: deFlightSet) {
-			if (!f.arrivalCode.equals(aCode)) {
-				firF.add(f);
-			}
-		}
-		
-		Collections.sort(firF, new BL.CodeComparatorArrival());
-		
-		Set<Flight> aFlightSet = GetData.getArrivalFlightInfo(aCode, aDate);
-		
-		for (Flight f: aFlightSet) {
-			if (!f.depatureCode.equals(deCode)) {
-				secF.add(f);
-			}
-		}
-		
-		Collections.sort(secF, new BL.CodeComparatorDeparture());
-		
-		for (Flight firEle: firF) {
-			boolean flag = true;
-			for (Flight secEle : secF) {
-				if (firEle.arrivalCode.equals(secEle.depatureCode)) {
-					long timeDiff = TimeUnit.MILLISECONDS.toMinutes(secEle.depatureTime.getTime() - firEle.arrivalTime.getTime());
-					if ( (timeDiff <= upperTime ) & (timeDiff >= lowerTime)) {
-						ArrayList<Flight> validTrip = new ArrayList<>();
-						validTrip.add(firEle);
-						validTrip.add(secEle);
-						Leg_Trip legTrip = new Leg_Trip(validTrip);
-						oneStop.add(legTrip);
-						
-					}
-					flag = false;
-				}else if (flag = false){
-					break;
-				}else {
-					continue;
-				}
-			}
-		}
-		
-		return oneStop;
-		
-	}
+//	public static ArrayList<ArrayList<Flight>> generateOneStopOver(String deCode, String aCode, Date aDate) throws IOException{
+//		
+//		// find all flight end with aCode
+//		// remove the one that can direct from deCode
+//		// for each inter-Code(also inter-deCode), find the start deCode equals deCode
+//		// for all flights above, fliter by layover time restriction
+//		// TODO: add current date restriction
+//		
+//		ArrayList<ArrayList<Flight>> oneStop = new ArrayList<>(); 
+//		
+//		Set<Flight> aFlightSet = GetData.getArrivalFlightInfo(aCode, aDate);
+//		
+//		for (Flight f: aFlightSet) {
+//			if (!f.depatureCode.equals(deCode)) {
+//				
+//				String interACode = f.depatureCode;
+//				Date interADate = f.depatureTime;
+//				
+//				Set<Flight> interAFlightSet = GetData.getArrivalFlightInfo(interACode, interADate);
+//				
+//				for (Flight firF: interAFlightSet) {
+//					if(firF.depatureCode.equals(deCode)) {
+//						long timeDiff = TimeUnit.MILLISECONDS.toMinutes(f.depatureTime.getTime() - firF.arrivalTime.getTime()); 
+//						if ((timeDiff <= upperTime ) & (timeDiff >= lowerTime)) {
+//							ArrayList<Flight> validTrip = new ArrayList<>();
+//							validTrip.add(firF);
+//							validTrip.add(f);
+//							oneStop.add(validTrip);
+//						}
+//					}
+//				}
+//				
+//			}
+//		}
+//	
+//		return oneStop;
+//		
+//	}
+//
+//	public static ArrayList<Leg_Trip> generateOneStopOver(String deCode, Date deDate, String aCode, Date aDate) throws IOException{
+//		// find all flight start with deCode, remove direct, sort by acode
+//		// find all flight end with aCode, remove direct, sort by decode
+//		// join by left-acode and right-decode, then filter by time restriction
+//		
+//		ArrayList<Leg_Trip> oneStop = new ArrayList<>(); 
+//		
+//		ArrayList<Flight> firF = new ArrayList<>();
+//		ArrayList<Flight> secF = new ArrayList<>();
+//		
+//		Set<Flight> deFlightSet = GetData.getDepartureFlightInfo(deCode, deDate);
+//		
+//		for (Flight f: deFlightSet) {
+//			if (!f.arrivalCode.equals(aCode)) {
+//				firF.add(f);
+//			}
+//		}
+//		
+//		Collections.sort(firF, new BL.CodeComparatorArrival());
+//		
+//		Set<Flight> aFlightSet = GetData.getArrivalFlightInfo(aCode, aDate);
+//		
+//		for (Flight f: aFlightSet) {
+//			if (!f.depatureCode.equals(deCode)) {
+//				secF.add(f);
+//			}
+//		}
+//		
+//		Collections.sort(secF, new BL.CodeComparatorDeparture());
+//		
+//		for (Flight firEle: firF) {
+//			boolean flag = true;
+//			for (Flight secEle : secF) {
+//				if (firEle.arrivalCode.equals(secEle.depatureCode)) {
+//					long timeDiff = TimeUnit.MILLISECONDS.toMinutes(secEle.depatureTime.getTime() - firEle.arrivalTime.getTime());
+//					if ( (timeDiff <= upperTime ) & (timeDiff >= lowerTime)) {
+//						ArrayList<Flight> validTrip = new ArrayList<>();
+//						validTrip.add(firEle);
+//						validTrip.add(secEle);
+//						Leg_Trip legTrip = new Leg_Trip(validTrip);
+//						oneStop.add(legTrip);
+//						
+//					}
+//					flag = false;
+//				}else if (flag = false){
+//					break;
+//				}else {
+//					continue;
+//				}
+//			}
+//		}
+//		
+//		return oneStop;
+//		
+//	}
 	
 }
