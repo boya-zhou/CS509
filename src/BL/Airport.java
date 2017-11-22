@@ -1,6 +1,5 @@
 package BL;
 
-import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.TimeZone;
 
@@ -22,7 +21,6 @@ public class Airport {
         this.latitude = latitude;
         this.longitude = longitude;
         this.timeZone = TimeZone.getTimeZone(timeZoneString);
-        System.out.println(ZonedDateTime.ofInstant(Instant.now(), timeZone.toZoneId()));
     }
 
     public static Airport getAirport(String airportCode){
@@ -52,5 +50,9 @@ public class Airport {
 
 	public TimeZone getTimeZone() {
 		return timeZone;
+	}
+	
+	public ZonedDateTime getLocalTime(ZonedDateTime zdt) {
+		return(zdt.withZoneSameInstant(this.timeZone.toZoneId()));
 	}
 }

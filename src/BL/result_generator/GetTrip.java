@@ -14,7 +14,7 @@ public class GetTrip {
 		
 		long tStart = System.currentTimeMillis();
 		
-		String deCode = "AUS";
+		String deCode = "ORD";
 		int deYear = 2017;
 		int deMonth = 12;
 		int deDay = 12;

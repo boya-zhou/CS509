@@ -21,6 +21,7 @@ import DB.GetData;
 
 public class HashFlight {
 	
+	// singleton objects
 	private static Map<String, Set<Flight>> cachedFlightDepartFrom = null;
 	private static Map<String, Set<Flight>> cachedFlightArriveTo = null;
 	
@@ -149,6 +150,14 @@ public class HashFlight {
 				
 	}
 	
+	/**
+	 * find flights that arrive before flightAfter within minWaitMinutes and maxWaitMinutes
+	 * @param flightAfter
+	 * @param minWaitMinutes
+	 * @param maxWaitMinutes
+	 * @return
+	 * @throws IOException
+	 */
 	public static Set<Flight> findFlightsBefore(Flight flightAfter, long minWaitMinutes, long maxWaitMinutes) throws IOException {
 		ZonedDateTime departDateTime = flightAfter.getDepartureTime();
 		ZonedDateTime departTimeGMT = departDateTime.withZoneSameLocal(TimeZone.getTimeZone("GMT").toZoneId());
@@ -175,6 +184,14 @@ public class HashFlight {
 	}
 	
 
+	/**
+	 * find flights that depart after flightBefore within minWaitMinutes and maxWaitMinutes
+	 * @param flightBefore
+	 * @param minWaitMinutes
+	 * @param maxWaitMinutes
+	 * @return
+	 * @throws IOException
+	 */
 	public static Set<Flight> findFlightsAfter(Flight flightBefore, long minWaitMinutes, long maxWaitMinutes) throws IOException {
 		ZonedDateTime arriveDateTime = flightBefore.getArrivalTime();
 		ZonedDateTime arriveTimeGMT = arriveDateTime.withZoneSameLocal(TimeZone.getTimeZone("GMT").toZoneId());
