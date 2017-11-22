@@ -1,13 +1,13 @@
 package BL;
 
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 import java.util.Comparator;
-import java.util.Date;
 
 public class Flight implements Serializable{
     public int flightNumber;
-    public Date depatureTime;
-    public Date arrivalTime;
+    public ZonedDateTime depatureTime;
+    public ZonedDateTime arrivalTime;
     public String depatureCode;
     public String arrivalCode;
     public String airplaneModel;
@@ -21,7 +21,7 @@ public class Flight implements Serializable{
     public Flight() {
     }
     
-    public Flight(int flightNumber, Date depatureTime, Date arrivalTime, String depatureCode, String arrivalCode, String airplaneModel, int flightTime,
+    public Flight(int flightNumber, ZonedDateTime depatureTime, ZonedDateTime arrivalTime, String depatureCode, String arrivalCode, String airplaneModel, int flightTime,
                   int remain_FirstClass, int remain_Coach, double price_FirstClass, double price_Coach) {
         this.flightNumber = flightNumber;
         this.depatureTime = depatureTime;
@@ -73,11 +73,11 @@ public class Flight implements Serializable{
         return flightNumber;
     }
 
-    public Date getDepatureTime() {
+    public ZonedDateTime getDepatureTime() {
         return depatureTime;
     }
 
-    public Date getArrivalTime() {
+    public ZonedDateTime getArrivalTime() {
         return arrivalTime;
     }
 

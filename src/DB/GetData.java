@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,17 +22,17 @@ public class GetData {
 
 	private static String baseURL = "http://cs509.cs.wpi.edu:8181/CS509.server/ReservationSystem?team=404";
 
-	public static Set<Flight> getDepartureFlightInfo(String departureAirportCode, Date departureDate) throws IOException {
+	public static Set<Flight> getDepartureFlightInfo(String departureAirportCode, LocalDate departureDate) throws IOException {
 		String returnString = getDepartureFlightInfoXML(departureAirportCode, departureDate);
 		return XMLparser.parseFlightSet(returnString);
 	}
 
-	public static Set<Flight> getArrivalFlightInfo(String departureAirportCode, Date departureDate) throws IOException {
+	public static Set<Flight> getArrivalFlightInfo(String departureAirportCode, LocalDate departureDate) throws IOException {
 		String returnString = getArrivalFlightInfoXML(departureAirportCode, departureDate);
 		return XMLparser.parseFlightSet(returnString);
 	}
 	
-	public static String getDepartureFlightInfoXML(String departureAirportCode, Date departureDate) {
+	public static String getDepartureFlightInfoXML(String departureAirportCode, LocalDate departureDate) {
 		SimpleDateFormat dateformat = new SimpleDateFormat("yyyy_MM_dd");
 		String dateString = dateformat.format(departureDate);
 		String url = baseURL+"&action=list&list_type=departing&airport=" + departureAirportCode + "&day=" + dateString;
@@ -44,7 +45,7 @@ public class GetData {
 		}
 	}
 	
-	public static String getArrivalFlightInfoXML(String arrivalAirportCode, Date arrivalDate) {
+	public static String getArrivalFlightInfoXML(String arrivalAirportCode, LocalDate arrivalDate) {
 		SimpleDateFormat dateformat = new SimpleDateFormat("yyyy_MM_dd");
 		String dateString = dateformat.format(arrivalDate);
 		String url = baseURL+"&action=list&list_type=arriving&airport=" + arrivalAirportCode + "&day=" + dateString;
@@ -69,13 +70,13 @@ public class GetData {
 		}
 	}	
 	
-	private static Map<String, Integer> getTimeZoneOffsetInfo() throws IOException {
+	private static Map<String, String> getTimeZoneOffsetInfo() throws IOException {
 		BufferedReader reader = new BufferedReader(new FileReader("sources/airport_timezoneoffset.csv"));
-		Map<String, Integer> timeMap = new HashMap<String, Integer>();
+		Map<String, String> timeMap = new HashMap<String, String>();
 		String line = null;
 		while ((line = reader.readLine()) != null) {
 			String[] s = line.split(",");
-			timeMap.put(s[0], Integer.parseInt(s[1]));
+			timeMap.put(s[0], s[2]);
 		}
 		return timeMap;
 	}

@@ -1,4 +1,4 @@
-package java_demo_and_sandbox;
+package demo;
 
 
 import java.io.BufferedReader;

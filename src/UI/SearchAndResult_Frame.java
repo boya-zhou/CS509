@@ -1,19 +1,34 @@
 package UI;
 
-import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.util.GregorianCalendar;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-import BL.*;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.JTextPane;
+import javax.swing.SwingConstants;
+
+import BL.DefaultModelFactory;
+import BL.Flight;
+import DB.GetData;
 
 public class SearchAndResult_Frame extends JFrame{
 	private static final long serialVersionUID = 1L;
@@ -93,10 +108,10 @@ public class SearchAndResult_Frame extends JFrame{
 				int departm=Integer.parseInt(txtMm.getText());
 				int departd=Integer.parseInt(txtDd.getText());
 				
-				java.util.Date inputDate = new GregorianCalendar(departy, departm-1, departd).getTime();
+				LocalDate inputDate = LocalDate.of(departy, departm, departd);
 			System.out.println(inputDate);
 			try {
-				flightList=XMLparser.parseFlightSet(DB.GetData.getDepartureFlightInfo(departPlace, inputDate));
+				flightList= GetData.getDepartureFlightInfo(departPlace, inputDate);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

@@ -1,6 +1,7 @@
 package BL.result_generator;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -19,7 +20,7 @@ public class GetOneWayResult {
 		int deMonth = Calendar.DECEMBER;
 		int deDay = 12;
 		
-		Date deDate = new GregorianCalendar(deYear, deMonth, deDay).getTime();
+		LocalDate deDate = LocalDate.of(deYear, deMonth, deDay);
 		
 		Set<Flight> deFlightSet = GetData.getDepartureFlightInfo(deCode, deDate);				
 		
@@ -28,12 +29,12 @@ public class GetOneWayResult {
 		int aMonth = Calendar.DECEMBER;
 		int aDay = 12;
 		
-		Date aDate = new GregorianCalendar(aYear, aMonth, aDay).getTime();
+		LocalDate aDate = LocalDate.of(aYear, aMonth, aDay);
 		
 		System.out.println(getResult(deCode, deDate, aCode));
 	}
 	
-	public static ArrayList<Leg_Trip> getResult(String deCode, Date deDate, String aCode) throws IOException, ClassNotFoundException {
+	public static ArrayList<Leg_Trip> getResult(String deCode, LocalDate deDate, String aCode) throws IOException, ClassNotFoundException {
 		
 		ArrayList<Leg_Trip> allRes = new ArrayList<>();
 		

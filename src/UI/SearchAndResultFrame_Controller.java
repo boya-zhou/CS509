@@ -1,7 +1,5 @@
 package UI;
 
-import BL.XMLparser;
-
 import java.awt.EventQueue;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -10,8 +8,6 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-
-import UI.SearchAndResult_Frame;
 
 public class SearchAndResultFrame_Controller {
 	private JTextField txtFromWhere;

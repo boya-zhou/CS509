@@ -1,4 +1,4 @@
-package java_demo_and_sandbox;
+package demo;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -21,6 +21,8 @@ public class prototype1Demo {
 		for(Airplane a: Airplanes) {
 			System.out.println(a.toString());
 		}
+	}
+	public static void findFlightLoop() {
 		BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
 		try {
 			while(true) {

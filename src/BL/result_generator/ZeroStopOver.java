@@ -1,11 +1,10 @@
 package BL.result_generator;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Map;
 import java.util.Set;
 
@@ -22,7 +21,7 @@ public class ZeroStopOver {
 		int deMonth = Calendar.DECEMBER;
 		int deDay = 11;
 		
-		Date deDate = new GregorianCalendar(deYear, deMonth, deDay).getTime();
+		LocalDate deDate = LocalDate.of(deYear, deMonth, deDay);
 		
 		Set<Flight> deFlightSet = GetData.getDepartureFlightInfo(deCode, deDate);				
 		
@@ -31,7 +30,7 @@ public class ZeroStopOver {
 		int aMonth = Calendar.DECEMBER;
 		int aDay = 12;
 		
-		Date aDate = new GregorianCalendar(aYear, aMonth, aDay).getTime();
+		LocalDate aDate = LocalDate.of(aYear, aMonth, aDay);
 				
 		System.out.println(generateZeroStopOver(deCode, deDate, aCode));
 //		System.out.println(generateZeroStopOver(deCode, aCode, aDate)); 
@@ -39,7 +38,7 @@ public class ZeroStopOver {
 		
 	}
 	
-	public static ArrayList<Leg_Trip> generateZeroStopOver(String deCode, Date deDate, String aCode) throws IOException, ClassNotFoundException{
+	public static ArrayList<Leg_Trip> generateZeroStopOver(String deCode, LocalDate deDate, String aCode) throws IOException, ClassNotFoundException{
 		
 		// only give de airport, serach for arrival airport
 		Map<String, Set<Flight>> cachedFlight = HashFlight.readFlightMap();
@@ -55,7 +54,7 @@ public class ZeroStopOver {
 		return zeroStop;		
 	}
 	
-	public static ArrayList<Leg_Trip> generateZeroStopOver(String deCode, String aCode, Date aDate) throws IOException{
+	public static ArrayList<Leg_Trip> generateZeroStopOver(String deCode, String aCode, LocalDate aDate) throws IOException{
 		
 		// only give a airport, search for de airport
 		ArrayList<Leg_Trip> zeroStop = new ArrayList<>(); 
@@ -75,7 +74,7 @@ public class ZeroStopOver {
 		
 	}
 	
- 	public static ArrayList<Flight> generateZeroStopOver(String deCode, Date deDate, String aCode, Date aDate) throws IOException, ClassNotFoundException{
+ 	public static ArrayList<Flight> generateZeroStopOver(String deCode, LocalDate deDate, String aCode, LocalDate aDate) throws IOException, ClassNotFoundException{
  		// give both, find if there are same flight number
  		
  		Map<String, Set<Flight>> cachedFlight = HashFlight.readFlightMap();

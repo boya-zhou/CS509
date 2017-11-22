@@ -1,23 +1,31 @@
 package BL;
 
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.util.Date;
+import java.util.TimeZone;
+
 public class Airport {
 
     String airportCode;
     String airportName;
     double latitude;
     double longitude;
-    int timeZoneOffset;
+    TimeZone timeZone;
 
 	public Airport() {
     	throw new UnsupportedOperationException();
     }
     
-    public Airport(String airportCode, String airportName, double latitude, double longitude, int timeZoneOffset) {
+    public Airport(String airportCode, String airportName, double latitude, double longitude, String timeZoneString) {
         this.airportCode = airportCode;
         this.airportName = airportName;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.timeZoneOffset = timeZoneOffset;
+        this.timeZone = TimeZone.getTimeZone(timeZoneString);
+        Date dt = Date.from(Instant.now());
+        System.out.println(dt.toInstant().atZone(timeZone.toZoneId()));
     }
 
     public static Airport getAirport(String airportCode){
@@ -26,7 +34,7 @@ public class Airport {
     }
 
     public String toString(){
-        return "[" + airportCode + "||" + airportName + "||" + latitude + "||" + longitude + "||" + timeZoneOffset + "]\n";
+        return "[" + airportCode + "||" + airportName + "||" + latitude + "||" + longitude + "||" + timeZone + "]\n";
     }
 
     public String getAirportCode() {
@@ -45,7 +53,7 @@ public class Airport {
         return longitude;
     }
 
-    public int getTimeZoneOffset() {
-		return timeZoneOffset;
+	public TimeZone getTimeZone() {
+		return timeZone;
 	}
 }

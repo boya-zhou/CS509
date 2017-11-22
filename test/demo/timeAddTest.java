@@ -1,4 +1,4 @@
-package java_demo_and_sandbox;
+package demo;
 
 import java.text.ParseException;
 import java.util.ArrayList;

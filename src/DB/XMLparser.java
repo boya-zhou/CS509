@@ -3,10 +3,9 @@ package DB;
 import java.io.IOException;
 import java.io.StringReader;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -37,10 +36,10 @@ public class XMLparser {
 	public static void main(String args[]) throws IOException {
 		String inputCode = "BOS";
 		int inputYear = 2017;
-		int inputMonth = Calendar.DECEMBER;
+		int inputMonth = 12;
 		int inputDay = 12;
 
-		Date inputDate = new GregorianCalendar(inputYear, inputMonth, inputDay).getTime();
+		LocalDate inputDate = LocalDate.of(inputYear, inputMonth, inputDay);
 		System.out.println(inputDate);
 		String xmlString = DB.GetData.getArrivalFlightInfoXML(inputCode, inputDate);
 		System.out.println(xmlString);
@@ -103,11 +102,11 @@ public class XMLparser {
 
 		Element depNode = (Element) e.getElementsByTagName("Departure").item(0);
 		String departureCode = depNode.getElementsByTagName("Code").item(0).getTextContent();
-		Date departureTime = serverDTStringToDate(depNode.getElementsByTagName("Time").item(0).getTextContent());
+		ZonedDateTime departureTime = serverDTStringToDate(depNode.getElementsByTagName("Time").item(0).getTextContent());
 
 		Element arrNode = (Element) e.getElementsByTagName("Arrival").item(0);
 		String arrivalCode = arrNode.getElementsByTagName("Code").item(0).getTextContent();
-		Date arrivalTime = serverDTStringToDate(arrNode.getElementsByTagName("Time").item(0).getTextContent());
+		ZonedDateTime arrivalTime = serverDTStringToDate(arrNode.getElementsByTagName("Time").item(0).getTextContent());
 
 		Element seating = (Element) e.getElementsByTagName("Seating").item(0);
 		Element firstClassNode = (Element) seating.getElementsByTagName("FirstClass").item(0);
@@ -129,11 +128,11 @@ public class XMLparser {
 	 * @return
 	 * @throws ParseException
 	 */
-	private static Date serverDTStringToDate(String dtString) throws ParseException {
-		SimpleDateFormat df = new SimpleDateFormat("yyyy MMM dd hh:mm 'GMT'");
-		df.setTimeZone(TimeZone.getTimeZone("GMT"));
-		return df.parse(dtString);
-
+	private static ZonedDateTime serverDTStringToDate(String dtString) throws ParseException {
+		DateTimeFormatter dtFormat = DateTimeFormatter.ofPattern("yyyy MMM dd hh:mm 'GMT'")
+				.withZone(TimeZone.getTimeZone("GMT").toZoneId());
+		
+		return ZonedDateTime.parse(dtString, dtFormat);
 	}
 
 	/**
@@ -168,7 +167,7 @@ public class XMLparser {
 	 *             if something wrong happens, e.g. xml not in the right format,
 	 *             some info missing
 	 */
-	public static Set<Airport> parseAirportSet(String xmlString, Map<String, Integer> timeMap) throws IOException {
+	public static Set<Airport> parseAirportSet(String xmlString, Map<String, String> timeMap) throws IOException {
 		try {
 			Set<Airport> airportSet = new HashSet<Airport>();
 			Document doc = loadXMLFromString(xmlString);
@@ -227,12 +226,13 @@ public class XMLparser {
 	 * @throws DOMException
 	 * @throws ParseException
 	 */
-	private static Airport elementToAirport(Element e, Map<String,Integer> timeMap) throws DOMException, ParseException {
+	private static Airport elementToAirport(Element e, Map<String,String> timeMap) throws DOMException, ParseException {
 		String airportCode = e.getAttribute("Code");
 		String airportName = e.getAttribute("Name");
 		double latitude = Double.parseDouble(e.getElementsByTagName("Latitude").item(0).getTextContent());
 		double longitude = Double.parseDouble(e.getElementsByTagName("Longitude").item(0).getTextContent());
-		return new Airport(airportCode, airportName, latitude, longitude, timeMap.get(airportCode));
+		String timeZone = timeMap.get(airportCode);
+		return new Airport(airportCode, airportName, latitude, longitude, timeZone);
 	}
 
 	/**

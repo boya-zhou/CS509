@@ -1,10 +1,10 @@
 package BL.result_generator;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Map;
 import java.util.Set;
@@ -12,7 +12,6 @@ import java.util.concurrent.TimeUnit;
 
 import BL.Flight;
 import BL.Leg_Trip;
-import BL.XMLparser;
 import DB.GetData;
 
 // TODO: the layover time range from o.5 hour to 4 hour(30 min to 240 min), is this right? 
@@ -27,10 +26,10 @@ public class OneStopOver {
 		
 		String deCode = "AUS";
 		int deYear = 2017;
-		int deMonth = Calendar.DECEMBER;
+		int deMonth = 12;
 		int deDay = 12;
 		
-		Date deDate = new GregorianCalendar(deYear, deMonth, deDay).getTime();
+		LocalDate deDate = LocalDate.of(deYear, deMonth, deDay);
 		
 //		String deXMLString = GetData.getDepartureFlightInfo(deCode, deDate);		
 //		Set<Flight> deFlightSet = XMLparser.parseFlightSet(deXMLString);
@@ -38,10 +37,10 @@ public class OneStopOver {
 		
 		String aCode = "DEN";
 		int aYear = 2017;
-		int aMonth = Calendar.DECEMBER;
+		int aMonth = 12;
 		int aDay = 12;
 		
-		Date aDate = new GregorianCalendar(aYear, aMonth, aDay).getTime();
+		LocalDate aDate = LocalDate.of(aYear, aMonth, aDay);
 		
 		System.out.println(generateOneStopOver(deCode, deDate, aCode));
 //		System.out.println(generateOneStopOver(deCode, aCode, aDate));
@@ -50,7 +49,7 @@ public class OneStopOver {
 		
 	}
 	
-	public static ArrayList<Leg_Trip> generateOneStopOver(String deCode, Date deDate, String aCode) throws IOException, ClassNotFoundException{
+	public static ArrayList<Leg_Trip> generateOneStopOver(String deCode, LocalDate deDate, String aCode) throws IOException, ClassNotFoundException{
 		
 		// find all flight start from deCode
 		// remove the one that can direct get to acode
@@ -64,17 +63,17 @@ public class OneStopOver {
 		for (Flight f: deFlightSet) {
 			if (! f.arrivalCode.equals(aCode)) {
 				String interDeCode = f.arrivalCode;
-				Date interDeDate = f.arrivalTime;
+				ZonedDateTime interDeDate = f.arrivalTime;
 				
-				//TODO: ask the how server return result related with Date
+				//TODO: ask the how server return result related with LocalDate
 				//TODO: if I ask flight in "2017_12_12", flight in which time range will be return? (2017_12_11 12:00PM ~ 2017_12_13 12:00AM)
-				Set<Flight> interDeFlightSet = HashFlight.getDeFlight(cachedFlight, interDeCode, interDeDate);
+				Set<Flight> interDeFlightSet = HashFlight.getDeFlight(cachedFlight, interDeCode, interDeDate.toLocalDate());
 				
 				for(Flight secF: interDeFlightSet) {
 					//two restrcition: final aCode equals aCode, time between interDeDate and final
 					if (secF.arrivalCode.equals(aCode)) {
 						
-						long timeDiff = TimeUnit.MILLISECONDS.toMinutes(secF.depatureTime.getTime() - f.arrivalTime.getTime()); 
+						long timeDiff = TimeUnit.MILLISECONDS.toMinutes(secF.depatureTime.toEpochSecond() - f.arrivalTime.toEpochSecond()); 
 						if ((timeDiff >= lowerTime) & (timeDiff <= upperTime)) {
 							
 							ArrayList<Flight> validTrip = new ArrayList<>();
@@ -91,7 +90,7 @@ public class OneStopOver {
 		
 	}
 	
-	public static ArrayList<ArrayList<Flight>> generateOneStopOver(String deCode, String aCode, Date aDate) throws IOException{
+	public static ArrayList<ArrayList<Flight>> generateOneStopOver(String deCode, String aCode, LocalDate aDate) throws IOException{
 		
 		// find all flight end with aCode
 		// remove the one that can direct from deCode
@@ -107,7 +106,9 @@ public class OneStopOver {
 			if (!f.depatureCode.equals(deCode)) {
 				
 				String interACode = f.depatureCode;
-				Date interADate = f.depatureTime;
+				ZonedDateTime interADate = f.depatureTime;
+				
+				
 				
 				Set<Flight> interAFlightSet = GetData.getArrivalFlightInfo(interACode, interADate);
 				
@@ -130,7 +131,7 @@ public class OneStopOver {
 		
 	}
 
-	public static ArrayList<Leg_Trip> generateOneStopOver(String deCode, Date deDate, String aCode, Date aDate) throws IOException{
+	public static ArrayList<Leg_Trip> generateOneStopOver(String deCode, LocalDate deDate, String aCode, LocalDate aDate) throws IOException{
 		// find all flight start with deCode, remove direct, sort by acode
 		// find all flight end with aCode, remove direct, sort by decode
 		// join by left-acode and right-decode, then filter by time restriction
@@ -185,5 +186,4 @@ public class OneStopOver {
 		return oneStop;
 		
 	}
-	
 }

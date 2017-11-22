@@ -7,15 +7,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
+import java.time.LocalDate;
 import java.util.Map;
 import java.util.Set;
+
 import BL.Flight;
 import DB.GetData;
 
@@ -24,24 +20,19 @@ public class HashFlight {
 		
 		String deCode = "AUS";
 		int deYear = 2017;
-		int deMonth = Calendar.DECEMBER;
+		int deMonth = 12;
 		int deDay = 11;
 		
-		Date deDate = new GregorianCalendar(deYear, deMonth, deDay).getTime();
-		
-		System.out.println(deDate.toString());
-		DateFormat format = new SimpleDateFormat("E MMM dd HH:mm:ss z yyyy");
-		Date date = format.parse(deDate.toString());
-		System.out.println(deDate.toString());
+		LocalDate deDate = LocalDate.of(deYear, deMonth, deDay);
 		
 		Set<Flight> deFlightSet = GetData.getDepartureFlightInfo(deCode, deDate);		
 	
 		String aCode = "DEN";
 		int aYear = 2017;
-		int aMonth = Calendar.DECEMBER;
+		int aMonth = 12;
 		int aDay = 12;
 		
-		Date aDate = new GregorianCalendar(aYear, aMonth, aDay).getTime();		
+		LocalDate aDate = LocalDate.of(aYear, aMonth, aDay);
 		Map<String, Set<Flight>> cachedFlight = readFlightMap();
 				
 		long tStart = System.currentTimeMillis();
@@ -57,7 +48,7 @@ public class HashFlight {
 		elapsedSeconds = 0;
 		tStart = System.currentTimeMillis();
 		
-		Set<Flight> aFlightSet = GetData.getArrivalFlightInfo("AUS", aDate);	
+		Set<Flight> aFlightSet = GetData.getArrivalFlightInfo("AUS", aDate);
 		
 		tEnd = System.currentTimeMillis();
 		tDelta = tEnd - tStart;
@@ -66,7 +57,7 @@ public class HashFlight {
 
 	}
 	
-	public static Set<Flight> getResCache(Map<String, Set<Flight>> cachedFlight, String Code, Date date){
+	public static Set<Flight> getResCache(Map<String, Set<Flight>> cachedFlight, String Code, LocalDate date){
 		
 		Set<Flight> resultSet = cachedFlight.get(Code.concat(" ").concat(date.toString()));
 	
@@ -99,7 +90,7 @@ public class HashFlight {
         return e;
 	}
 	
-	public static Set<Flight> getDeFlight(Map<String, Set<Flight>> cachedFlight, String deCode, Date deDate) throws IOException{
+	public static Set<Flight> getDeFlight(Map<String, Set<Flight>> cachedFlight, String deCode, LocalDate deDate) throws IOException{
 		
  		Set<Flight> deFlightSet = HashFlight.getResCache(cachedFlight, deCode, deDate);
  		
@@ -111,7 +102,7 @@ public class HashFlight {
 		return deFlightSet;
 	}
 	
-	public static Set<Flight> getAFlight(Map<String, Set<Flight>> cachedFlight, String aCode, Date aDate) throws IOException{
+	public static Set<Flight> getAFlight(Map<String, Set<Flight>> cachedFlight, String aCode, LocalDate aDate) throws IOException{
 		
 		Set<Flight> aFlightList = HashFlight.getResCache(cachedFlight, aCode, aDate);
  		if (aFlightList == null) {
