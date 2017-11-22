@@ -1,7 +1,6 @@
 package DB;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -9,7 +8,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -33,8 +31,7 @@ public class GetData {
 	}
 	
 	public static String getDepartureFlightInfoXML(String departureAirportCode, LocalDate departureDate) {
-		SimpleDateFormat dateformat = new SimpleDateFormat("yyyy_MM_dd");
-		String dateString = dateformat.format(departureDate);
+		String dateString = String.format("%04d_%02d_%02d", departureDate.getYear(), departureDate.getMonthValue(), departureDate.getDayOfMonth());
 		String url = baseURL+"&action=list&list_type=departing&airport=" + departureAirportCode + "&day=" + dateString;
 //		System.out.println(url);
 		
@@ -46,8 +43,7 @@ public class GetData {
 	}
 	
 	public static String getArrivalFlightInfoXML(String arrivalAirportCode, LocalDate arrivalDate) {
-		SimpleDateFormat dateformat = new SimpleDateFormat("yyyy_MM_dd");
-		String dateString = dateformat.format(arrivalDate);
+		String dateString = String.format("%04d_%02d_%02d", arrivalDate.getYear(), arrivalDate.getMonthValue(), arrivalDate.getDayOfMonth());
 		String url = baseURL+"&action=list&list_type=arriving&airport=" + arrivalAirportCode + "&day=" + dateString;
 //		System.out.println(url);
 		try {

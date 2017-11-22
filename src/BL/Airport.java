@@ -1,9 +1,7 @@
 package BL;
 
 import java.time.Instant;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.Date;
 import java.util.TimeZone;
 
 public class Airport {
@@ -24,8 +22,7 @@ public class Airport {
         this.latitude = latitude;
         this.longitude = longitude;
         this.timeZone = TimeZone.getTimeZone(timeZoneString);
-        Date dt = Date.from(Instant.now());
-        System.out.println(dt.toInstant().atZone(timeZone.toZoneId()));
+        System.out.println(ZonedDateTime.ofInstant(Instant.now(), timeZone.toZoneId()));
     }
 
     public static Airport getAirport(String airportCode){

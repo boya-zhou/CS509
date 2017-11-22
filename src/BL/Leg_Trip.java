@@ -1,4 +1,5 @@
 package BL;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 public class Leg_Trip {
@@ -37,5 +38,24 @@ public class Leg_Trip {
     		return result;
     	
     }
+
+	public ZonedDateTime getArrivalTime() {
+		ZonedDateTime zdt = flightList.get(0).getArrivalTime();
+		for (Flight f : flightList) {
+			if (f.getArrivalTime().isAfter(zdt)) {
+				zdt = f.getArrivalTime();
+			}
+		}
+		return zdt;
+	}
     
+	public ZonedDateTime getDepartureTime() {
+		ZonedDateTime zdt = flightList.get(0).getDepartureTime();
+		for (Flight f : flightList) {
+			if (f.getDepartureTime().isBefore(zdt)) {
+				zdt = f.getDepartureTime();
+			}
+		}
+		return zdt;
+	}
 }

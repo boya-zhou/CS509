@@ -26,7 +26,7 @@ public class DefaultModelFactory {
 		model.addColumn("Airplane Model");
 		model.addColumn("Flight Time");
 		for (Flight f : set) {
-			String[] temp = {f.getDepatureCode(),f.getDepatureTime().toString(),f.getArrivalCode(),f.getArrivalTime().toString(),f.getAirplaneModel()};
+			String[] temp = {f.getDepatureCode(),f.getDepartureTime().toString(),f.getArrivalCode(),f.getArrivalTime().toString(),f.getAirplaneModel()};
 			model.addRow(temp);
 		}
 		return model;

@@ -43,13 +43,13 @@ public class ResultSort {
     public static final Comparator<Flight> DepatureAsc = new Comparator<Flight>() {
         @Override
         public int compare(Flight f1, Flight f2) {
-            return f1.getDepatureTime().compareTo(f2.getDepatureTime());
+            return f1.getDepartureTime().compareTo(f2.getDepartureTime());
         }
     };
     public static final Comparator<Flight> DepatureDes = new Comparator<Flight>() {
         @Override
         public int compare(Flight f1, Flight f2) {
-            return f2.getDepatureTime().compareTo(f1.getDepatureTime());
+            return f2.getDepartureTime().compareTo(f1.getDepartureTime());
         }
     };
     public static final Comparator<Flight> ArrivalAsc = new Comparator<Flight>() {

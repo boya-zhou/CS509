@@ -2,7 +2,9 @@ package DB;
 
 import java.io.IOException;
 
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 public class ReserveFlightTest {
 	@Before

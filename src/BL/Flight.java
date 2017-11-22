@@ -6,7 +6,7 @@ import java.util.Comparator;
 
 public class Flight implements Serializable{
     public int flightNumber;
-    public ZonedDateTime depatureTime;
+    public ZonedDateTime departureTime;
     public ZonedDateTime arrivalTime;
     public String depatureCode;
     public String arrivalCode;
@@ -24,7 +24,7 @@ public class Flight implements Serializable{
     public Flight(int flightNumber, ZonedDateTime depatureTime, ZonedDateTime arrivalTime, String depatureCode, String arrivalCode, String airplaneModel, int flightTime,
                   int remain_FirstClass, int remain_Coach, double price_FirstClass, double price_Coach) {
         this.flightNumber = flightNumber;
-        this.depatureTime = depatureTime;
+        this.departureTime = depatureTime;
         this.arrivalTime = arrivalTime;
         this.depatureCode = depatureCode;
         this.arrivalCode = arrivalCode;
@@ -38,7 +38,7 @@ public class Flight implements Serializable{
     
     public Flight(Flight flight) {
         this.flightNumber = flight.flightNumber;
-        this.depatureTime = flight.depatureTime;
+        this.departureTime = flight.departureTime;
         this.arrivalTime = flight.arrivalTime;
         this.depatureCode = flight.depatureCode;
         this.arrivalCode = flight.arrivalCode;
@@ -54,7 +54,7 @@ public class Flight implements Serializable{
 
     @Override
     public String toString() {
-        return "[" + flightNumber + "||" + depatureTime + "||" + arrivalTime + "||" + depatureCode + "||" +
+        return "[" + flightNumber + "||" + departureTime + "||" + arrivalTime + "||" + depatureCode + "||" +
                 arrivalCode + "||" + airplaneModel + "||" + flightTime + "||" + remain_FirstClass + "||" + 
                 remain_Coach + "||" + price_FirstClass + "||" + price_Coach +"]\n";
     }
@@ -73,8 +73,8 @@ public class Flight implements Serializable{
         return flightNumber;
     }
 
-    public ZonedDateTime getDepatureTime() {
-        return depatureTime;
+    public ZonedDateTime getDepartureTime() {
+        return departureTime;
     }
 
     public ZonedDateTime getArrivalTime() {

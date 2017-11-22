@@ -1,11 +1,9 @@
 package BL.result_generator;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 import BL.Leg_Trip;
 import BL.Trip;
@@ -18,19 +16,19 @@ public class GetTrip {
 		
 		String deCode = "AUS";
 		int deYear = 2017;
-		int deMonth = Calendar.DECEMBER;
+		int deMonth = 12;
 		int deDay = 12;
 		
-		Date deDate = new GregorianCalendar(deYear, deMonth, deDay).getTime();
+		LocalDate deDate = LocalDate.of(deYear, deMonth, deDay);
 		
-		String aCode = "DEN";
+		String aCode = "ORD";
 		int aYear = 2017;
-		int aMonth = Calendar.DECEMBER;
+		int aMonth = 12;
 		int aDay = 16;
 		
-		Date roundDate = new GregorianCalendar(aYear, aMonth, aDay).getTime();
-
-//		System.out.println(getOneWayTrip(deCode, deDate, aCode));
+		LocalDate roundDate = LocalDate.of(aYear, aMonth, aDay);
+		
+		//System.out.println(getOneWayTrip(deCode, deDate, aCode));
 		System.out.println(getRoundTrip(deCode, deDate, aCode, roundDate));
 		
 		long tEnd = System.currentTimeMillis();
@@ -40,7 +38,7 @@ public class GetTrip {
 		
 	}
 	
-	public static ArrayList<Trip> getOneWayTrip(String deCode, Date deDate, String aCode) throws IOException, ClassNotFoundException{
+	public static ArrayList<Trip> getOneWayTrip(String deCode, LocalDate deDate, String aCode) throws IOException, ClassNotFoundException{
 		
 		ArrayList<Trip> res = new ArrayList<Trip>();
 		
@@ -55,7 +53,7 @@ public class GetTrip {
 		
 	}
 	
-	public static ArrayList<Trip> getRoundTrip(String deCode, Date deDate, String aCode, Date roundDate) throws IOException, ClassNotFoundException{
+	public static ArrayList<Trip> getRoundTrip(String deCode, LocalDate deDate, String aCode, LocalDate roundDate) throws IOException, ClassNotFoundException{
 		
 		ArrayList<Trip> res = new ArrayList<Trip>();
 		

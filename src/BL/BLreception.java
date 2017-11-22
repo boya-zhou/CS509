@@ -5,9 +5,9 @@ public interface BLreception {
     public static void reserve(Flight flight){reserve(flight);};
     public static void reset(Flight flight){reset(flight);}
     
-    public static Flight getFlight(int flightNumber){
-        return Flight.getFlight(flightNumber);
-    }
+    //public static Flight getFlight(int flightNumber){
+    //    return Flight.getFlight(flightNumber);
+    //}
     public static Airport getAirport(String airportCode){
         return Airport.getAirport(airportCode);
     }

@@ -33,7 +33,10 @@ import BL.Flight;
 public class XMLparser {
 
 	@Deprecated
-	public static void main(String args[]) throws IOException {
+	public static void main(String args[]) throws IOException, ParseException {
+		String inputFormat = "2017 Dec 12 01:31 GMT";
+		ZonedDateTime zdt = serverDTStringToDate(inputFormat);
+		System.out.println(zdt);
 		String inputCode = "BOS";
 		int inputYear = 2017;
 		int inputMonth = 12;
@@ -129,7 +132,7 @@ public class XMLparser {
 	 * @throws ParseException
 	 */
 	private static ZonedDateTime serverDTStringToDate(String dtString) throws ParseException {
-		DateTimeFormatter dtFormat = DateTimeFormatter.ofPattern("yyyy MMM dd hh:mm 'GMT'")
+		DateTimeFormatter dtFormat = DateTimeFormatter.ofPattern("yyyy MMM dd kk:mm 'GMT'")
 				.withZone(TimeZone.getTimeZone("GMT").toZoneId());
 		
 		return ZonedDateTime.parse(dtString, dtFormat);

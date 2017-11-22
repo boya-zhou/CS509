@@ -3,7 +3,6 @@ package BL.result_generator;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Set;
 
@@ -19,7 +18,7 @@ public class GetOneWayResult {
 		int deMonth = Calendar.DECEMBER;
 		int deDay = 12;
 		
-		Date deDate = new GregorianCalendar(deYear, deMonth, deDay).getTime();
+		LocalDate deDate = new GregorianCalendar(deYear, deMonth, deDay).getTime();
 		
 		Set<Flight> deFlightSet = GetData.getDepartureFlightInfo(deCode, deDate);				
 		

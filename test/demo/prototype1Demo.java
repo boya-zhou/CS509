@@ -2,8 +2,7 @@ package demo;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.time.LocalDate;
 import java.util.Set;
 
 import BL.Airplane;
@@ -35,9 +34,9 @@ public class prototype1Demo {
 				System.out.print("please input your departure date in this format yyyy/MM/dd (all numeric): ");
 				String yMdString = buffer.readLine();
 				String[] yMd = yMdString.split("/");
-				Date date = new GregorianCalendar(Integer.parseInt(yMd[0]), 
+				LocalDate date = LocalDate.of(Integer.parseInt(yMd[0]), 
 						Integer.parseInt(yMd[1])-1, /* -1 because the GregorianCalendar start month = 0*/ 
-						Integer.parseInt(yMd[2])).getTime();
+						Integer.parseInt(yMd[2]));
 				Set<Flight> flightSet = GetData.getDepartureFlightInfo(airport, date);
 				System.out.println("Found " + flightSet.size() + " result(s):");
 				int i = 1;
@@ -48,7 +47,7 @@ public class prototype1Demo {
 							+ "FirstClass remaining %d ($%.2f each). "
 							+ "Coach remaining %d ($.2f each).",
 							i++,
-							f.flightNumber, f.depatureCode, f.arrivalCode, f.depatureTime.toGMTString(), f.arrivalTime.toGMTString(),
+							f.flightNumber, f.depatureCode, f.arrivalCode, f.departureTime, f.arrivalTime,
 							f.getAirplaneModel(),
 							f.getRemain_FirstClass(), f.getPrice_FirstClass(),
 							f.getRemain_FirstClass(), f.getRemain_Coach());
