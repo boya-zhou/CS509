@@ -1,5 +1,6 @@
 package BL;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import BL.result_generator.GetTrip;
@@ -7,6 +8,9 @@ import BL.result_generator.GetTrip;
 public class Trip {
 	List<Leg_Trip> leg_tripList;
 
+
+	public ZonedDateTime departureTime;
+	public ZonedDateTime arrivalTime;
     public Trip(List<Leg_Trip> leg_tripList) {
         this.leg_tripList = leg_tripList;
     }
@@ -29,9 +33,18 @@ public class Trip {
     	}
     	return price;
     }
-    
-    
-    @Override
+
+	public ZonedDateTime getDepartureTime() {
+		ZonedDateTime departureTime =leg_tripList.get(0).getFlightList().get(0).getDepartureTime();
+		return departureTime;
+	}
+
+	public ZonedDateTime getArrivalTime() {
+		ZonedDateTime arrivalTime =leg_tripList.get(0).getFlightList().get(0).getArrivalTime();
+		return arrivalTime;
+	}
+
+	@Override
     public String toString() {
     	
     		String result = "";
