@@ -14,14 +14,14 @@ public class GetTrip {
 		
 		long tStart = System.currentTimeMillis();
 		
-		String deCode = "ORD";
+		String deCode = "DEN";
 		int deYear = 2017;
 		int deMonth = 12;
 		int deDay = 12;
 		
 		LocalDate deDate = LocalDate.of(deYear, deMonth, deDay);
 		
-		String aCode = "ORD";
+		String aCode = "AUS";
 		int aYear = 2017;
 		int aMonth = 12;
 		int aDay = 16;

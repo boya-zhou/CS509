@@ -35,9 +35,12 @@ public class GetOneWayResult {
 		
 		ArrayList<Leg_Trip> allRes = new ArrayList<>();
 		
-		ArrayList<Leg_Trip> zeroStop = ZeroStopOver.generateZeroStopOver(deCode, deDate, aCode);		
+		ArrayList<Leg_Trip> zeroStop = ZeroStopOver.generateZeroStopOver(deCode, deDate, aCode);	
+		System.out.println(zeroStop.toString());
 		ArrayList<Leg_Trip> oneStop = OneStopOver.generateOneStopOver(deCode, deDate, aCode);		
+		System.out.println(oneStop.toString());
 		ArrayList<Leg_Trip> twoStop = TwoStopOver.generateTwoStopOver(deCode, deDate, aCode);
+		System.out.println(twoStop.toString());
 		
 		allRes.addAll(zeroStop);
 		allRes.addAll(oneStop);

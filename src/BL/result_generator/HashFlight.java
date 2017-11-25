@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,7 +17,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
+import BL.Airport;
 import BL.Flight;
+import BL.TimeConvert;
 import DB.GetData;
 
 public class HashFlight {
@@ -27,6 +30,8 @@ public class HashFlight {
 	
 	public static void main(String[] args) throws IOException, ParseException, ClassNotFoundException {
 		
+		emptyCache(FlightType.DEPARTFROM);
+		emptyCache(FlightType.ARRIVETO);
 		String deCode = "AUS";
 		int deYear = 2017;
 		int deMonth = 12;
@@ -37,7 +42,7 @@ public class HashFlight {
 		Set<Flight> deFlightSet = GetData.getDepartureFlightInfo(deCode, deDate);
 		findFlightsAfter(deFlightSet.iterator().next(), 30, 240);
 		findFlightsBefore(deFlightSet.iterator().next(), 30, 240);
-	
+		
 		String aCode = "DEN";
 		int aYear = 2017;
 		int aMonth = 12;
@@ -66,6 +71,11 @@ public class HashFlight {
 		elapsedSeconds = tDelta / 1000.0;
 		System.out.println(elapsedSeconds);
 
+	}
+	
+	public static void emptyCache(FlightType type) throws IOException {
+		Map<String, Set<Flight>> empty = new HashMap<String, Set<Flight>>();
+		saveFlightMap(empty, type);
 	}
 	
 	public static Set<Flight> getResCache(Map<String, Set<Flight>> cachedFlight, String Code, LocalDate date){
@@ -116,19 +126,57 @@ public class HashFlight {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param deCode the airport code of the departure airport
+	 * @param deDate the date of the departure in the deCode airport local time
+	 * @return
+	 * @throws IOException
+	 */
 	public static Set<Flight> getDeFlight(String deCode, LocalDate deDate) throws IOException{
 		if(cachedFlightDepartFrom == null) {
 			cachedFlightDepartFrom = readFlightMap(FlightType.DEPARTFROM);	
 		}
-		Map<String, Set<Flight>> cachedFlight = cachedFlightDepartFrom;
-		
- 		Set<Flight> deFlightSet = HashFlight.getResCache(cachedFlight, deCode, deDate);
- 		
- 		if (deFlightSet == null) {
- 			deFlightSet = GetData.getDepartureFlightInfo(deCode, deDate);
- 			cachedFlight.put(deCode.concat(" ").concat(deDate.toString()), deFlightSet);
- 			HashFlight.saveFlightMap(cachedFlight, FlightType.DEPARTFROM);
- 		}
+ 		Set<Flight> deFlightSet = HashFlight.getResCache(cachedFlightDepartFrom, deCode, deDate);
+  		if (deFlightSet == null || deFlightSet.isEmpty()) {
+  	 		//create the midnight and end of day zoned date time
+  			Set<Airport> allAirports = GetData.getAllAirports();
+  			Airport airport = null;
+  			for(Airport a: allAirports) {
+  				if(a.getAirportCode().equals(deCode)) {
+  					airport = a;
+  				}
+  			}
+  			Map<String, String> codeZone = null;
+  			try {
+  				codeZone = TimeConvert.readCodeZone();
+  			} catch (ClassNotFoundException e) {}
+  			ZonedDateTime midnight = ZonedDateTime.of(deDate, LocalTime.of(0, 0, 0), airport.getTimeZone().toZoneId());
+  			ZonedDateTime endOfDay = ZonedDateTime.of(deDate, LocalTime.of(23, 59, 59), airport.getTimeZone().toZoneId());
+  			
+  			ZonedDateTime midnightGMT = midnight.withZoneSameInstant(TimeZone.getTimeZone("GMT").toZoneId());
+  			ZonedDateTime endOfDayGMT = endOfDay.withZoneSameInstant(TimeZone.getTimeZone("GMT").toZoneId());
+  			
+  	 		Set<Flight> midnightFlightSet = GetData.getDepartureFlightInfo(deCode, midnightGMT.toLocalDate());
+  	 		Set<Flight> endOfDayFlightSet = GetData.getDepartureFlightInfo(deCode, endOfDayGMT.toLocalDate());		
+  	 		
+  	 		deFlightSet = new HashSet<Flight>();
+  	 		for(Flight flight: midnightFlightSet) {
+  	 			if(flight.getDepartureTime().isAfter(midnight)) {
+  	 				deFlightSet.add(flight);
+  	 			}
+  	 		}
+  	 		
+  	 		for(Flight flight: endOfDayFlightSet) {
+  	 			if(flight.getDepartureTime().isBefore(endOfDay)) {
+  	 				deFlightSet.add(flight);
+  	 			}
+  	 		}
+  	  		
+ 			cachedFlightDepartFrom.put(deCode.concat(" ").concat(deDate.toString()), deFlightSet);
+ 			HashFlight.saveFlightMap(cachedFlightDepartFrom, FlightType.DEPARTFROM);
+  		}
+
 		return deFlightSet;
 	}
 	
@@ -194,20 +242,19 @@ public class HashFlight {
 	 */
 	public static Set<Flight> findFlightsAfter(Flight flightBefore, long minWaitMinutes, long maxWaitMinutes) throws IOException {
 		ZonedDateTime arriveDateTime = flightBefore.getArrivalTime();
-		ZonedDateTime arriveTimeGMT = arriveDateTime.withZoneSameLocal(TimeZone.getTimeZone("GMT").toZoneId());
 		
-		Set<Flight> departToday = HashFlight.getDeFlight(flightBefore.getArrivalCode(), arriveTimeGMT.toLocalDate());
+		Set<Flight> departToday = HashFlight.getDeFlight(flightBefore.getArrivalCode(), arriveDateTime.toLocalDate());
 		Set<Flight> allFlights = departToday;
 		//if the hour is greater than 20, it is possible to find connecting flight the next day
-		if(arriveTimeGMT.getHour() > 20) {
-			LocalDate nextDay = arriveTimeGMT.toLocalDate().plusDays(1);
+		if(arriveDateTime.getHour() >= 20) {
+			LocalDate nextDay = arriveDateTime.toLocalDate().plusDays(1);
 			Set<Flight> departNextDay = HashFlight.getDeFlight(flightBefore.getArrivalCode(), nextDay);
 			allFlights.addAll(departNextDay);
 		}
 		
 		Set<Flight> possibleFlights = new HashSet<Flight>();
 		for(Flight f: allFlights) {
-			//-1 to lower and +1 to upper so that isAfter and isBefore also include the equal cases
+			//-1 to lower and +1 to upper so that isAfter and isBefore also include the equal cases (inclusive)
 			ZonedDateTime lowerBound = flightBefore.getArrivalTime().plusSeconds(minWaitMinutes * 60 - 1);
 			ZonedDateTime upperBound = flightBefore.getArrivalTime().plusSeconds(maxWaitMinutes * 60 + 1);
 			if(f.getDepartureTime().isAfter(lowerBound) && f.getDepartureTime().isBefore(upperBound)) {

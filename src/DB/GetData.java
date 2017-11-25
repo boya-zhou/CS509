@@ -18,6 +18,7 @@ import BL.Flight;
 public class GetData {
 
 	private static String baseURL = "http://cs509.cs.wpi.edu:8181/CS509.server/ReservationSystem?team=404";
+	private static Set<Airport> allAirports = null;
 
 	public static Set<Flight> getDepartureFlightInfo(String departureAirportCode, LocalDate departureDate) throws IOException {
 		String returnString = getDepartureFlightInfoXML(departureAirportCode, departureDate);
@@ -53,15 +54,20 @@ public class GetData {
 	}
 	
 	public static Set<Airport> getAllAirports() {
-		String url = baseURL+"&action=list&list_type=airports";
-//		System.out.println(url);
-		try {
-			String xmlString = getXML(url);
-			System.out.println(xmlString);
-			Set<Airport> airportSets = XMLparser.parseAirportSet(xmlString, getTimeZoneOffsetInfo());
-			return airportSets;
-		} catch(IOException e) {
-			throw new RuntimeException("Cannot connect to the WPI API");
+		if(allAirports != null) {
+			return allAirports;
+		} else {
+			String url = baseURL+"&action=list&list_type=airports";
+	//		System.out.println(url);
+			try {
+				String xmlString = getXML(url);
+				System.out.println(xmlString);
+				Set<Airport> airportSets = XMLparser.parseAirportSet(xmlString, getTimeZoneOffsetInfo());
+				allAirports = airportSets;
+				return airportSets;
+			} catch(IOException e) {
+				throw new RuntimeException("Cannot connect to the WPI API");
+			}
 		}
 	}	
 	
