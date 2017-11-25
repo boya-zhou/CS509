@@ -1,7 +1,6 @@
 package UI;
 
 import java.awt.EventQueue;
-import UI.SearchAndResult_Frame;
 
 public class frameTest {
 	public static void main(String args[]) {
@@ -11,6 +10,7 @@ public class frameTest {
 				// TODO Auto-generated method stub
 				try {
 					SearchAndResult_Frame test=new SearchAndResult_Frame();
+					//Detail_Frame test = new Detail_Frame(null, 0);
 					test.setBounds(0, 0, 1360, 940);
 					test.setVisible(true);
 				} catch (Exception e) {

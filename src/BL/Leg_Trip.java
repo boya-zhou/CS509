@@ -1,5 +1,4 @@
 package BL;
-import java.time.ZonedDateTime;
 import java.util.List;
 
 public class Leg_Trip {
@@ -24,7 +23,50 @@ public class Leg_Trip {
     public int getTripSize() {
     		return getFlightList().size();
     }
-
+    
+    public double getLegTripCoachPrice() {
+    	double Coachprice=0.00;
+    	for(Flight f:flightList) {
+    		Coachprice+=f.getPrice_Coach();
+    	}
+    	return Coachprice;
+    }
+    
+    public double getLegTripFirstPrice() {
+    	double  Firstprice=0.00;
+    	for(Flight f:flightList) {
+    		Firstprice+=f.getPrice_FirstClass();
+    	}
+    	return Firstprice;
+    }
+    
+    public String getLegTripStopOver() {
+    	
+    	String stopover = "";
+    	
+    	for(int i=1;i<flightList.size();i++) {
+    		
+    		stopover+="-->"+flightList.get(i).getDepatureCode();    		
+    	}
+    	return  stopover;
+    }
+    
+    public String getLegTripDepartCode() {
+    	
+    	String departcode = "";
+    	departcode = flightList.get(0).getDepatureCode();
+    	return departcode;
+    	
+    }
+    
+    public String getLegTripArrivalCode() {
+    	
+    	String arrivalcode = "";
+    	arrivalcode = flightList.get(0).getArrivalCode();
+    	return arrivalcode;
+    	
+    }
+    
     
     @Override
     public String toString() {
@@ -38,24 +80,5 @@ public class Leg_Trip {
     		return result;
     	
     }
-
-	public ZonedDateTime getArrivalTime() {
-		ZonedDateTime zdt = flightList.get(0).getArrivalTime();
-		for (Flight f : flightList) {
-			if (f.getArrivalTime().isAfter(zdt)) {
-				zdt = f.getArrivalTime();
-			}
-		}
-		return zdt;
-	}
     
-	public ZonedDateTime getDepartureTime() {
-		ZonedDateTime zdt = flightList.get(0).getDepartureTime();
-		for (Flight f : flightList) {
-			if (f.getDepartureTime().isBefore(zdt)) {
-				zdt = f.getDepartureTime();
-			}
-		}
-		return zdt;
-	}
 }

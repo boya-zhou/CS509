@@ -9,6 +9,8 @@ import javax.swing.JComboBox;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
+import UI.SearchAndResult_Frame;
+
 public class SearchAndResultFrame_Controller {
 	private JTextField txtFromWhere;
 	private JTextField txtToWhere;
