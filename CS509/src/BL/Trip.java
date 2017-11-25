@@ -13,14 +13,14 @@ public class Trip {
 	}
     @Override
     public String toString() {
-    	
+
     		String result = "";
-		
+
     		for (Leg_Trip legTrip: leg_tripList) {
     			result += "\t\n" + legTrip;
     		}
-    			
+
     		return result;
-    	
+
     }
 }
