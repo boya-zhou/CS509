@@ -5,7 +5,7 @@ public class Leg_Trip {
     
 	List<Flight> flightList;
     int num_flight;
-    int Stopover;
+
 	Long TotalTime;
     int TripType;
     
@@ -68,7 +68,8 @@ public class Leg_Trip {
     	
     }
 	public Integer getTotalTime() {
-		int hour = 0;
+		int Stopover=flightList.size();
+    	int hour = 0;
 		Long TotalTime= flightList.get(0).getDepartureTime().toEpochSecond()-flightList.get(Stopover).getArrivalTime().toEpochSecond();
 		hour = (int) (TotalTime/3600);
 
