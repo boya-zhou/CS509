@@ -10,6 +10,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import BL.Airplane.SeatType;
 import BL.Flight;
 
 public class ReserveFlightTest {
@@ -58,8 +59,8 @@ public class ReserveFlightTest {
 		List<Flight> flights = new ArrayList<Flight>(GetData.getArrivalFlightInfo("BOS", LocalDate.of(2017, 12, 28)));
 		List<Flight> toReserve = flights.subList(3, 6);
 		System.out.println(toReserve);
-		String[] seats = {"Coach", "Coach", "Coach"};
-		List<String> seatType = Arrays.asList(seats);
+		SeatType[] seats = {SeatType.COACH, SeatType.FIRST_CLASS, SeatType.COACH};
+		List<SeatType> seatType = Arrays.asList(seats);
 		ReserveFlight.lock();
         ReserveFlight.reserve(toReserve, seatType);
 		ReserveFlight.unlock();

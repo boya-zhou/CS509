@@ -24,6 +24,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import BL.Airplane;
+import BL.Airplane.SeatType;
 import BL.Airport;
 import BL.Flight;
 
@@ -261,13 +262,13 @@ public class XMLparser {
 		return new Airplane(model, maunfacturer, firstclassSeat, coachSeat);
 	}
 	
-	public static String flightListToXML(List<Flight> flightSet, List<String> seatType) {
+	public static String flightListToXML(List<Flight> flightSet, List<SeatType> seatType) {
 		String xml = "<Flights>";
 		if(flightSet.size() != seatType.size()) {
 			throw new RuntimeException("flightSet must be same size as seatType");
 		}
 		for(int i = 0; i < flightSet.size(); i++) {
-			String flightXML = String.format("<Flight number=\"%d\" seating=\"%s\"/>", flightSet.get(i).getFlightNumber(), seatType.get(i));
+			String flightXML = String.format("<Flight number=\"%d\" seating=\"%s\"/>", flightSet.get(i).getFlightNumber(), seatType.get(i).toString());
 			xml = xml + flightXML;
 		}
 		xml = xml + "</Flights>";

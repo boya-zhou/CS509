@@ -1,10 +1,11 @@
 package BL;
 
-import DB.ReserveFlight;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import BL.Airplane.SeatType;
+import DB.ReserveFlight;
 
 public class Reserve{	
 
@@ -23,7 +24,7 @@ public class Reserve{
 	 * @param seatType
 	 * @return 0 on successful, -1 if failed
 	 */
-	public static int reserve(Trip trip, List<String> seatType) {
+	public static int reserve(Trip trip, List<SeatType> seatType) {
 		return(reserve(tripToFlightList(trip), seatType));
 	}
 	
@@ -35,7 +36,7 @@ public class Reserve{
 	 * @param maxAttempts max number of attempts
 	 * @return 0 if one is successful, -1 if all fails
 	 */
-	public static int tryReserve(Trip trip, List<String> seatType, int maxAttempts) {
+	public static int tryReserve(Trip trip, List<SeatType> seatType, int maxAttempts) {
 		for(int i = 0; i < maxAttempts; i++) {
 			int status = reserve(trip, seatType);
 			if (status == 0) {
@@ -59,7 +60,7 @@ public class Reserve{
 	 * @param seatType
 	 * @return 0 on successful, -1 if failed
 	 */
-	public static int reserve(List<Flight> trip, List<String> seatType) {
+	public static int reserve(List<Flight> trip, List<SeatType> seatType) {
 		try {
 			ReserveFlight.lock();
 	        ReserveFlight.reserve(trip, seatType);

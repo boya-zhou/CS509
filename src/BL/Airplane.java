@@ -43,4 +43,20 @@ public class Airplane {
     public int getAmount_coachSeat() {
         return amount_coachSeat;
     }
+    
+    public enum SeatType {
+    	COACH,
+    	FIRST_CLASS;
+    	
+    	@Override
+    	public String toString() {
+    		if(this == COACH) {
+    			return "Coach";
+    		} else if(this == FIRST_CLASS) {
+    			return "FirstClass";
+    		} else {
+    			return null;
+    		}
+    	}
+    }
 }

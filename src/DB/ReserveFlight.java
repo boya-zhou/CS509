@@ -9,6 +9,7 @@ import java.net.URL;
 import java.util.List;
 
 import BL.Flight;
+import BL.Airplane.SeatType;
 
 public class ReserveFlight {
 	
@@ -30,7 +31,7 @@ public class ReserveFlight {
 	 * @return 0 if successful
 	 * @throws IOException if fails
 	 */
-	public static int reserve(List<Flight> flights, List<String> seatType) throws IOException {
+	public static int reserve(List<Flight> flights, List<SeatType> seatType) throws IOException {
 		String xmlFlights = XMLparser.flightListToXML(flights, seatType);
 		reserveXML(xmlFlights);
 		return 0;

@@ -3,8 +3,6 @@ package BL;
 import java.time.ZonedDateTime;
 import java.util.List;
 
-import BL.result_generator.GetTrip;
-
 public class Trip {
 	List<Leg_Trip> leg_tripList;
 
