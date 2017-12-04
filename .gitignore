@@ -49,3 +49,4 @@ local.properties
 .worksheet
 /build/
 *.class
+/doc/

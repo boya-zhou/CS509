@@ -127,7 +127,7 @@ public class GetData {
 	 * get all airplanes using a map object from airplane model (string) to airplane object
 	 * will remember the set from previous requests
 	 * using singleton
-	 * @return a map of model -> airplane object
+	 * @return a map of model to airplane object
 	 */
 	public static Map<String, Airplane> getAllAirplaneMap() {
 		if(allAirplaneMap != null) {
