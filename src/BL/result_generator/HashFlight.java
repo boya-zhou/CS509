@@ -20,6 +20,7 @@ import java.util.TimeZone;
 import BL.Airport;
 import BL.Flight;
 import BL.TimeConvert;
+import BL.Trip;
 import DB.GetData;
 
 public class HashFlight {

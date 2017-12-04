@@ -19,6 +19,8 @@ public class GetData {
 
 	private static String baseURL = "http://cs509.cs.wpi.edu:8181/CS509.server/ReservationSystem?team=404";
 	private static Set<Airport> allAirports = null;
+	private static Set<Airplane> allAirplanes = null;
+	private static Map<String, Airplane> allAirplaneMap = null;
 
 	public static Set<Flight> getDepartureFlightInfo(String departureAirportCode, LocalDate departureDate) throws IOException {
 		String returnString = getDepartureFlightInfoXML(departureAirportCode, departureDate);
@@ -83,17 +85,33 @@ public class GetData {
 	}
 
 	public static Set<Airplane> getAllAirplanes() {
-		String url = baseURL+"&action=list&list_type=airplanes";
-//		System.out.println(url);
-		try {
-			String xmlString = getXML(url);
-			System.out.println(xmlString);
-			return XMLparser.parseAirplaneSet(xmlString);
-		} catch(IOException e) {
-			throw new RuntimeException("Cannot connect to the WPI API");
+		if(allAirplanes != null) {
+			return allAirplanes;
+		} else {
+			String url = baseURL+"&action=list&list_type=airplanes";
+			try {
+				String xmlString = getXML(url);
+				System.out.println(xmlString);
+				allAirplanes = XMLparser.parseAirplaneSet(xmlString);
+				return allAirplanes;
+			} catch(IOException e) {
+				throw new RuntimeException("Cannot connect to the WPI API");
+			}
 		}
-	}	
+	}
 
+	public static Map<String, Airplane> getAllAirplaneMap() {
+		if(allAirplaneMap != null) {
+			return allAirplaneMap;
+		} else {
+			allAirplaneMap = new HashMap<String, Airplane>();
+			for(Airplane airplane: getAllAirplanes()) {
+				allAirplaneMap.put(airplane.getModel(), airplane);
+			}
+		return allAirplaneMap;
+		}
+	}
+	
 	/**
 	 * helper function to interface with the server GET API
 	 * @param getURL

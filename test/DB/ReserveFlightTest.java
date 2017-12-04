@@ -1,10 +1,16 @@
 package DB;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import BL.Flight;
 
 public class ReserveFlightTest {
 	@Before
@@ -46,10 +52,22 @@ public class ReserveFlightTest {
 			ReserveFlight.unlock();
 		}
 	}
+	
+	@Test
+	public void testTryReserve() throws IOException {
+		List<Flight> flights = new ArrayList<Flight>(GetData.getArrivalFlightInfo("BOS", LocalDate.of(2017, 12, 28)));
+		List<Flight> toReserve = flights.subList(3, 6);
+		System.out.println(toReserve);
+		String[] seats = {"Coach", "Coach", "Coach"};
+		List<String> seatType = Arrays.asList(seats);
+		ReserveFlight.lock();
+        ReserveFlight.reserve(toReserve, seatType);
+		ReserveFlight.unlock();
+	}
 
 	@After
 	public void destroy() throws IOException {
 		ReserveFlight.unlock();
 	}
-
+	
 }

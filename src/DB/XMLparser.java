@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
@@ -32,7 +33,6 @@ import BL.Flight;
  */
 public class XMLparser {
 
-	@Deprecated
 	public static void main(String args[]) throws IOException, ParseException {
 		String inputFormat = "2017 Dec 12 01:31 GMT";
 		ZonedDateTime zdt = serverDTStringToDate(inputFormat);
@@ -51,10 +51,6 @@ public class XMLparser {
 		for (Flight f : flightList) {
 			System.out.println(f);
 		}
-	}
-
-	public static String FlightSetToXML(Set<Flight> flights) {
-		throw new RuntimeException("not implemented yet");
 	}
 
 	/**
@@ -99,9 +95,12 @@ public class XMLparser {
 	 * @throws ParseException
 	 */
 	private static Flight elementToFlight(Element e) throws DOMException, ParseException {
+		Map<String, Airplane> allAirplanes = GetData.getAllAirplaneMap();
+		
 		int flightNumber = Integer.parseInt(e.getAttribute("Number"));
 		String airplaneModel = e.getAttribute("Airplane");
 		int flightTime = Integer.parseInt(e.getAttribute("FlightTime"));
+		Airplane airplane = allAirplanes.get(airplaneModel);
 
 		Element depNode = (Element) e.getElementsByTagName("Departure").item(0);
 		String departureCode = depNode.getElementsByTagName("Code").item(0).getTextContent();
@@ -114,8 +113,9 @@ public class XMLparser {
 		Element seating = (Element) e.getElementsByTagName("Seating").item(0);
 		Element firstClassNode = (Element) seating.getElementsByTagName("FirstClass").item(0);
 		Element coachNode = (Element) seating.getElementsByTagName("Coach").item(0);
-		int remainingFirstClass = Integer.parseInt(firstClassNode.getTextContent());
-		int remainingCoach = Integer.parseInt(coachNode.getTextContent());
+		int remainingFirstClass = airplane.getAmount_firstclassSeat() - Integer.parseInt(firstClassNode.getTextContent());
+		int remainingCoach = airplane.getAmount_coachSeat() - Integer.parseInt(coachNode.getTextContent());
+		
 		double priceFirstClass = Double
 				.parseDouble(firstClassNode.getAttribute("Price").replace("$", "").replace(",", ""));
 		double priceCoach = Double.parseDouble(coachNode.getAttribute("Price").replace("$", ""));
@@ -259,5 +259,18 @@ public class XMLparser {
 		int firstclassSeat = Integer.parseInt(e.getElementsByTagName("FirstClassSeats").item(0).getTextContent());
 		int coachSeat = Integer.parseInt(e.getElementsByTagName("CoachSeats").item(0).getTextContent());
 		return new Airplane(model, maunfacturer, firstclassSeat, coachSeat);
+	}
+	
+	public static String flightListToXML(List<Flight> flightSet, List<String> seatType) {
+		String xml = "<Flights>";
+		if(flightSet.size() != seatType.size()) {
+			throw new RuntimeException("flightSet must be same size as seatType");
+		}
+		for(int i = 0; i < flightSet.size(); i++) {
+			String flightXML = String.format("<Flight number=\"%d\" seating=\"%s\"/>", flightSet.get(i).getFlightNumber(), seatType.get(i));
+			xml = xml + flightXML;
+		}
+		xml = xml + "</Flights>";
+		return xml;
 	}
 }
