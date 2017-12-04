@@ -11,6 +11,11 @@ import java.util.List;
 import BL.Flight;
 import BL.Airplane.SeatType;
 
+/**
+ * a class responsible for FlightReservation as well as
+ * other POST requests.
+ *
+ */
 public class ReserveFlight {
 	
 	/**

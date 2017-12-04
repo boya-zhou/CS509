@@ -15,6 +15,12 @@ import BL.Airplane;
 import BL.Airport;
 import BL.Flight;
 
+/**
+ * This is the class that contains functions
+ * that do all the GET requests and return java objects
+ * that are immediately usable by the rest of the programs
+ *
+ */
 public class GetData {
 
 	private static String baseURL = "http://cs509.cs.wpi.edu:8181/CS509.server/ReservationSystem?team=404";
@@ -32,7 +38,7 @@ public class GetData {
 		return XMLparser.parseFlightSet(returnString);
 	}
 	
-	public static String getDepartureFlightInfoXML(String departureAirportCode, LocalDate departureDate) {
+	private static String getDepartureFlightInfoXML(String departureAirportCode, LocalDate departureDate) {
 		String dateString = String.format("%04d_%02d_%02d", departureDate.getYear(), departureDate.getMonthValue(), departureDate.getDayOfMonth());
 		String url = baseURL+"&action=list&list_type=departing&airport=" + departureAirportCode + "&day=" + dateString;
 //		System.out.println(url);
@@ -44,7 +50,7 @@ public class GetData {
 		}
 	}
 	
-	public static String getArrivalFlightInfoXML(String arrivalAirportCode, LocalDate arrivalDate) {
+	private static String getArrivalFlightInfoXML(String arrivalAirportCode, LocalDate arrivalDate) {
 		String dateString = String.format("%04d_%02d_%02d", arrivalDate.getYear(), arrivalDate.getMonthValue(), arrivalDate.getDayOfMonth());
 		String url = baseURL+"&action=list&list_type=arriving&airport=" + arrivalAirportCode + "&day=" + dateString;
 //		System.out.println(url);
@@ -55,6 +61,12 @@ public class GetData {
 		}
 	}
 	
+	/**
+	 * get all airports as a set
+	 * will remember the set from previous requests
+	 * using singleton
+	 * @return a set of all airports
+	 */
 	public static Set<Airport> getAllAirports() {
 		if(allAirports != null) {
 			return allAirports;
@@ -63,8 +75,8 @@ public class GetData {
 	//		System.out.println(url);
 			try {
 				String xmlString = getXML(url);
-				System.out.println(xmlString);
-				Set<Airport> airportSets = XMLparser.parseAirportSet(xmlString, getTimeZoneOffsetInfo());
+				//System.out.println(xmlString);
+				Set<Airport> airportSets = XMLparser.parseAirportSet(xmlString, getTimeZoneInfo());
 				allAirports = airportSets;
 				return airportSets;
 			} catch(IOException e) {
@@ -73,7 +85,12 @@ public class GetData {
 		}
 	}	
 	
-	private static Map<String, String> getTimeZoneOffsetInfo() throws IOException {
+	/**
+	 * read timezone from file
+	 * @return a map from airport code to timezone of that airport
+	 * @throws IOException if something's wrong
+	 */
+	private static Map<String, String> getTimeZoneInfo() throws IOException {
 		BufferedReader reader = new BufferedReader(new FileReader("sources/airport_timezoneoffset.csv"));
 		Map<String, String> timeMap = new HashMap<String, String>();
 		String line = null;
@@ -84,6 +101,12 @@ public class GetData {
 		return timeMap;
 	}
 
+	/**
+	 * get a set of all airplanes
+	 * will remember the set from previous requests
+	 * using singleton
+	 * @return a set of all airplanes
+	 */
 	public static Set<Airplane> getAllAirplanes() {
 		if(allAirplanes != null) {
 			return allAirplanes;
@@ -91,7 +114,7 @@ public class GetData {
 			String url = baseURL+"&action=list&list_type=airplanes";
 			try {
 				String xmlString = getXML(url);
-				System.out.println(xmlString);
+				//System.out.println(xmlString);
 				allAirplanes = XMLparser.parseAirplaneSet(xmlString);
 				return allAirplanes;
 			} catch(IOException e) {
@@ -100,6 +123,12 @@ public class GetData {
 		}
 	}
 
+	/**
+	 * get all airplanes using a map object from airplane model (string) to airplane object
+	 * will remember the set from previous requests
+	 * using singleton
+	 * @return a map of model -> airplane object
+	 */
 	public static Map<String, Airplane> getAllAirplaneMap() {
 		if(allAirplaneMap != null) {
 			return allAirplaneMap;

@@ -13,6 +13,13 @@ import org.junit.Test;
 import BL.Airplane.SeatType;
 import BL.Flight;
 
+/**
+ * test both ReserveFlight and XMLparser (The reserve part)
+ * since XMLparser by its own is meaningless,
+ * it has to be coupled with other classes to be meaningful
+ * @author tpatikorn
+ *
+ */
 public class ReserveFlightTest {
 	@Before
 	public void setup() {

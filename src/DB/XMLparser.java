@@ -33,7 +33,7 @@ import BL.Flight;
  *
  */
 public class XMLparser {
-
+	/*
 	public static void main(String args[]) throws IOException, ParseException {
 		String inputFormat = "2017 Dec 12 01:31 GMT";
 		ZonedDateTime zdt = serverDTStringToDate(inputFormat);
@@ -53,6 +53,7 @@ public class XMLparser {
 			System.out.println(f);
 		}
 	}
+	*/
 
 	/**
 	 * parse an input xml string to a Set of Flight objects if the server
