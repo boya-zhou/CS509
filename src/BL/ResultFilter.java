@@ -24,10 +24,12 @@ public class ResultFilter {
 	}
 	
 	/**
+	 * Filter a list of trip using stopoverNum
 	 * 
 	 * @param TripResult 
-	 * @param stopNum 
-	 * @return
+	 * 			a list of trips we get from the Gettrip function
+	 * @param stopNum the maximum stopover number get from the GUI
+	 * @return a list of trips in which each trip's stopover number is less then the stopNum is returned
 	 */
 	
 	public static ArrayList<Trip> stopover(ArrayList<Trip> TripResult,int stopNum){
@@ -60,10 +62,14 @@ public class ResultFilter {
 	/**
 	 * 
 	 * @param TripResult
+	 * 			a list of trips we get from the Gettrip function
 	 * @param start
+	 * 			a LocalDateTime get from GUI
 	 * @param stop
+	 * 			a LocalDateTime get from GUI
 	 * @return
-	 */
+	 * 			a list of trip
+	 */	
 	
 	public static ArrayList<Trip> timeWindow(ArrayList<Trip> TripResult, LocalDateTime start ,LocalDateTime stop){
 		ArrayList<Trip> res = new ArrayList<Trip>();
@@ -93,8 +99,6 @@ public class ResultFilter {
 		int aMonth = 12;
 		int aDay = 16;
 		
-		LocalDate roundDate = LocalDate.of(aYear, aMonth, aDay);
-
 		try {
 			//TripResult=GetTrip.getRoundTrip(deCode, deDate, aCode, roundDate);
 			TripResult=GetTrip.getOneWayTrip(deCode, deDate, aCode);
@@ -103,12 +107,7 @@ public class ResultFilter {
 			e.printStackTrace();
 		}
 		DB.ReserveFlight.lock();
-		String XML = DB.XMLparser.FlightToXML(TripResult.get(0).getLeg_tripList().get(0).getFlightList().get(0), "FirstClass");
-		int respon = DB.ReserveFlight.reserveXML(XML);
 		DB.ReserveFlight.unlock();
-		System.out.println(XML);
-		System.out.println(respon);
-
 		
 		TripResult.get(0).getDepartureTime();
 	}

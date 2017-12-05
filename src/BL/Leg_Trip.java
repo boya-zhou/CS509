@@ -135,13 +135,14 @@ public class Leg_Trip {
 	}
 	
     public String getAirplaneModel() {
-    	//get airplanemodel for each flight
+    	//get airplane model for each flight
     	String airplaneModel ="";
     	for(Flight f:flightList) {
     		airplaneModel += "--"+f.airplaneModel;
     	}
     	return airplaneModel+"--";
     }
+    
     
     @Override
     public String toString() {

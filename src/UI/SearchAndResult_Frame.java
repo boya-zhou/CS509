@@ -37,7 +37,7 @@ public class SearchAndResult_Frame extends JFrame{
 	private JComboBox<String> returnyyyy;
 	private JComboBox<String> departmm;
 	private JComboBox<String> returnmm;
-	private JComboBox<String> OneOrRound;
+	public JComboBox<String> OneOrRound;
 	private JComboBox<String> StopOver;
 	private JLabel lblNewLabel_3;
 	private ArrayList<Trip> trips;
@@ -608,6 +608,9 @@ public class SearchAndResult_Frame extends JFrame{
 	}
 	public JComboBox<String> getStopTime() {
 		return StopTime;
+	}
+	public JComboBox<String> getOneOrRound() {
+		return OneOrRound;
 	}
 }
 
