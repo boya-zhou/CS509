@@ -15,34 +15,7 @@ public class TwoStopOver {
 	
 	static long lowerTime = 30;
 	static long upperTime = 240;
-	
-	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		
-		String deCode = "AUS";
-		int deYear = 2017;
-		int deMonth = 12;
-		int deDay = 11;
-		
-		LocalDate deDate = LocalDate.of(deYear, deMonth, deDay);
-		
-		String aCode = "DEN";
-		int aYear = 2017;
-		int aMonth = 12;
-		int aDay = 12;
-		
-		LocalDate aDate = LocalDate.of(aYear, aMonth, aDay);		
-		
-		long tStart = System.currentTimeMillis();
-		
-		System.out.println(generateTwoStopOver(deCode, deDate, aCode));
-		
-		long tEnd = System.currentTimeMillis();
-		long tDelta = tEnd - tStart;
-		double elapsedSeconds = tDelta / 1000.0;
-		System.out.println(elapsedSeconds);
-	
-	}
-	
 	public static boolean validTimeRes(ZonedDateTime d1, ZonedDateTime d2) {
 		long timeDiff = TimeUnit.MILLISECONDS.toMinutes(d1.toEpochSecond() - d2.toEpochSecond()); 
 		if ((timeDiff >= lowerTime) & (timeDiff <= upperTime)) {
