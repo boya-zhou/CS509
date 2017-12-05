@@ -40,6 +40,7 @@ public class Confirmation extends JFrame{
 				}else {
 					JOptionPane.showMessageDialog(jPanel, "Sorry! Reserve fail!");
 				}
+				setVisible(false);
 			}
 
 		});

@@ -33,19 +33,19 @@ public class DefaultModelFactory {
 		if(seat==0) {
 			//Round-way trip, coach seat
 			for (Trip t: trips) {
-				String[] temp1= {t.getLeg_tripList().get(0).getLocalLegDepartTime(t.getDepartureTime()).toString(),
+				String[] temp1= {t.getLeg_tripList().get(0).getLocalLegDepartTime(t.getDepartureTime()).toString().replaceAll("T", " "),
 						t.getLeg_tripList().get(0).getLegTripDepartCode().toString(),
 						t.getLeg_tripList().get(0).getLegTripStopOver()+"-->",
 						t.getLeg_tripList().get(0).getLegTripArrivalCode().toString(),
-						t.getLeg_tripList().get(0).getLocalLegArrivalTime(t.getArrivalTime()).toString(),
+						t.getLeg_tripList().get(0).getLocalLegArrivalTime(t.getArrivalTime()).toString().replaceAll("T", " "),
 						t.getLeg_tripList().get(0).getTotalTime(),
 						String.format("%1$,.2f", t.getLeg_tripList().get(0).getLegTripCoachPrice())+"$"};
 				model.addRow(temp1);
-				String[] temp2= {t.getLeg_tripList().get(1).getLocalLegDepartTime(t.getDepartureTime2()).toString(),
+				String[] temp2= {t.getLeg_tripList().get(1).getLocalLegDepartTime(t.getDepartureTime2()).toString().replaceAll("T", " "),
 						t.getLeg_tripList().get(1).getLegTripDepartCode().toString(),
 						t.getLeg_tripList().get(1).getLegTripStopOver()+"-->",
 						t.getLeg_tripList().get(1).getLegTripArrivalCode().toString(),
-						t.getLeg_tripList().get(1).getLocalLegArrivalTime(t.getArrivalTime2()).toString(),
+						t.getLeg_tripList().get(1).getLocalLegArrivalTime(t.getArrivalTime2()).toString().replaceAll("T", " "),
 						t.getLeg_tripList().get(1).getTotalTime(),
 						String.format("%1$,.2f", t.getLeg_tripList().get(1).getLegTripCoachPrice())+"$"};
 				String[] temp3= {"","","","","",""
@@ -56,19 +56,19 @@ public class DefaultModelFactory {
 		}else {
 			//Round-way trip, first class seat
 			for (Trip t: trips) {
-				String[] temp1= {t.getLeg_tripList().get(0).getLocalLegDepartTime(t.getDepartureTime()).toString(),
+				String[] temp1= {t.getLeg_tripList().get(0).getLocalLegDepartTime(t.getDepartureTime()).toString().replaceAll("T", " "),
 						t.getLeg_tripList().get(0).getLegTripDepartCode().toString(),
 						t.getLeg_tripList().get(0).getLegTripStopOver()+"-->",
 						t.getLeg_tripList().get(0).getLegTripArrivalCode().toString(),
-						t.getLeg_tripList().get(0).getLocalLegArrivalTime(t.getArrivalTime()).toString(),
+						t.getLeg_tripList().get(0).getLocalLegArrivalTime(t.getArrivalTime()).toString().replaceAll("T", " "),
 						t.getLeg_tripList().get(0).getTotalTime(),
 						String.format("%1$,.2f", t.getLeg_tripList().get(0).getLegTripFirstPrice())+"$"};
 				model.addRow(temp1);
-				String[] temp2= {t.getLeg_tripList().get(1).getLocalLegDepartTime(t.getDepartureTime2()).toString(),
+				String[] temp2= {t.getLeg_tripList().get(1).getLocalLegDepartTime(t.getDepartureTime2()).toString().replaceAll("T", " "),
 						t.getLeg_tripList().get(1).getLegTripDepartCode().toString(),
 						t.getLeg_tripList().get(1).getLegTripStopOver()+"-->",
 						t.getLeg_tripList().get(1).getLegTripArrivalCode().toString(),
-						t.getLeg_tripList().get(1).getLocalLegArrivalTime(t.getArrivalTime2()).toString(),
+						t.getLeg_tripList().get(1).getLocalLegArrivalTime(t.getArrivalTime2()).toString().replaceAll("T", " "),
 						t.getLeg_tripList().get(1).getTotalTime(),
 						String.format("%1$,.2f", t.getLeg_tripList().get(1).getLegTripFirstPrice())+"$"};
 				String[] temp3= {"","","","","",""
@@ -95,11 +95,11 @@ public class DefaultModelFactory {
 		if(seat==0) {
 			//One-way trip, coach seat
 			for(Trip t: trips) {
-				String[] temp= {t.getLeg_tripList().get(0).getLocalLegDepartTime(t.getDepartureTime()).toString(),
+				String[] temp= {t.getLeg_tripList().get(0).getLocalLegDepartTime(t.getDepartureTime()).toString().replaceAll("T", " "),
 						t.getLeg_tripList().get(0).getLegTripDepartCode().toString(),
 						t.getLeg_tripList().get(0).getLegTripStopOver()+"-->",
 						t.getLeg_tripList().get(0).getLegTripArrivalCode().toString(),
-						t.getLeg_tripList().get(0).getLocalLegArrivalTime(t.getArrivalTime()).toString(),
+						t.getLeg_tripList().get(0).getLocalLegArrivalTime(t.getArrivalTime()).toString().replaceAll("T", " "),
 						t.getLeg_tripList().get(0).getTotalTime(),
 						String.format("%1$,.2f", t.getTripCoachPrice())+"$"};
 				model.addRow(temp);
@@ -107,11 +107,11 @@ public class DefaultModelFactory {
 		}else {
 			//One-way trip first-class seat
 			for(Trip t: trips) {
-				String[] temp= {t.getLeg_tripList().get(0).getLocalLegDepartTime(t.getDepartureTime()).toString(),
+				String[] temp= {t.getLeg_tripList().get(0).getLocalLegDepartTime(t.getDepartureTime()).toString().replaceAll("T", " "),
 						t.getLeg_tripList().get(0).getLegTripDepartCode().toString(),
 						t.getLeg_tripList().get(0).getLegTripStopOver()+"-->",
 						t.getLeg_tripList().get(0).getLegTripArrivalCode().toString(),t.getArrivalTime().toLocalDateTime().toString(),
-						t.getLeg_tripList().get(0).getLocalLegArrivalTime(t.getArrivalTime()).toString(),
+						t.getLeg_tripList().get(0).getLocalLegArrivalTime(t.getArrivalTime()).toString().replaceAll("T", " "),
 						t.getLeg_tripList().get(0).getTotalTime(),
 						String.format("%1$,.2f", t.getTripFirstPrice())+"$"};
 				model.addRow(temp);

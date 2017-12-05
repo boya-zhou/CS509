@@ -267,8 +267,8 @@ public class Detail_Frame extends JFrame{
 			from.setText(selectedTrip.getLeg_tripList().get(0).getFlightList().get(0).getDepatureCode());
 			stopover.setText(selectedTrip.getLeg_tripList().get(0).getLegTripStopOver()+"-->");
 			to.setText(selectedTrip.getLeg_tripList().get(0).getLegTripArrivalCode());
-			departTime.setText(selectedTrip.getLeg_tripList().get(0).getLocalLegDepartTime(selectedTrip.getDepartureTime()).toString());
-			ArrivalTime.setText(selectedTrip.getLeg_tripList().get(0).getLocalLegArrivalTime(selectedTrip.getArrivalTime()).toString());
+			departTime.setText(selectedTrip.getLeg_tripList().get(0).getLocalLegDepartTime(selectedTrip.getDepartureTime()).toString().replaceAll("T", " ").replaceAll("T", " "));
+			ArrivalTime.setText(selectedTrip.getLeg_tripList().get(0).getLocalLegArrivalTime(selectedTrip.getArrivalTime()).toString().replaceAll("T", " "));
 			TotalTime.setText("----------------"+selectedTrip.getLeg_tripList().get(0).getTotalTime()+"----------------");
 			if(seatclass == 0) {
 				//coachPrice show
@@ -301,8 +301,8 @@ public class Detail_Frame extends JFrame{
 			from.setText(selectedTrip.getLeg_tripList().get(0).getFlightList().get(0).getDepatureCode());
 			stopover.setText(selectedTrip.getLeg_tripList().get(0).getLegTripStopOver()+"-->");
 			to.setText(selectedTrip.getLeg_tripList().get(0).getLegTripArrivalCode());
-			departTime.setText(selectedTrip.getLeg_tripList().get(0).getLocalLegDepartTime(selectedTrip.getDepartureTime()).toString());
-			ArrivalTime.setText(selectedTrip.getLeg_tripList().get(0).getLocalLegArrivalTime(selectedTrip.getArrivalTime()).toString());
+			departTime.setText(selectedTrip.getLeg_tripList().get(0).getLocalLegDepartTime(selectedTrip.getDepartureTime()).toString().replaceAll("T", " "));
+			ArrivalTime.setText(selectedTrip.getLeg_tripList().get(0).getLocalLegArrivalTime(selectedTrip.getArrivalTime()).toString().replaceAll("T", " "));
 			TotalTime.setText("----------------"+selectedTrip.getLeg_tripList().get(0).getTotalTime()+"----------------");
 			LegTrivalTime1.setText(selectedTrip.getLeg_tripList().get(0).LegsegmentTime());
 			AirplaneModel1.setText(selectedTrip.getLeg_tripList().get(0).getAirplaneModel());
@@ -317,8 +317,8 @@ public class Detail_Frame extends JFrame{
 			back1.setText(selectedTrip.getLeg_tripList().get(1).getFlightList().get(0).getDepatureCode());
 			backStopOver.setText(selectedTrip.getLeg_tripList().get(1).getLegTripStopOver()+"-->");
 			back2.setText(selectedTrip.getLeg_tripList().get(1).getLegTripArrivalCode());
-			back1Time.setText(selectedTrip.getLeg_tripList().get(1).getLocalLegDepartTime(selectedTrip.getDepartureTime2()).toString());
-			back2Time.setText(selectedTrip.getLeg_tripList().get(1).getLocalLegArrivalTime(selectedTrip.getArrivalTime2()).toString());
+			back1Time.setText(selectedTrip.getLeg_tripList().get(1).getLocalLegDepartTime(selectedTrip.getDepartureTime2()).toString().replaceAll("T", " ").replaceAll("T", " ").replaceAll("T", " "));
+			back2Time.setText(selectedTrip.getLeg_tripList().get(1).getLocalLegArrivalTime(selectedTrip.getArrivalTime2()).toString().replaceAll("T", " ").replaceAll("T", " ").replaceAll("T", " "));
 			TotalTime2.setText("----------------"+selectedTrip.getLeg_tripList().get(1).getTotalTime()+"----------------");
 			LegTravelTime2.setText(selectedTrip.getLeg_tripList().get(1).LegsegmentTime());
 			AirplaneModel2.setText(selectedTrip.getLeg_tripList().get(1).getAirplaneModel());
@@ -346,7 +346,7 @@ public class Detail_Frame extends JFrame{
 			public void run() {
 				// TODO Auto-generated method stub
 				Detail_Frame detail_Frame = new Detail_Frame(trips, RowNum,seatclass);
-				detail_Frame.setBounds(400, 400, 1200, 800);
+				detail_Frame.setBounds(200, 200, 1200, 800);
 				detail_Frame.setVisible(true);	
 				detail_Frame.setAlwaysOnTop(true);
 			}

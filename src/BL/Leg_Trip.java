@@ -128,7 +128,7 @@ public class Leg_Trip {
 			}
 			time = airport.getLocalTime(f.arrivalTime).toLocalDateTime();
 			if(i<flightList.size()) {
-				TravelTime +="-->"+time.toString();
+				TravelTime +="-->"+time.toString().replaceAll("T", " ");
 			}
 		}
 		return TravelTime+"-->";
