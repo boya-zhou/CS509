@@ -58,7 +58,6 @@ public class Detail_Frame extends JFrame{
 		
 		JButton btnNewButton = new JButton("Reserve");
 		btnNewButton.addMouseListener(new MouseAdapter() {
-
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				flightlist=null;
@@ -83,22 +82,7 @@ public class Detail_Frame extends JFrame{
 						seat.add(SeatType.FIRST_CLASS);
 					}
 				}
-
-				
-				try {
-					ReserveFlight.lock();
-					respon = ReserveFlight.reserve(flightlist,seat);
-					ReserveFlight.unlock();
-					System.out.println("try to reserve");
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				if(respon == 0) {
-					JOptionPane.showMessageDialog(Jpanel, "Reserve success!");
-				}else {
-					JOptionPane.showMessageDialog(Jpanel, "Reserve fail!");
-				}
+				Confirmation confirmation = new Confirmation(flightlist,seat);
 			}
 		});
 		btnNewButton.setFont(new Font("Tempus Sans ITC", Font.BOLD, 30));
@@ -362,7 +346,7 @@ public class Detail_Frame extends JFrame{
 			public void run() {
 				// TODO Auto-generated method stub
 				Detail_Frame detail_Frame = new Detail_Frame(trips, RowNum,seatclass);
-				detail_Frame.setBounds(0, 0, 1200, 800);
+				detail_Frame.setBounds(400, 400, 1200, 800);
 				detail_Frame.setVisible(true);	
 				detail_Frame.setAlwaysOnTop(true);
 			}

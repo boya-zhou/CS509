@@ -3,18 +3,11 @@ package BL;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
-import javax.sound.midi.Soundbank;
-
-import org.omg.PortableServer.RequestProcessingPolicyOperations;
+import org.omg.CORBA.TRANSACTION_MODE;
 
 import BL.result_generator.GetTrip;
-import BL.result_generator.ZeroStopOver;
 
 public class ResultFilter {
 	
@@ -28,7 +21,8 @@ public class ResultFilter {
 	 * 
 	 * @param TripResult 
 	 * 			a list of trips we get from the Gettrip function
-	 * @param stopNum the maximum stopover number get from the GUI
+	 * @param stopNum 
+	 * 			the maximum stopover number get from the GUI
 	 * @return a list of trips in which each trip's stopover number is less then the stopNum is returned
 	 */
 	
@@ -60,15 +54,15 @@ public class ResultFilter {
 	}
 	
 	/**
-	 * 
+	 * Filter trips using departure time window 
 	 * @param TripResult
-	 * 			a list of trips we get from the Gettrip function
+	 * 		    a list of trips we get from the Gettrip function
 	 * @param start
-	 * 			a LocalDateTime get from GUI
+	 * 			a LocalDateTime get from GUI the earliest departure time
 	 * @param stop
-	 * 			a LocalDateTime get from GUI
+	 * 			a LocalDateTime get from GUI the latest departure time
 	 * @return
-	 * 			a list of trip
+	 * 			a list of trip according to the requirement 
 	 */	
 	
 	public static ArrayList<Trip> timeWindow(ArrayList<Trip> TripResult, LocalDateTime start ,LocalDateTime stop){
@@ -83,8 +77,19 @@ public class ResultFilter {
 		return res;		
 	}
 	
+	public static ArrayList<Trip> timeWindow2(ArrayList<Trip> TripResult, LocalDateTime start, LocalDateTime stop, LocalDateTime start2,LocalDateTime stop2){
+		ArrayList<Trip> res = new ArrayList<Trip>();
+		for(int i=0;i<TripResult.size();i++) {
+			Trip each = TripResult.get(i);
+			LocalDateTime departTime1 = each.leg_tripList.get(0).getLocalLegDepartTime(each.leg_tripList.get(0).getFlightList().get(0).getDepartureTime());
+			LocalDateTime departTime2 = each.leg_tripList.get(0).getLocalLegDepartTime(each.leg_tripList.get(1).getFlightList().get(0).getDepartureTime());
+			if(departTime1.compareTo(start)>0 && departTime1.compareTo(stop)<0 && departTime2.compareTo(start2)>0d && departTime2.compareTo(stop2)<0) {
+				res.add(each);
+			}
+		}
+		return res;
+	}
 
-	
 	public static void main(String[] args) throws IOException{
 		ArrayList<Trip> TripResult=new ArrayList<>();	
 		String deCode = "AUS";
@@ -95,9 +100,6 @@ public class ResultFilter {
 		LocalDate deDate = LocalDate.of(deYear, deMonth, deDay);
 		
 		String aCode = "DEN";
-		int aYear = 2017;
-		int aMonth = 12;
-		int aDay = 16;
 		
 		try {
 			//TripResult=GetTrip.getRoundTrip(deCode, deDate, aCode, roundDate);
@@ -108,7 +110,7 @@ public class ResultFilter {
 		}
 		DB.ReserveFlight.lock();
 		DB.ReserveFlight.unlock();
-		
+
 		TripResult.get(0).getDepartureTime();
 	}
 }

@@ -1,8 +1,6 @@
 package UI;
 
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
-import javax.sound.midi.Soundbank;
 import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -12,11 +10,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.text.BreakIterator;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Set;
 
 import BL.*;
 import java.awt.event.ItemListener;
@@ -174,7 +170,15 @@ public class SearchAndResult_Frame extends JFrame{
 							int stopHour = StopTime.getSelectedIndex();
 							LocalDateTime start = LocalDateTime.of(departy, departm, departd, startHour, 0);
 							LocalDateTime stop = LocalDateTime.of(departy, departm, departd, stopHour, 0);
-							trips =ResultFilter.timeWindow(trips, start, stop);
+							LocalDateTime start2 = LocalDateTime.of(departy,departm,departd,0,0);
+							LocalDateTime stop2 = LocalDateTime.of(departy,departm,departd,23,59);
+							trips =ResultFilter.timeWindow2(trips, start, stop,start2,stop2);
+						}else {
+							LocalDateTime start = LocalDateTime.of(departy, departm, departd, 0, 0);
+							LocalDateTime stop = LocalDateTime.of(departy, departm, departd, 23, 59);
+							LocalDateTime start2 = LocalDateTime.of(returny, returnm,returnd,0,0);
+							LocalDateTime stop2 = LocalDateTime.of(returny, returnm,returnd,23,59);
+							trips =ResultFilter.timeWindow2(trips, start, stop, start2 , stop2);
 						}
 					} catch (ClassNotFoundException | IOException e) {
 						// TODO Auto-generated catch block
@@ -209,6 +213,10 @@ public class SearchAndResult_Frame extends JFrame{
 						int stopHour = StopTime.getSelectedIndex()+1;
 						LocalDateTime start = LocalDateTime.of(departy, departm, departd, startHour, 0);
 						LocalDateTime stop = LocalDateTime.of(departy, departm, departd, stopHour, 0);
+						trips =ResultFilter.timeWindow(trips, start, stop);
+					}else {
+						LocalDateTime start = LocalDateTime.of(departy,departm,departd,0,0);
+						LocalDateTime stop = LocalDateTime.of(departy,departm,departd,23,59);
 						trips =ResultFilter.timeWindow(trips, start, stop);
 					}
 					if(trips.size()==0) {
@@ -560,6 +568,21 @@ public class SearchAndResult_Frame extends JFrame{
 		TimeWindow.setFont(new Font("Tempus Sans ITC", Font.BOLD, 25));
 		TimeWindow.setBounds(285, 220, 197, 46);
 		panel.add(TimeWindow);
+		
+		JButton btnNewButton_1 = new JButton("Reset Database");
+		btnNewButton_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				try {
+					DB.ReserveFlight.reset();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+		btnNewButton_1.setBounds(37, 845, 131, 25);
+		panel.add(btnNewButton_1);
 		
 		
 		

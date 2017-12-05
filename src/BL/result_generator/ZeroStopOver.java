@@ -8,34 +8,9 @@ import java.util.Set;
 
 import BL.Flight;
 import BL.Leg_Trip;
-import DB.GetData;
 
 public class ZeroStopOver {
-	
-	public static void main(String[] args) throws IOException, ClassNotFoundException {
-				
-		String deCode = "AUS";
-		int deYear = 2017;
-		int deMonth = 12;
-		int deDay = 11;
 		
-		LocalDate deDate = LocalDate.of(deYear, deMonth, deDay);
-		
-		Set<Flight> deFlightSet = GetData.getDepartureFlightInfo(deCode, deDate);				
-		
-		String aCode = "DEN";
-		int aYear = 2017;
-		int aMonth = 12;
-		int aDay = 12;
-		
-		LocalDate aDate = LocalDate.of(aYear, aMonth, aDay);
-				
-		System.out.println(generateZeroStopOver(deCode, deDate, aCode));
-//		System.out.println(generateZeroStopOver(deCode, aCode, aDate)); 
-//		System.out.println(generateZeroStopOver(deCode, deDate, 0, aCode, aDate, 0)); 
-		
-	}
-	
 	/**
 	 * Get valid zero stop leg trip based on departure airport code,  local departure time, arrival airport code
 	 * @param deCode - The departure airport code

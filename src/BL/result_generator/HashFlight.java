@@ -7,7 +7,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
@@ -27,52 +26,7 @@ public class HashFlight {
 	// singleton objects
 	private static Map<String, Set<Flight>> cachedFlightDepartFrom = null;
 	private static Map<String, Set<Flight>> cachedFlightArriveTo = null;
-	
-	public static void main(String[] args) throws IOException, ParseException, ClassNotFoundException {
 		
-		emptyCache(FlightType.DEPARTFROM);
-		emptyCache(FlightType.ARRIVETO);
-		String deCode = "AUS";
-		int deYear = 2017;
-		int deMonth = 12;
-		int deDay = 11;
-		
-		LocalDate deDate = LocalDate.of(deYear, deMonth, deDay);
-		
-		Set<Flight> deFlightSet = GetData.getDepartureFlightInfo(deCode, deDate);
-		findFlightsAfter(deFlightSet.iterator().next(), 30, 240);
-		findFlightsBefore(deFlightSet.iterator().next(), 30, 240);
-		
-		String aCode = "DEN";
-		int aYear = 2017;
-		int aMonth = 12;
-		int aDay = 12;
-		
-		LocalDate aDate = LocalDate.of(aYear, aMonth, aDay);
-		Map<String, Set<Flight>> cachedFlight = readFlightMap(FlightType.DEPARTFROM);
-				
-		long tStart = System.currentTimeMillis();
-		
-		Set<Flight> result1 = getResCache(cachedFlight, "AUS", aDate);
-		
-		long tEnd = System.currentTimeMillis();
-		long tDelta = tEnd - tStart;
-		double elapsedSeconds = tDelta / 1000.0;
-		System.out.println(elapsedSeconds);
-		
-		
-		elapsedSeconds = 0;
-		tStart = System.currentTimeMillis();
-		
-		Set<Flight> aFlightSet = GetData.getArrivalFlightInfo("AUS", aDate);
-		
-		tEnd = System.currentTimeMillis();
-		tDelta = tEnd - tStart;
-		elapsedSeconds = tDelta / 1000.0;
-		System.out.println(elapsedSeconds);
-
-	}
-	
 	/**
 	 * Empty cache table used to save map relation between key(departure airport and departure local date) and value(list of Flight object)
 	 * @param type - departFrom or arriveTo

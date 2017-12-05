@@ -10,27 +10,7 @@ import BL.Leg_Trip;
 import DB.GetData;
 
 public class GetOneWayResult {
-	
-	public static void main(String[] args) throws IOException, ClassNotFoundException {
-		String deCode = "AUS";
-		int deYear = 2017;
-		int deMonth = 12;
-		int deDay = 12;
 		
-		LocalDate deDate = LocalDate.of(deYear, deMonth, deDay);
-		
-		Set<Flight> deFlightSet = GetData.getDepartureFlightInfo(deCode, deDate);				
-		
-		String aCode = "DEN";
-		int aYear = 2017;
-		int aMonth = 12;
-		int aDay = 12;
-		
-		LocalDate aDate = LocalDate.of(aYear, aMonth, aDay);
-		
-		System.out.println(getResult(deCode, deDate, aCode));
-	}
-	
 	/**
 	 * get list of leg of trip with zero, one, two stop over 
 	 * @param deCode - The departure airport code

@@ -2,6 +2,7 @@ package BL;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import BL.Airplane.SeatType;
@@ -26,6 +27,20 @@ public class Reserve{
 	 */
 	public static int reserve(Trip trip, List<SeatType> seatType) {
 		return(reserve(tripToFlightList(trip), seatType));
+	}
+	
+	/**
+	 * try to reserve all flight in the trip
+	 * in the case that all seats are of the same seatType 
+	 * this will try to acquire lock as well as unlock for you
+	 * the length of seatType must be the same as the number of all the flights in the trip
+	 * @param trip
+	 * @param seatType
+	 * @return 0 on successful, -1 if failed
+	 */
+	public static int reserve(Trip trip, SeatType seatType) {
+		List<Flight> flights = tripToFlightList(trip);
+		return(reserve(flights, Collections.nCopies(flights.size(), seatType)));
 	}
 	
 	/**

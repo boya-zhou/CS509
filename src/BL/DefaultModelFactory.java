@@ -48,7 +48,8 @@ public class DefaultModelFactory {
 						t.getLeg_tripList().get(1).getLocalLegArrivalTime(t.getArrivalTime2()).toString(),
 						t.getLeg_tripList().get(1).getTotalTime(),
 						String.format("%1$,.2f", t.getLeg_tripList().get(1).getLegTripCoachPrice())+"$"};
-				String[] temp3= {};
+				String[] temp3= {"","","","","",""
+						,"Total:"+String.format("%1$,.2f", t.getLeg_tripList().get(1).getLegTripCoachPrice()+t.getLeg_tripList().get(0).getLegTripCoachPrice())+"$"};
 				model.addRow(temp2);
 				model.addRow(temp3);
 			}
@@ -70,7 +71,8 @@ public class DefaultModelFactory {
 						t.getLeg_tripList().get(1).getLocalLegArrivalTime(t.getArrivalTime2()).toString(),
 						t.getLeg_tripList().get(1).getTotalTime(),
 						String.format("%1$,.2f", t.getLeg_tripList().get(1).getLegTripFirstPrice())+"$"};
-				String[] temp3= {};
+				String[] temp3= {"","","","","",""
+						,"Total:"+String.format("%1$,.2f", t.getLeg_tripList().get(1).getLegTripFirstPrice()+t.getLeg_tripList().get(0).getLegTripFirstPrice())+"$"};
 				model.addRow(temp2);
 				model.addRow(temp3);
 			}
