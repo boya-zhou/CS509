@@ -39,19 +39,19 @@ public class Detail_Frame extends JFrame{
 		lblNewLabel.setIcon(new ImageIcon(Detail_Frame.class.getResource("/com/sun/java/swing/plaf/windows/icons/Warn.gif")));
 		lblNewLabel.setForeground(Color.RED);
 		lblNewLabel.setFont(new Font("Tempus Sans ITC", Font.BOLD, 40));
-		lblNewLabel.setBounds(464, 24, 272, 95);
+		lblNewLabel.setBounds(458, 0, 272, 95);
 		Jpanel.add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("New label");
 		lblNewLabel_1.setIcon(new ImageIcon(Detail_Frame.class.getResource("/image/download1.png")));
-		lblNewLabel_1.setBounds(87, 32, 152, 95);
+		lblNewLabel_1.setBounds(87, 8, 152, 95);
 		Jpanel.add(lblNewLabel_1);
 		
 		JTextPane textPane = new JTextPane();
 		textPane.setEditable(false);
 		textPane.setText("WPI World Plane.Inc");
 		textPane.setFont(new Font("Tempus Sans ITC", Font.BOLD, 30));
-		textPane.setBounds(839, 681, 331, 46);
+		textPane.setBounds(839, 707, 331, 46);
 		Jpanel.add(textPane);
 		
 		//test.setText(trips.get(RowNum).toString());
@@ -102,7 +102,7 @@ public class Detail_Frame extends JFrame{
 			}
 		});
 		btnNewButton.setFont(new Font("Tempus Sans ITC", Font.BOLD, 30));
-		btnNewButton.setBounds(904, 605, 165, 59);
+		btnNewButton.setBounds(904, 635, 165, 59);
 		Jpanel.add(btnNewButton);
 		
 		JButton Back = new JButton("Back");
@@ -119,7 +119,7 @@ public class Detail_Frame extends JFrame{
 		});
 		
 		Back.setFont(new Font("Tempus Sans ITC", Font.BOLD, 30));
-		Back.setBounds(143, 605, 165, 59);
+		Back.setBounds(143, 635, 165, 59);
 		Jpanel.add(Back);
 		
 		JLabel from = new JLabel("1");
@@ -159,11 +159,11 @@ public class Detail_Frame extends JFrame{
 		ArrivalTime.setBounds(874, 238, 296, 71);
 		Jpanel.add(ArrivalTime);
 		
-		JLabel TotalTime = new JLabel("6");
+		JLabel TotalTime = new JLabel("TotalTime");
 		TotalTime.setHorizontalAlignment(SwingConstants.CENTER);
 		TotalTime.setForeground(Color.BLACK);
 		TotalTime.setFont(new Font("Tempus Sans ITC", Font.BOLD, 30));
-		TotalTime.setBounds(301, 140, 576, 42);
+		TotalTime.setBounds(221, 100, 726, 42);
 		Jpanel.add(TotalTime);
 		
 		JLabel back1 = new JLabel("3");
@@ -201,21 +201,22 @@ public class Detail_Frame extends JFrame{
 		back2Time.setBounds(874, 494, 296, 71);
 		Jpanel.add(back2Time);
 		
-		JLabel TotalTime2 = new JLabel("6");
+		JLabel TotalTime2 = new JLabel("TotalTime");
 		TotalTime2.setHorizontalAlignment(SwingConstants.CENTER);
 		TotalTime2.setForeground(Color.BLACK);
 		TotalTime2.setFont(new Font("Tempus Sans ITC", Font.BOLD, 30));
-		TotalTime2.setBounds(301, 390, 576, 42);
+		TotalTime2.setBounds(221, 369, 726, 42);
 		Jpanel.add(TotalTime2);
 		
 		JLabel lblNewLabel_2 = new JLabel("You need to pay:");
 		lblNewLabel_2.setFont(new Font("Tempus Sans ITC", Font.BOLD, 35));
-		lblNewLabel_2.setBounds(334, 603, 296, 59);
+		lblNewLabel_2.setBounds(334, 633, 296, 59);
 		Jpanel.add(lblNewLabel_2);
 		
 		JLabel Money = new JLabel("New label");
+		Money.setForeground(Color.RED);
 		Money.setFont(new Font("Tempus Sans ITC", Font.BOLD, 35));
-		Money.setBounds(642, 602, 205, 60);
+		Money.setBounds(642, 634, 205, 60);
 		Jpanel.add(Money);
 		
 		JLabel LegTrivalTime1 = new JLabel("7");
@@ -246,6 +247,34 @@ public class Detail_Frame extends JFrame{
 		AirplaneModel2.setBounds(301, 550, 576, 42);
 		Jpanel.add(AirplaneModel2);
 		
+		JLabel timeDetail = new JLabel("segTime");
+		timeDetail.setHorizontalAlignment(SwingConstants.CENTER);
+		timeDetail.setForeground(Color.BLACK);
+		timeDetail.setFont(new Font("Tempus Sans ITC", Font.BOLD, 30));
+		timeDetail.setBounds(132, 142, 905, 42);
+		Jpanel.add(timeDetail);
+		
+		JLabel timeDetail2 = new JLabel("segTime");
+		timeDetail2.setHorizontalAlignment(SwingConstants.CENTER);
+		timeDetail2.setForeground(Color.BLACK);
+		timeDetail2.setFont(new Font("Tempus Sans ITC", Font.BOLD, 30));
+		timeDetail2.setBounds(132, 409, 905, 42);
+		Jpanel.add(timeDetail2);
+		
+		JLabel Money1 = new JLabel("Money1");
+		Money1.setForeground(Color.RED);
+		Money1.setHorizontalAlignment(SwingConstants.CENTER);
+		Money1.setFont(new Font("Tempus Sans ITC", Font.BOLD, 25));
+		Money1.setBounds(978, 334, 121, 33);
+		Jpanel.add(Money1);
+		
+		JLabel Money2 = new JLabel("Money2");
+		Money2.setForeground(Color.RED);
+		Money2.setHorizontalAlignment(SwingConstants.CENTER);
+		Money2.setFont(new Font("Tempus Sans ITC", Font.BOLD, 25));
+		Money2.setBounds(978, 589, 121, 33);
+		Jpanel.add(Money2);
+		
 
 		oneOrRound = trips.get(0).getLeg_tripList().size();
 		if(oneOrRound==1) {
@@ -256,7 +285,7 @@ public class Detail_Frame extends JFrame{
 			to.setText(selectedTrip.getLeg_tripList().get(0).getLegTripArrivalCode());
 			departTime.setText(selectedTrip.getLeg_tripList().get(0).getLocalLegDepartTime(selectedTrip.getDepartureTime()).toString());
 			ArrivalTime.setText(selectedTrip.getLeg_tripList().get(0).getLocalLegArrivalTime(selectedTrip.getArrivalTime()).toString());
-			TotalTime.setText("------"+selectedTrip.getLeg_tripList().get(0).getTotalTime()+"------");
+			TotalTime.setText("----------------"+selectedTrip.getLeg_tripList().get(0).getTotalTime()+"----------------");
 			if(seatclass == 0) {
 				//coachPrice show
 				Money.setText(String.format("%1$,.2f", selectedTrip.getTripCoachPrice())+"$");
@@ -266,6 +295,14 @@ public class Detail_Frame extends JFrame{
 			}
 			AirplaneModel1.setText(selectedTrip.getLeg_tripList().get(0).getAirplaneModel());
 			LegTrivalTime1.setText(selectedTrip.getLeg_tripList().get(0).LegsegmentTime());
+			timeDetail.setText(selectedTrip.getLeg_tripList().get(0).getintervalTime());
+			if(seatclass==0) {
+				Money1.setText(String.format("%1$,.2f", selectedTrip.getTripCoachPrice())+"$");
+			}else {
+				Money1.setText(String.format("%1$,.2f", selectedTrip.getTripFirstPrice())+"$");
+			}
+			Money2.setVisible(false);
+			timeDetail2.setVisible(false);
 			AirplaneModel2.setVisible(false);
 			back1.setVisible(false);
 			backStopOver.setVisible(false);
@@ -282,9 +319,15 @@ public class Detail_Frame extends JFrame{
 			to.setText(selectedTrip.getLeg_tripList().get(0).getLegTripArrivalCode());
 			departTime.setText(selectedTrip.getLeg_tripList().get(0).getLocalLegDepartTime(selectedTrip.getDepartureTime()).toString());
 			ArrivalTime.setText(selectedTrip.getLeg_tripList().get(0).getLocalLegArrivalTime(selectedTrip.getArrivalTime()).toString());
-			TotalTime.setText("------"+selectedTrip.getLeg_tripList().get(0).getTotalTime()+"------");
+			TotalTime.setText("----------------"+selectedTrip.getLeg_tripList().get(0).getTotalTime()+"----------------");
 			LegTrivalTime1.setText(selectedTrip.getLeg_tripList().get(0).LegsegmentTime());
 			AirplaneModel1.setText(selectedTrip.getLeg_tripList().get(0).getAirplaneModel());
+			timeDetail.setText(selectedTrip.getLeg_tripList().get(0).getintervalTime());
+			if(seatclass==0) {
+				Money1.setText(String.format("%1$,.2f", selectedTrip.getLeg_tripList().get(0).getLegTripCoachPrice())+"$");
+			}else {
+				Money1.setText(String.format("%1$,.2f", selectedTrip.getLeg_tripList().get(0).getLegTripFirstPrice())+"$");
+			}
 			
 			
 			back1.setText(selectedTrip.getLeg_tripList().get(1).getFlightList().get(0).getDepatureCode());
@@ -292,9 +335,15 @@ public class Detail_Frame extends JFrame{
 			back2.setText(selectedTrip.getLeg_tripList().get(1).getLegTripArrivalCode());
 			back1Time.setText(selectedTrip.getLeg_tripList().get(1).getLocalLegDepartTime(selectedTrip.getDepartureTime2()).toString());
 			back2Time.setText(selectedTrip.getLeg_tripList().get(1).getLocalLegArrivalTime(selectedTrip.getArrivalTime2()).toString());
-			TotalTime2.setText("------"+selectedTrip.getLeg_tripList().get(1).getTotalTime()+"------");
+			TotalTime2.setText("----------------"+selectedTrip.getLeg_tripList().get(1).getTotalTime()+"----------------");
 			LegTravelTime2.setText(selectedTrip.getLeg_tripList().get(1).LegsegmentTime());
 			AirplaneModel2.setText(selectedTrip.getLeg_tripList().get(1).getAirplaneModel());
+			timeDetail2.setText(selectedTrip.getLeg_tripList().get(1).getintervalTime());
+			if(seatclass==0) {
+				Money2.setText(String.format("%1$,.2f", selectedTrip.getLeg_tripList().get(1).getLegTripCoachPrice())+"$");
+			}else {
+				Money2.setText(String.format("%1$,.2f", selectedTrip.getLeg_tripList().get(1).getLegTripFirstPrice())+"$");
+			}
 			
 			if(seatclass==0) {
 				//coachPrice show

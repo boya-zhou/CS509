@@ -143,6 +143,36 @@ public class Leg_Trip {
     	return airplaneModel+"--";
     }
     
+    public String getintervalTime() {
+    	String time ="";
+    	int hour=0;
+    	int minutes = 0;
+    	int minute = 0;
+    	int hour2 = 0;
+    	int minutes2 = 0;
+    	int minute2 = 0;
+    	
+    	for(int i=0;i<flightList.size();i++) {
+    		Flight flight =flightList.get(i);
+    		Long flighttime = flight.getArrivalTime().toEpochSecond()-flight.getDepartureTime().toEpochSecond();
+    		hour = (int) (flighttime/3600);
+    		minutes = (int)(flighttime/60);
+    		minute = minutes - hour*60;
+    		
+    		time += "-->"+Integer.toString(hour)+"h" + Integer.toString(minute)+"m";
+    		
+    		if(i+1<flightList.size()) {
+    				
+    			Flight flight2 = flightList.get(i+1);
+    			Long interval = flight2.getDepartureTime().toEpochSecond()-flight.getArrivalTime().toEpochSecond();
+    			hour2 = (int)(interval/3600);
+    			minutes2= (int)(interval/60);
+    			minute2 = minutes2 - hour2*60;
+    			time += "--Stop:"+Integer.toString(hour2)+"h" + Integer.toString(minute2)+"m";
+    		}
+    	}
+    	return time+"-->";
+    }
     
     @Override
     public String toString() {

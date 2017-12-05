@@ -1,6 +1,7 @@
 package UI;
 
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import javax.sound.midi.Soundbank;
 import javax.swing.*;
 import java.awt.BorderLayout;
