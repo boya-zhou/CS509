@@ -50,6 +50,15 @@ public class TwoStopOver {
 		}
 		return false;
 	}
+	/**
+	 * Get valid two stop leg trip based on departure airport code,  local departure time, arrival airport code
+	 * @param deCode - The departure airport code
+	 * @param deDate - The departure time in local time
+	 * @param aCode - The arrival airport code
+	 * @return A list of leg trip which contain two stopover
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
 	
 	public static ArrayList<Leg_Trip> generateTwoStopOver(String deCode, LocalDate deDate, String aCode) throws IOException, ClassNotFoundException{
 		// find fir set of valid flights, remove straight
@@ -84,83 +93,4 @@ public class TwoStopOver {
 		
 	}
 	
-	public static ArrayList<Leg_Trip> generateTwoStopOver(String deCode, String aCode, LocalDate aDate) throws IOException{
-		// find first set of valid from acode and aDate, remove straight
-		// find second set of valid from acode and aDate, remove straight
-		// find third valid flight
-
-		ArrayList<Leg_Trip> twoStop = new ArrayList<>();
-		Set<Flight> zeroAFlightSet = GetData.getArrivalFlightInfo(aCode, aDate);
-
-		for (Flight zeroF : zeroAFlightSet) {
-			if (!deCode.equals(zeroF.depatureCode)) {
-				Set<Flight> firAFlightSet = HashFlight.findFlightsBefore(zeroF, lowerTime, lowerTime);
-				for (Flight firF : firAFlightSet) {
-					if ((!firF.depatureCode.equals(deCode)) & (!firF.depatureCode.equals(aCode))) {
-						Set<Flight> secAFlightSet = HashFlight.findFlightsBefore(zeroF, lowerTime, lowerTime);
-						for (Flight secF : secAFlightSet) {
-							if (secF.depatureCode.equals(deCode)) {
-								ArrayList<Flight> validTrip = new ArrayList<>();
-								validTrip.add(secF);
-								validTrip.add(firF);
-								validTrip.add(zeroF);
-								twoStop.add(new Leg_Trip(validTrip));
-							}
-
-						}
-					}
-
-				}
-			}
-		}
-
-		return twoStop;
-		
-	}
-		
-	public static ArrayList<ArrayList<Flight>> generateTwoStopOver(String deCode, LocalDate deDate, String aCode, LocalDate aDate) throws IOException, ClassNotFoundException{
-		// generate valid flight from decode and dDate
-		// generate calid flight from acode and adate
-		// iter first set, iter sec set, restrict by one hour
-
-		ArrayList<ArrayList<Flight>> twoStop = new ArrayList<>();
-		Set<Flight> zeroDeFlightSet = HashFlight.getDeFlight(deCode, deDate);
-		Set<Flight> secAFlightSet = HashFlight.getAFlight(aCode, aDate);
-
-		for (Flight zeroF : zeroDeFlightSet) {
-			if (!zeroF.arrivalCode.equals(aCode)) {
-				for (Flight secF : secAFlightSet) {
-					if (!secF.depatureCode.equals(deCode)) {
-						// find aDate for zeroF, find deDate for secF, diff should larger than two
-						// lowertime
-						ZonedDateTime zeroADate = zeroF.arrivalTime;
-						ZonedDateTime secDeDate = secF.departureTime;
-
-						long timeDiff = TimeUnit.MILLISECONDS
-								.toMinutes(secDeDate.toEpochSecond() - zeroADate.toEpochSecond());
-
-						if (timeDiff >= 2 * lowerTime) {
-							String zeroACode = zeroF.arrivalCode;
-							String secDeCode = secF.depatureCode;
-
-							ArrayList<Flight> firFlight = ZeroStopOver.generateZeroStopOver(zeroACode,
-									zeroADate.toLocalDate(), secDeCode, secDeDate.toLocalDate());
-							for (Flight firF : firFlight) {
-								if (validTimeRes(firF.arrivalTime, zeroADate)
-										& validTimeRes(secDeDate, firF.departureTime)) {
-									ArrayList<Flight> validTrip = new ArrayList<>();
-									validTrip.add(zeroF);
-									validTrip.add(firF);
-									validTrip.add(secF);
-									twoStop.add(validTrip);
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-
-		return twoStop;
-	}
 }

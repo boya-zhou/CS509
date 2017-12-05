@@ -31,6 +31,16 @@ public class GetOneWayResult {
 		System.out.println(getResult(deCode, deDate, aCode));
 	}
 	
+	/**
+	 * get list of leg of trip with zero, one, two stop over 
+	 * @param deCode - The departure airport code
+	 * @param deDate - The departure time in local time
+	 * @param aCode - The arrival airport code
+	 * @return A list of leg trip which contain zero, one, two stopover
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
+	
 	public static ArrayList<Leg_Trip> getResult(String deCode, LocalDate deDate, String aCode) throws IOException, ClassNotFoundException {
 		
 		ArrayList<Leg_Trip> allRes = new ArrayList<>();

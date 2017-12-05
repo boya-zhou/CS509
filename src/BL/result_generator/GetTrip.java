@@ -37,6 +37,15 @@ public class GetTrip {
 		System.out.println(elapsedSeconds);
 		
 	}
+	/**
+	 * Get list of one way trip based on departure airport code, local departure time, arrival airport code
+	 * @param deCode - The departure airport code
+	 * @param deDate - The departure time in local time
+	 * @param aCode - The arrival airport code
+	 * @return A list of leg trip which contain two trip
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
 	
 	public static ArrayList<Trip> getOneWayTrip(String deCode, LocalDate deDate, String aCode) throws IOException, ClassNotFoundException{
 		
@@ -52,6 +61,16 @@ public class GetTrip {
 		return res;
 		
 	}
+	
+	/**
+	 * Get list of round way trip based on departure airport code, local departure time, arrival airport code
+	 * @param deCode - The departure airport code
+	 * @param deDate - The departure time in local time
+	 * @param aCode - The arrival airport code
+	 * @return A list of leg trip which contain two trip
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
 	
 	public static ArrayList<Trip> getRoundTrip(String deCode, LocalDate deDate, String aCode, LocalDate roundDate) throws IOException, ClassNotFoundException{
 		

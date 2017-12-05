@@ -20,7 +20,6 @@ import java.util.TimeZone;
 import BL.Airport;
 import BL.Flight;
 import BL.TimeConvert;
-import BL.Trip;
 import DB.GetData;
 
 public class HashFlight {
@@ -74,11 +73,23 @@ public class HashFlight {
 
 	}
 	
+	/**
+	 * Empty cache table used to save map relation between key(departure airport and departure local date) and value(list of Flight object)
+	 * @param type - departFrom or arriveTo
+	 * @throws IOException
+	 */
 	public static void emptyCache(FlightType type) throws IOException {
 		Map<String, Set<Flight>> empty = new HashMap<String, Set<Flight>>();
 		saveFlightMap(empty, type);
 	}
 	
+	/**
+	 * Get list of flights from a hashtable in memory based on departure airport and departure local date
+	 * @param cachedFlight - a hashtable where key is departure airport and departure local date and value is list of Flight object
+	 * @param Code - departure airport code
+	 * @param date - departure airport local time
+	 * @return
+	 */
 	public static Set<Flight> getResCache(Map<String, Set<Flight>> cachedFlight, String Code, LocalDate date){
 		
 		Set<Flight> resultSet = cachedFlight.get(Code.concat(" ").concat(date.toString()));
@@ -86,9 +97,16 @@ public class HashFlight {
 		return resultSet;
 	}
 	
+	/**
+	 * Save the hashtable in local disk
+	 * In hashtable key is departure airport and departure local date and value is list of Flight object
+	 * @param cachedFlight - a hashtable where key is departure airport and departure local date and value is list of Flight object
+	 * @param type - departFrom or arriveTo
+	 * @throws IOException
+	 */
 	public static void saveFlightMap(Map<String, Set<Flight>> cachedFlight, FlightType type) throws IOException {
 		Path currentPath = Paths.get(System.getProperty("user.dir"));
-		Path filePath = Paths.get(currentPath.toString(), "sources", "flight"+type.toString());
+		Path filePath = Paths.get(currentPath.toString(), "sources", "flight" + type.toString());
 		
 		//try creating file. this operation will do nothing if the file already exists
 		filePath.toFile().createNewFile();
@@ -101,6 +119,13 @@ public class HashFlight {
         //System.out.println("Serialized data is saved in " + filePath.toString());
 	}
 	
+	/**
+	 * Read hashtable from local disk
+	 * In hashtable key is departure airport and departure local date and value is list of Flight object
+	 * @param type - departFrom or arriveTo
+	 * @return
+	 * @throws IOException
+	 */
 	public static Map<String, Set<Flight>> readFlightMap(FlightType type) throws IOException {
 		Path currentPath = Paths.get(System.getProperty("user.dir"));
 		Path filePath = Paths.get(currentPath.toString(), "sources", "flight"+type.toString());
@@ -128,10 +153,12 @@ public class HashFlight {
 	}
 	
 	/**
-	 * 
+	 * Get list of flights based on departure airport code or departure local time
+	 * Try to get from hashtable first, if can't, request from server and update hashtable to local disk
+	 * In hashtable key is departure airport and departure local date and value is list of Flight object
 	 * @param deCode the airport code of the departure airport
 	 * @param deDate the date of the departure in the deCode airport local time
-	 * @return
+	 * @return list of flights 
 	 * @throws IOException
 	 */
 	public static Set<Flight> getDeFlight(String deCode, LocalDate deDate) throws IOException{

@@ -36,6 +36,15 @@ public class ZeroStopOver {
 		
 	}
 	
+	/**
+	 * Get valid zero stop leg trip based on departure airport code,  local departure time, arrival airport code
+	 * @param deCode - The departure airport code
+	 * @param deDate - The departure time in local time
+	 * @param aCode - The arrival airport code
+	 * @return A list of leg trip which contain zero stopover
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
 	public static ArrayList<Leg_Trip> generateZeroStopOver(String deCode, LocalDate deDate, String aCode) throws IOException, ClassNotFoundException{
 		
 		// only give de airport, serach for arrival airport
@@ -50,35 +59,5 @@ public class ZeroStopOver {
 		}
 		return zeroStop;		
 	}
-	
-	public static ArrayList<Leg_Trip> generateZeroStopOver(String deCode, String aCode, LocalDate aDate) throws IOException{
-		
-		// only give a airport, search for de airport
-		ArrayList<Leg_Trip> zeroStop = new ArrayList<>(); 
-		
-		Set<Flight> aFlightSet = GetData.getArrivalFlightInfo(aCode, aDate);
-		
-		for (Flight f: aFlightSet) {
-			if (deCode.equals(f.depatureCode)) {
-				ArrayList<Flight> validLeg = new ArrayList<Flight>();
-				validLeg.add(f);
-				zeroStop.add(new Leg_Trip(validLeg));
-			
-			}
-		}
-		
-		return zeroStop;
-		
-	}
-	
- 	public static ArrayList<Flight> generateZeroStopOver(String deCode, LocalDate deDate, String aCode, LocalDate aDate) throws IOException, ClassNotFoundException{
- 		// give both, find if there are same flight number
- 		Set<Flight> deFlightSet = HashFlight.getDeFlight(deCode, deDate);
- 		
- 		Set<Flight> aFlightList = HashFlight.getAFlight(aCode, aDate);
- 		deFlightSet.retainAll(aFlightList);
- 		return new ArrayList<Flight>(deFlightSet);
- 		
- 	}
 		
 }
