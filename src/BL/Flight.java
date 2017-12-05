@@ -2,6 +2,7 @@ package BL;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;
+import java.util.Comparator;
 
 public class Flight implements Serializable{
     public int flightNumber;

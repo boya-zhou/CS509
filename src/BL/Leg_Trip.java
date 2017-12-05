@@ -1,5 +1,10 @@
 package BL;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Set;
+
+import DB.GetData;
 
 public class Leg_Trip {
     
@@ -8,6 +13,7 @@ public class Leg_Trip {
 
 	Long TotalTime;
     int TripType;
+    Set<Airport> allAirports = GetData.getAllAirports();
     
     public Leg_Trip(List<Flight> flightList) {
         this.flightList = flightList;
@@ -63,18 +69,79 @@ public class Leg_Trip {
     public String getLegTripArrivalCode() {
     	
     	String arrivalcode = "";
-    	arrivalcode = flightList.get(0).getArrivalCode();
+    	arrivalcode = flightList.get(flightList.size()-1).arrivalCode;
     	return arrivalcode;
     	
     }
-	public Integer getTotalTime() {
-		int Stopover=flightList.size();
-    	int hour = 0;
-		Long TotalTime= flightList.get(0).getDepartureTime().toEpochSecond()-flightList.get(Stopover).getArrivalTime().toEpochSecond();
-		hour = (int) (TotalTime/3600);
-
-		return hour;
+	public String getTotalTime() {
+		int hour;
+		int minutes;
+		int minute;
+		String Time;
+		Long TotalTime= flightList.get(flightList.size()-1).getArrivalTime().toEpochSecond()-flightList.get(0).getDepartureTime().toEpochSecond();
+		hour =(int)(TotalTime/3600);
+		minutes=(int)(TotalTime/60);
+		minute=minutes-hour*60;	
+		Time=Integer.toString(hour)+"h"+Integer.toString(minute)+"m";	
+		return Time;		
 	}
+    
+	public Long getTotalTimeToCompare() {
+		Long TotalTime = flightList.get(flightList.size()-1).getArrivalTime().toEpochSecond()-flightList.get(0).getDepartureTime().toEpochSecond();
+		return TotalTime;
+	}
+	
+	public LocalDateTime getLocalLegDepartTime(ZonedDateTime time1) {
+		Airport airport = null;
+		for(Airport a: allAirports) {
+			if(a.getAirportCode().equals(flightList.get(0).getDepatureCode())) {
+				airport = a;
+			}
+		}
+		LocalDateTime time = airport.getLocalTime(time1).toLocalDateTime();
+		return time;		
+	}
+	
+	public LocalDateTime getLocalLegArrivalTime(ZonedDateTime time1) {
+		Airport airport = null;
+		for(Airport a: allAirports) {
+			if(a.getAirportCode().equals(flightList.get(flightList.size()-1).getArrivalCode())){
+				airport = a;
+			}
+		}
+		LocalDateTime time = airport.getLocalTime(time1).toLocalDateTime();
+		return time;
+	}
+	
+	public String LegsegmentTime() {
+		//to get the leg trip arrival place local time
+		LocalDateTime time;
+		String TravelTime = ""; 
+		Airport airport = null;
+		int i =0;
+		for(Flight f: flightList) {
+			i+=1;
+			for(Airport a:allAirports) {
+				if(a.getAirportCode().equals(f.getArrivalCode())) {
+					airport = a;
+				}
+			}
+			time = airport.getLocalTime(f.arrivalTime).toLocalDateTime();
+			if(i<flightList.size()) {
+				TravelTime +="-->"+time.toString();
+			}
+		}
+		return TravelTime+"-->";
+	}
+	
+    public String getAirplaneModel() {
+    	//get airplanemodel for each flight
+    	String airplaneModel ="";
+    	for(Flight f:flightList) {
+    		airplaneModel += "--"+f.airplaneModel;
+    	}
+    	return airplaneModel+"--";
+    }
     
     @Override
     public String toString() {

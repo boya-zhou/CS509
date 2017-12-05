@@ -2,11 +2,19 @@ package BL;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+
+import javax.sound.midi.Soundbank;
+
+import org.omg.PortableServer.RequestProcessingPolicyOperations;
 
 import BL.result_generator.GetTrip;
+import BL.result_generator.ZeroStopOver;
 
 public class ResultFilter {
 	
@@ -14,6 +22,13 @@ public class ResultFilter {
 		//I will put this filter in the GUI
 		return null;
 	}
+	
+	/**
+	 * 
+	 * @param TripResult 
+	 * @param stopNum 
+	 * @return
+	 */
 	
 	public static ArrayList<Trip> stopover(ArrayList<Trip> TripResult,int stopNum){
 		
@@ -24,7 +39,7 @@ public class ResultFilter {
 			//one-way trip
 			for (int i = 0; i < TripResult.size(); i++) {
 				Trip each = TripResult.get(i);
-				if(each.leg_tripList.get(0).flightList.size()==stopNum+1){
+				if(each.leg_tripList.get(0).flightList.size()<=stopNum+1){
 					res.add(each);
 				}
 			}
@@ -33,7 +48,7 @@ public class ResultFilter {
 			//round trip
 			for(int i=0;i<TripResult.size();i++) {
 				Trip each = TripResult.get(i);
-				if(each.leg_tripList.get(0).flightList.size()==stopNum+1 && each.leg_tripList.get(1).flightList.size()==stopNum+1) {
+				if(each.leg_tripList.get(0).flightList.size()<=stopNum+1 && each.leg_tripList.get(1).flightList.size()<=stopNum+1) {
 					res.add(each);
 				}
 			}
@@ -42,44 +57,59 @@ public class ResultFilter {
 		return res;	
 	}
 	
-	public static ArrayList<Trip> timeWindow(ArrayList<Trip> TripResult,Date startTime,Date stopTime){
-		//TODO 
-		long from = startTime.getTime();
-		long to = stopTime.getTime();
-		ArrayList<Trip> res=new ArrayList<Trip>();
-		for (int i = 0; i < TripResult.size(); i++) {
+	/**
+	 * 
+	 * @param TripResult
+	 * @param start
+	 * @param stop
+	 * @return
+	 */
+	
+	public static ArrayList<Trip> timeWindow(ArrayList<Trip> TripResult, LocalDateTime start ,LocalDateTime stop){
+		ArrayList<Trip> res = new ArrayList<Trip>();
+		for(int i=0; i<TripResult.size();i++) {
 			Trip each = TripResult.get(i);
-			if(each.leg_tripList.get(0).flightList.get(0).getDepartureTime().toEpochSecond() >= from && each.leg_tripList.get(0).flightList.get(0).
-					getDepartureTime().toEpochSecond()<=to) {
+			LocalDateTime departTime =each.leg_tripList.get(0).getLocalLegDepartTime(each.leg_tripList.get(0).getFlightList().get(0).getDepartureTime());
+			if(departTime.compareTo(start)>0 && departTime.compareTo(stop)<0) {
 				res.add(each);
 			}
 		}
- 		return res;
+		return res;		
 	}
 	
-	public static void main(String[] args){
+
+	
+	public static void main(String[] args) throws IOException{
 		ArrayList<Trip> TripResult=new ArrayList<>();	
 		String deCode = "AUS";
 		int deYear = 2017;
-		int deMonth = Calendar.DECEMBER;
+		int deMonth =12;
 		int deDay = 12;
 		
 		LocalDate deDate = LocalDate.of(deYear, deMonth, deDay);
 		
 		String aCode = "DEN";
 		int aYear = 2017;
-		int aMonth = Calendar.DECEMBER;
+		int aMonth = 12;
 		int aDay = 16;
 		
 		LocalDate roundDate = LocalDate.of(aYear, aMonth, aDay);
 
 		try {
-			TripResult=GetTrip.getRoundTrip(deCode, deDate, aCode, roundDate);
-			//TripResult=GetTrip.getOneWayTrip(deCode, deDate, aCode);
+			//TripResult=GetTrip.getRoundTrip(deCode, deDate, aCode, roundDate);
+			TripResult=GetTrip.getOneWayTrip(deCode, deDate, aCode);
 		} catch (ClassNotFoundException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		stopover(TripResult, 1);
+		DB.ReserveFlight.lock();
+		String XML = DB.XMLparser.FlightToXML(TripResult.get(0).getLeg_tripList().get(0).getFlightList().get(0), "FirstClass");
+		int respon = DB.ReserveFlight.reserveXML(XML);
+		DB.ReserveFlight.unlock();
+		System.out.println(XML);
+		System.out.println(respon);
+
+		
+		TripResult.get(0).getDepartureTime();
 	}
 }

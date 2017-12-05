@@ -9,10 +9,10 @@ import java.util.Set;
 
 public class ResultSort {
 
-    public static Set<Trip> sort(Set<Trip> set, Comparator<Trip> comparator) {
-        List<Trip> tempList = new ArrayList<Trip>(set);
+    public static ArrayList<Trip> sort(ArrayList<Trip> trips, Comparator<Trip> comparator) {
+        List<Trip> tempList = new ArrayList<Trip>(trips);
         tempList.sort(comparator);
-        return new LinkedHashSet<Trip>(tempList);
+        return new ArrayList<Trip>(tempList);
     }
 
 
@@ -55,27 +55,27 @@ public class ResultSort {
     public static final Comparator<Trip> ArrivalAsc = new Comparator<Trip>() {
         @Override
         public int compare(Trip t1, Trip t2) {
-            return t1.getArrivalTime().compareTo(t2.getArrivalTime());
+            return t1.getWholeTripArrivalTime().compareTo(t2.getWholeTripArrivalTime());
         }
     };
     public static final Comparator<Trip> ArrivalDes = new Comparator<Trip>() {
         @Override
         public int compare(Trip t1, Trip t2) {
-            return  t2.getArrivalTime().compareTo(t1.getArrivalTime());
+            return  t2.getWholeTripArrivalTime().compareTo(t1.getWholeTripArrivalTime());
         }
     };
 
-    public static final Comparator<Leg_Trip> TotalTimeAsc = new Comparator<Leg_Trip>() {
+    public static final Comparator<Trip> TotalTimeAsc = new Comparator<Trip>() {
         @Override
-        public int compare(Leg_Trip l1, Leg_Trip l2) {
-            return  l2.getTotalTime().compareTo(l1.getTotalTime());
+        public int compare(Trip t1, Trip t2) {
+            return  Double.compare(t1.getTotalTimetoCompare(), t2.getTotalTimetoCompare());
         }
     };
 
-    public static final Comparator<Leg_Trip> TotalTimeDes = new Comparator<Leg_Trip>() {
+    public static final Comparator<Trip> TotalTimeDes = new Comparator<Trip>() {
         @Override
-        public int compare(Leg_Trip l1, Leg_Trip l2) {
-            return  l2.getTotalTime().compareTo(l1.getTotalTime());
+        public int compare(Trip t1, Trip t2) {
+            return  Double.compare(t2.getTotalTimetoCompare(), t1.getTotalTimetoCompare());
         }
     };
 
