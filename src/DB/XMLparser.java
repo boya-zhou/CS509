@@ -262,14 +262,21 @@ public class XMLparser {
 		int coachSeat = Integer.parseInt(e.getElementsByTagName("CoachSeats").item(0).getTextContent());
 		return new Airplane(model, maunfacturer, firstclassSeat, coachSeat);
 	}
-	
-	public static String flightListToXML(List<Flight> flightSet, List<SeatType> seatType) {
+
+	/**
+	 * convert a list of flights to XML for DB API
+	 * seatType must be of the same order as flightList
+	 * @param flightList
+	 * @param seatType
+	 * @return the corresponding XML string
+	 */
+	public static String flightListToXML(List<Flight> flightList, List<SeatType> seatType) {
 		String xml = "<Flights>";
-		if(flightSet.size() != seatType.size()) {
+		if(flightList.size() != seatType.size()) {
 			throw new RuntimeException("flightSet must be same size as seatType");
 		}
-		for(int i = 0; i < flightSet.size(); i++) {
-			String flightXML = String.format("<Flight number=\"%d\" seating=\"%s\"/>", flightSet.get(i).getFlightNumber(), seatType.get(i).toString());
+		for(int i = 0; i < flightList.size(); i++) {
+			String flightXML = String.format("<Flight number=\"%d\" seating=\"%s\"/>", flightList.get(i).getFlightNumber(), seatType.get(i).toString());
 			xml = xml + flightXML;
 		}
 		xml = xml + "</Flights>";

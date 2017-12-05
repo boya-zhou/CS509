@@ -13,6 +13,7 @@ import javax.sound.midi.Soundbank;
 
 import org.omg.PortableServer.RequestProcessingPolicyOperations;
 
+import BL.Airplane.SeatType;
 import BL.result_generator.GetTrip;
 import BL.result_generator.ZeroStopOver;
 
@@ -103,10 +104,8 @@ public class ResultFilter {
 			e.printStackTrace();
 		}
 		DB.ReserveFlight.lock();
-		String XML = DB.XMLparser.FlightToXML(TripResult.get(0).getLeg_tripList().get(0).getFlightList().get(0), "FirstClass");
-		int respon = DB.ReserveFlight.reserveXML(XML);
+		int respon = Reserve.reserve(TripResult.get(0), SeatType.FIRST_CLASS);
 		DB.ReserveFlight.unlock();
-		System.out.println(XML);
 		System.out.println(respon);
 
 		

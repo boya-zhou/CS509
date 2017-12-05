@@ -9,6 +9,13 @@ import java.util.List;
  */
 public class ResultSort {
 
+	/**
+	 * sort the array out-of-place
+	 * the original trips remain unchanged
+	 * @param trips original list of trips
+	 * @param comparator the sort criterion 
+	 * @return a new array that contain the same items as trips, but sorted according to comparator
+	 */
 	public static ArrayList<Trip> sort(ArrayList<Trip> trips, Comparator<Trip> comparator) {
 		List<Trip> tempList = new ArrayList<Trip>(trips);
 		tempList.sort(comparator);
@@ -118,20 +125,40 @@ public class ResultSort {
 	/**
      * sort ascendingly by the number of stopover 
      */
-	public static final Comparator<Leg_Trip> StopoverAsc = new Comparator<Leg_Trip>() {
+	public static final Comparator<Trip> StopoverAsc = new Comparator<Trip>() {
 		@Override
-		public int compare(Leg_Trip l1, Leg_Trip l2) {
-			return l2.getLegTripStopOver().compareTo(l1.getLegTripStopOver());
+		public int compare(Trip t1, Trip t2) {
+			List<Leg_Trip> l1 = t1.getLeg_tripList();
+			int t1stops = 0;
+			for(Leg_Trip l: l1) {
+				t1stops += l.getTripSize() - 1;
+			}
+			List<Leg_Trip> l2 = t2.getLeg_tripList();
+			int t2stops = 0;
+			for(Leg_Trip l: l2) {
+				t2stops += l.getTripSize() - 1;
+			}
+			return Integer.compare(t1stops, t2stops);
 		}
 	};
 
 	/**
      * sort descendingly by the number of stopover 
      */
-	public static final Comparator<Leg_Trip> StopoverDes = new Comparator<Leg_Trip>() {
+	public static final Comparator<Trip> StopoverDes = new Comparator<Trip>() {
 		@Override
-		public int compare(Leg_Trip l1, Leg_Trip l2) {
-			return l2.getLegTripStopOver().compareTo(l1.getLegTripStopOver());
+		public int compare(Trip t1, Trip t2) {
+			List<Leg_Trip> l1 = t1.getLeg_tripList();
+			int t1stops = 0;
+			for(Leg_Trip l: l1) {
+				t1stops += l.getTripSize() - 1;
+			}
+			List<Leg_Trip> l2 = t2.getLeg_tripList();
+			int t2stops = 0;
+			for(Leg_Trip l: l2) {
+				t2stops += l.getTripSize() - 1;
+			}
+			return Integer.compare(t2stops, t1stops);
 		}
 	};
 }
