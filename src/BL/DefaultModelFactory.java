@@ -110,7 +110,7 @@ public class DefaultModelFactory {
 				String[] temp= {t.getLeg_tripList().get(0).getLocalLegDepartTime(t.getDepartureTime()).toString().replaceAll("T", " "),
 						t.getLeg_tripList().get(0).getLegTripDepartCode().toString(),
 						t.getLeg_tripList().get(0).getLegTripStopOver()+"-->",
-						t.getLeg_tripList().get(0).getLegTripArrivalCode().toString(),t.getArrivalTime().toLocalDateTime().toString(),
+						t.getLeg_tripList().get(0).getLegTripArrivalCode().toString(),
 						t.getLeg_tripList().get(0).getLocalLegArrivalTime(t.getArrivalTime()).toString().replaceAll("T", " "),
 						t.getLeg_tripList().get(0).getTotalTime(),
 						String.format("%1$,.2f", t.getTripFirstPrice())+"$"};
