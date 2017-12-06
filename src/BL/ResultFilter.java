@@ -54,7 +54,7 @@ public class ResultFilter {
 	}
 	
 	/**
-	 * Filter trips using departure time window 
+	 * Filter trips using departure time window for one-way trip
 	 * @param TripResult
 	 * 		    a list of trips we get from the Gettrip function
 	 * @param start
@@ -77,6 +77,20 @@ public class ResultFilter {
 		return res;		
 	}
 	
+	/**
+	 * Filter the right time window for the round-way trip
+	 * @param TripResult
+	 * 			All the trip get from the gettrip funciton 
+	 * @param start
+	 * 			the start time for the fisrt leg trip
+	 * @param stop
+	 * 			the stop time for the first leg trip
+	 * @param start2
+	 * 			the start time for the second leg trip
+	 * @param stop2
+	 * 			the stop time for the second leg trip
+	 * @return
+	 */
 	public static ArrayList<Trip> timeWindow2(ArrayList<Trip> TripResult, LocalDateTime start, LocalDateTime stop, LocalDateTime start2,LocalDateTime stop2){
 		ArrayList<Trip> res = new ArrayList<Trip>();
 		for(int i=0;i<TripResult.size();i++) {

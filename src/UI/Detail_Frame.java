@@ -62,7 +62,6 @@ public class Detail_Frame extends JFrame{
 			public void mouseClicked(MouseEvent arg0) {
 				flightlist=null;
 				List<SeatType> seat = new ArrayList<SeatType>();
-				int respon = 0;
 				Trip selectedTrip;
 				if(oneOrRound==1) {
 					selectedTrip=trips.get(RowNum);

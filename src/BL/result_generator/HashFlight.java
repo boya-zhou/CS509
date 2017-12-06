@@ -26,7 +26,9 @@ public class HashFlight {
 	// singleton objects
 	private static Map<String, Set<Flight>> cachedFlightDepartFrom = null;
 	private static Map<String, Set<Flight>> cachedFlightArriveTo = null;
-		
+	public static void main(String[] args) throws IOException {
+		emptyCache(FlightType.DEPARTFROM);
+	}
 	/**
 	 * Empty cache table used to save map relation between key(departure airport and departure local date) and value(list of Flight object)
 	 * @param type - departFrom or arriveTo
