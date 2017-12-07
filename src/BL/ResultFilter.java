@@ -97,7 +97,7 @@ public class ResultFilter {
 			Trip each = TripResult.get(i);
 			LocalDateTime departTime1 = each.leg_tripList.get(0).getLocalLegDepartTime(each.leg_tripList.get(0).getFlightList().get(0).getDepartureTime());
 			LocalDateTime departTime2 = each.leg_tripList.get(0).getLocalLegDepartTime(each.leg_tripList.get(1).getFlightList().get(0).getDepartureTime());
-			if(departTime1.compareTo(start)>0 && departTime1.compareTo(stop)<0 && departTime2.compareTo(start2)>0d && departTime2.compareTo(stop2)<0) {
+			if(departTime1.compareTo(start)>0 && departTime1.compareTo(stop)<0 && departTime2.compareTo(start2)>0 && departTime2.compareTo(stop2)<0) {
 				res.add(each);
 			}
 		}

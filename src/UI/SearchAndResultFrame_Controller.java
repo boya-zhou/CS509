@@ -19,6 +19,7 @@ import javax.swing.JTable;
 
 import org.omg.CORBA.PRIVATE_MEMBER;
 
+import BL.BLreception;
 import BL.DefaultModelFactory;
 import BL.ResultFilter;
 import BL.Trip;
@@ -68,26 +69,26 @@ public class SearchAndResultFrame_Controller{
 				}
 				else {
 					try {
-						TripResult=BL.result_generator.GetTrip.getRoundTrip(departPlace, inputDate, arrivalPlace, roundDate);
+						TripResult=BLreception.getRoundTrip(departPlace, inputDate, arrivalPlace, roundDate);
 						if(stopNum==-1) {
 							trips=TripResult;
 						}else {
-							trips=ResultFilter.stopover(TripResult, stopNum);
+							trips=BLreception.stopover(TripResult, stopNum);
 						}
 						if(TimeWindow.isSelected()) {
 							int startHour = StartTime.getSelectedIndex();
 							int stopHour = StopTime.getSelectedIndex();
 							LocalDateTime start = LocalDateTime.of(departy, departm, departd, startHour, 0);
 							LocalDateTime stop = LocalDateTime.of(departy, departm, departd, stopHour, 0);
-							LocalDateTime start2 = LocalDateTime.of(departy,departm,departd,0,0);
-							LocalDateTime stop2 = LocalDateTime.of(departy,departm,departd,23,59);
-							trips =ResultFilter.timeWindow2(trips, start, stop,start2,stop2);
+							LocalDateTime start2 = LocalDateTime.of(returny,returnm,returnd,0,0);
+							LocalDateTime stop2 = LocalDateTime.of(returny,returnm,returnd,23,59);
+							trips =BLreception.timeWindow2(trips, start, stop,start2,stop2);
 						}else {
 							LocalDateTime start = LocalDateTime.of(departy, departm, departd, 0, 0);
 							LocalDateTime stop = LocalDateTime.of(departy, departm, departd, 23, 59);
 							LocalDateTime start2 = LocalDateTime.of(returny, returnm,returnd,0,0);
 							LocalDateTime stop2 = LocalDateTime.of(returny, returnm,returnd,23,59);
-							trips =ResultFilter.timeWindow2(trips, start, stop, start2 , stop2);
+							trips =BLreception.timeWindow2(trips, start, stop, start2 , stop2);
 						}
 					} catch (ClassNotFoundException | IOException e) {
 						// TODO Auto-generated catch block
@@ -107,7 +108,7 @@ public class SearchAndResultFrame_Controller{
 					JOptionPane.showMessageDialog(panel, "TimeWindow selected problem!Please select again!");
 				}else {
 					try {
-						TripResult=BL.result_generator.GetTrip.getOneWayTrip(departPlace, inputDate, arrivalPlace);
+						TripResult=BLreception.getOneWayTrip(departPlace, inputDate, arrivalPlace);
 					} catch (ClassNotFoundException | IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -115,18 +116,18 @@ public class SearchAndResultFrame_Controller{
 					if(stopNum==-1) {
 						trips=TripResult;
 					}else {
-						trips=ResultFilter.stopover(TripResult, stopNum);
+						trips=BLreception.stopover(TripResult, stopNum);
 					}
 					if(TimeWindow.isSelected()) {
 						int startHour = StartTime.getSelectedIndex();
 						int stopHour = StopTime.getSelectedIndex()+1;
 						LocalDateTime start = LocalDateTime.of(departy, departm, departd, startHour, 0);
 						LocalDateTime stop = LocalDateTime.of(departy, departm, departd, stopHour, 0);
-						trips =ResultFilter.timeWindow(trips, start, stop);
+						trips =BLreception.timeWindow(trips, start, stop);
 					}else {
 						LocalDateTime start = LocalDateTime.of(departy,departm,departd,0,0);
 						LocalDateTime stop = LocalDateTime.of(departy,departm,departd,23,59);
-						trips =ResultFilter.timeWindow(trips, start, stop);
+						trips =BLreception.timeWindow(trips, start, stop);
 					}
 					if(trips.size()==0) {
 						JOptionPane.showMessageDialog(panel, "There is no available flight according to your requirement!");
@@ -150,21 +151,21 @@ public class SearchAndResultFrame_Controller{
 							if(OneOrRound.getSelectedIndex()==0) {
 								//one-way trip
 								if(seatclass==0) {
-									trips = BL.ResultSort.sort(trips,BL.ResultSort.CoachPriceAsc);
+									trips = BLreception.sort(trips,BL.ResultSort.CoachPriceAsc);
 									table.setModel(DefaultModelFactory.getOneWayModel(trips, seatclass));
 								}
 								if(seatclass==1){
-									trips = BL.ResultSort.sort(trips,BL.ResultSort.FCPriceAsc);
+									trips = BLreception.sort(trips,BL.ResultSort.FCPriceAsc);
 									table.setModel(DefaultModelFactory.getOneWayModel(trips, seatclass));
 								}
 							}
 							else {
 								if(seatclass==0) {
-									trips = BL.ResultSort.sort(trips,BL.ResultSort.CoachPriceAsc);
+									trips = BLreception.sort(trips,BL.ResultSort.CoachPriceAsc);
 									table.setModel(DefaultModelFactory.getRoundModel(trips, seatclass));
 								}
 								if(seatclass==1){
-									trips = BL.ResultSort.sort(trips,BL.ResultSort.FCPriceAsc);
+									trips = BLreception.sort(trips,BL.ResultSort.FCPriceAsc);
 									table.setModel(DefaultModelFactory.getRoundModel(trips, seatclass));
 								}
 							}
@@ -173,21 +174,21 @@ public class SearchAndResultFrame_Controller{
 							//price high-low
 							if(OneOrRound.getSelectedIndex()==0) {
 								if(seatclass==0) {
-									trips = BL.ResultSort.sort(trips,BL.ResultSort.CoachPriceDes);
+									trips = BLreception.sort(trips,BL.ResultSort.CoachPriceDes);
 									table.setModel(DefaultModelFactory.getOneWayModel(trips, seatclass));
 								}
 								if(seatclass==1){
-									trips = BL.ResultSort.sort(trips,BL.ResultSort.FCPriceDes);
+									trips = BLreception.sort(trips,BL.ResultSort.FCPriceDes);
 									table.setModel(DefaultModelFactory.getOneWayModel(trips, seatclass));
 								}
 							}
 							else {
 								if(seatclass==0) {
-									trips = BL.ResultSort.sort(trips,BL.ResultSort.CoachPriceDes);
+									trips = BLreception.sort(trips,BL.ResultSort.CoachPriceDes);
 									table.setModel(DefaultModelFactory.getRoundModel(trips, seatclass));
 								}
 								if(seatclass==1){
-									trips = BL.ResultSort.sort(trips,BL.ResultSort.FCPriceDes);
+									trips = BLreception.sort(trips,BL.ResultSort.FCPriceDes);
 									table.setModel(DefaultModelFactory.getRoundModel(trips, seatclass));
 								}
 							}
@@ -196,21 +197,21 @@ public class SearchAndResultFrame_Controller{
 							// Total travel time short to long
 							if(OneOrRound.getSelectedIndex()==0) {
 								if(seatclass==0) {
-									trips = BL.ResultSort.sort(trips,BL.ResultSort.TotalTimeAsc);
+									trips = BLreception.sort(trips,BL.ResultSort.TotalTimeAsc);
 									table.setModel(DefaultModelFactory.getOneWayModel(trips, seatclass));
 								}
 								if(seatclass==1){
-									trips = BL.ResultSort.sort(trips,BL.ResultSort.TotalTimeAsc);
+									trips = BLreception.sort(trips,BL.ResultSort.TotalTimeAsc);
 									table.setModel(DefaultModelFactory.getOneWayModel(trips, seatclass));
 								}
 							}
 							else {
 								if(seatclass==0) {
-									trips = BL.ResultSort.sort(trips,BL.ResultSort.TotalTimeAsc);
+									trips = BLreception.sort(trips,BL.ResultSort.TotalTimeAsc);
 									table.setModel(DefaultModelFactory.getRoundModel(trips, seatclass));
 								}
 								if(seatclass==1){
-									trips = BL.ResultSort.sort(trips,BL.ResultSort.TotalTimeAsc);
+									trips = BLreception.sort(trips,BL.ResultSort.TotalTimeAsc);
 									table.setModel(DefaultModelFactory.getRoundModel(trips, seatclass));
 								}
 							}							
@@ -220,21 +221,21 @@ public class SearchAndResultFrame_Controller{
 							// Total travel time long to short
 							if(OneOrRound.getSelectedIndex()==0) {
 								if(seatclass==0) {
-									trips = BL.ResultSort.sort(trips,BL.ResultSort.TotalTimeDes);
+									trips = BLreception.sort(trips,BL.ResultSort.TotalTimeDes);
 									table.setModel(DefaultModelFactory.getOneWayModel(trips, seatclass));
 								}
 								if(seatclass==1){
-									trips = BL.ResultSort.sort(trips,BL.ResultSort.TotalTimeDes);
+									trips = BLreception.sort(trips,BL.ResultSort.TotalTimeDes);
 									table.setModel(DefaultModelFactory.getOneWayModel(trips, seatclass));
 								}
 							}
 							else {
 								if(seatclass==0) {
-									trips = BL.ResultSort.sort(trips,BL.ResultSort.TotalTimeDes);
+									trips = BLreception.sort(trips,BL.ResultSort.TotalTimeDes);
 									table.setModel(DefaultModelFactory.getRoundModel(trips, seatclass));
 								}
 								if(seatclass==1){
-									trips = BL.ResultSort.sort(trips,BL.ResultSort.TotalTimeDes);
+									trips = BLreception.sort(trips,BL.ResultSort.TotalTimeDes);
 									table.setModel(DefaultModelFactory.getRoundModel(trips, seatclass));
 								}
 							}							
@@ -243,21 +244,21 @@ public class SearchAndResultFrame_Controller{
 							//Departure Time early to late
 							if(OneOrRound.getSelectedIndex()==0) {
 								if(seatclass==0) {
-									trips = BL.ResultSort.sort(trips,BL.ResultSort.DepatureAsc);
+									trips = BLreception.sort(trips,BL.ResultSort.DepatureAsc);
 									table.setModel(DefaultModelFactory.getOneWayModel(trips, seatclass));
 								}
 								if(seatclass==1){
-									trips = BL.ResultSort.sort(trips,BL.ResultSort.DepatureAsc);
+									trips = BLreception.sort(trips,BL.ResultSort.DepatureAsc);
 									table.setModel(DefaultModelFactory.getOneWayModel(trips, seatclass));
 								}
 							}
 							else {
 								if(seatclass==0) {
-									trips = BL.ResultSort.sort(trips,BL.ResultSort.DepatureAsc);
+									trips = BLreception.sort(trips,BL.ResultSort.DepatureAsc);
 									table.setModel(DefaultModelFactory.getRoundModel(trips, seatclass));
 								}
 								if(seatclass==1){
-									trips = BL.ResultSort.sort(trips,BL.ResultSort.DepatureAsc);
+									trips = BLreception.sort(trips,BL.ResultSort.DepatureAsc);
 									table.setModel(DefaultModelFactory.getRoundModel(trips, seatclass));
 								}
 							}	
@@ -266,21 +267,21 @@ public class SearchAndResultFrame_Controller{
 							//Departure Time late to early 
 							if(OneOrRound.getSelectedIndex()==0) {
 								if(seatclass==0) {
-									trips = BL.ResultSort.sort(trips,BL.ResultSort.DepatureDes);
+									trips = BLreception.sort(trips,BL.ResultSort.DepatureDes);
 									table.setModel(DefaultModelFactory.getOneWayModel(trips, seatclass));
 								}
 								if(seatclass==1){
-									trips = BL.ResultSort.sort(trips,BL.ResultSort.DepatureDes);
+									trips = BLreception.sort(trips,BL.ResultSort.DepatureDes);
 									table.setModel(DefaultModelFactory.getOneWayModel(trips, seatclass));
 								}
 							}
 							else {
 								if(seatclass==0) {
-									trips = BL.ResultSort.sort(trips,BL.ResultSort.DepatureDes);
+									trips = BLreception.sort(trips,BL.ResultSort.DepatureDes);
 									table.setModel(DefaultModelFactory.getRoundModel(trips, seatclass));
 								}
 								if(seatclass==1){
-									trips = BL.ResultSort.sort(trips,BL.ResultSort.DepatureDes);
+									trips = BLreception.sort(trips,BL.ResultSort.DepatureDes);
 									table.setModel(DefaultModelFactory.getRoundModel(trips, seatclass));
 								}
 							}	
@@ -289,21 +290,21 @@ public class SearchAndResultFrame_Controller{
 							//arrival time early to late
 							if(OneOrRound.getSelectedIndex()==0) {
 								if(seatclass==0) {
-									trips = BL.ResultSort.sort(trips,BL.ResultSort.ArrivalAsc);
+									trips = BLreception.sort(trips,BL.ResultSort.ArrivalAsc);
 									table.setModel(DefaultModelFactory.getOneWayModel(trips, seatclass));
 								}
 								if(seatclass==1){
-									trips = BL.ResultSort.sort(trips,BL.ResultSort.ArrivalAsc);
+									trips = BLreception.sort(trips,BL.ResultSort.ArrivalAsc);
 									table.setModel(DefaultModelFactory.getOneWayModel(trips, seatclass));
 								}
 							}
 							else {
 								if(seatclass==0) {
-									trips = BL.ResultSort.sort(trips,BL.ResultSort.ArrivalAsc);
+									trips = BLreception.sort(trips,BL.ResultSort.ArrivalAsc);
 									table.setModel(DefaultModelFactory.getRoundModel(trips, seatclass));
 								}
 								if(seatclass==1){
-									trips = BL.ResultSort.sort(trips,BL.ResultSort.ArrivalAsc);
+									trips = BLreception.sort(trips,BL.ResultSort.ArrivalAsc);
 									table.setModel(DefaultModelFactory.getRoundModel(trips, seatclass));
 								}
 							}
@@ -312,21 +313,21 @@ public class SearchAndResultFrame_Controller{
 							//arrival time late to early
 							if(OneOrRound.getSelectedIndex()==0) {
 								if(seatclass==0) {
-									trips = BL.ResultSort.sort(trips,BL.ResultSort.ArrivalDes);
+									trips = BLreception.sort(trips,BL.ResultSort.ArrivalDes);
 									table.setModel(DefaultModelFactory.getOneWayModel(trips, seatclass));
 								}
 								if(seatclass==1){
-									trips = BL.ResultSort.sort(trips,BL.ResultSort.ArrivalDes);
+									trips = BLreception.sort(trips,BL.ResultSort.ArrivalDes);
 									table.setModel(DefaultModelFactory.getOneWayModel(trips, seatclass));
 								}
 							}
 							else {
 								if(seatclass==0) {
-									trips = BL.ResultSort.sort(trips,BL.ResultSort.ArrivalDes);
+									trips = BLreception.sort(trips,BL.ResultSort.ArrivalDes);
 									table.setModel(DefaultModelFactory.getRoundModel(trips, seatclass));
 								}
 								if(seatclass==1){
-									trips = BL.ResultSort.sort(trips,BL.ResultSort.ArrivalDes);
+									trips = BLreception.sort(trips,BL.ResultSort.ArrivalDes);
 									table.setModel(DefaultModelFactory.getRoundModel(trips, seatclass));
 								}
 							}
